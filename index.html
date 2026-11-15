@@ -119,4 +119,130 @@ input:checked+.sl{background:var(--teal)}input:checked+.sl:before{transform:tran
 <div class="ov" id="cfg" hidden><div class="mc">
   <h2>⚙️ Configurações</h2>
   <div class="row"><span>Modo escuro</span><label class="sw"><input type="checkbox" id="tD"><span class="sl"></span></label></div>
-  <div class="row"><span>Sons</span><label class="sw"><input type="checkbox" id="tS"><span
+  <div class="row"><span>Sons</span><label class="sw"><input type="checkbox" id="tS"><span class="sl"></span></label></div>
+  <div class="row"><span>Vibração</span><label class="sw"><input type="checkbox" id="tV"><span class="sl"></span></label></div>
+  <div class="row"><span>Tempo de jogo</span><em id="sT"></em></div>
+  <div class="row"><span>Toques</span><em id="sC"></em></div>
+  <div class="row"><span>Total faturado</span><em id="sM"></em></div>
+  <button class="ok" id="closeCfg">Fechar</button>
+  <button class="lk" id="reset">Recomeçar do zero</button>
+</div></div>
+<div class="ov" id="md" hidden><div class="mc"><h2 id="mt"></h2><p id="mp"></p><button class="ok" id="mk">Continuar</button></div></div>
+<div id="toast" role="status"></div>
+
+<script>
+window.addEventListener('error',function(e){var d=document.createElement('div');d.style.cssText='position:fixed;left:0;right:0;top:0;z-index:99;background:#b00020;color:#fff;padding:10px;font:14px monospace';d.textContent='Erro: '+e.message+' (linha '+e.lineno+')';document.body.appendChild(d)});
+</script>
+<script>
+(function(){
+const $=s=>document.querySelector(s);
+const KEY='garagem-tech-v1',SK='garagem-tech-set';
+const SUF=['','mil','mi','bi','tri','qua','qui','sex'];
+const fm=n=>{n=Math.max(0,n);if(n<1000)return n<10?n.toFixed(1).replace('.',','):String(Math.floor(n));let i=0;while(n>=1000&&i<SUF.length-1){n/=1000;i++}return n.toFixed(n<10?2:n<100?1:0).replace('.',',')+' '+SUF[i]};
+const fc=n=>n<1000?String(Math.ceil(n)):fm(n);
+const sum=a=>a.reduce((x,y)=>x+y,0);
+const tm=s=>{s=Math.floor(s);return s>=3600?Math.floor(s/3600)+'h '+Math.floor(s%3600/60)+'min':Math.floor(s/60)+'min '+s%60+'s'};
+
+let SET={dark:matchMedia('(prefers-color-scheme:dark)').matches,snd:true,vib:true};
+try{Object.assign(SET,JSON.parse(localStorage.getItem(SK))||{})}catch(e){}
+const saveSet=()=>{try{localStorage.setItem(SK,JSON.stringify(SET))}catch(e){}};
+const theme=()=>document.body.classList.toggle('dark',SET.dark);theme();
+
+const WC={};
+function wav(f,d,type){const k=f+'|'+d+'|'+type;if(WC[k])return WC[k];const r=16000,n=Math.floor(r*d),u=new Uint8Array(44+n*2),dv=new DataView(u.buffer);
+const w=(o,s)=>s.split('').forEach((c,i)=>dv.setUint8(o+i,c.charCodeAt(0)));
+w(0,'RIFF');dv.setUint32(4,36+n*2,true);w(8,'WAVEfmt ');dv.setUint32(16,16,true);dv.setUint16(20,1,true);dv.setUint16(22,1,true);dv.setUint32(24,r,true);dv.setUint32(28,r*2,true);dv.setUint16(32,2,true);dv.setUint16(34,16,true);w(36,'data');dv.setUint32(40,n*2,true);
+for(let i=0;i<n;i++){const p=(i*f/r)%1,s=type==='square'?(p<.5?1:-1):type==='triangle'?4*Math.abs(p-.5)-1:Math.sin(2*Math.PI*p);dv.setInt16(44+i*2,s*16000*Math.pow(1-i/n,2),true)}
+let b='';for(let i=0;i<u.length;i++)b+=String.fromCharCode(u[i]);return WC[k]='data:audio/wav;base64,'+btoa(b)}
+function tone(f,d=.08,type='square',v=.05,at=0){
+  if(!SET.snd)return;
+  const go=()=>{try{const a=new Audio(wav(f,d,type));a.volume=Math.min(1,v*9);a.play().catch(()=>{})}catch(e){}};
+  at?setTimeout(go,at*1000):go();
+}
+const sfx={
+  click:()=>tone(520+Math.random()*120,.05,'triangle',.06),
+  buy:()=>{tone(660,.08,'square',.04);tone(880,.1,'square',.04,.07)},
+  win:()=>[523,659,784,1047].forEach((f,i)=>tone(f,.18,'triangle',.07,i*.09)),
+  bonus:()=>[880,1175,1568].forEach((f,i)=>tone(f,.12,'sine',.07,i*.06))
+};
+const vib=n=>{if(SET.vib&&navigator.vibrate)try{navigator.vibrate(n)}catch(e){}};
+
+const APPS=[
+ {n:'Lanterna Pro',i:'🔦',d:'Acende a luz do celular. Já são 14 botões.',need:30,inc:4},
+ {n:'PetSnap',i:'🐶',d:'Fotos de pets com óculos de sol.',need:300,inc:35},
+ {n:'Fome Já',i:'🍕',d:'Pizza na porta antes de você pedir.',need:2500,inc:300},
+ {n:'Ritmo',i:'🎵',d:'Música para cada humor, até o pior.',need:22000,inc:2600},
+ {n:'ZenZen',i:'🧘',d:'Meditação com notificação a cada 5 minutos.',need:2e5,inc:23000},
+ {n:'Bora!',i:'🚗',d:'Caronas e carros que chegam rápido.',need:1.8e6,inc:2e5},
+ {n:'Bolsinha',i:'💸',d:'Banco digital com cofrinho animado.',need:1.6e7,inc:1.8e6},
+ {n:'Arena Pixel',i:'🎮',d:'Jogos rápidos para jogar em qualquer lugar.',need:1.5e8,inc:1.6e7},
+ {n:'Aurora',i:'🤖',d:'Assistente de IA que responde até o grupo da família.',need:1.4e9,inc:1.5e8},
+ {n:'Mundo+',i:'🌍',d:'A rede social onde todo mundo está.',need:1.3e10,inc:1.4e9}];
+const EMP=[
+ {n:'Estagiário',i:'🧑‍🎓',d:'Muito café, muita vontade.',cost:40,cps:.5},
+ {n:'Dev júnior',i:'👩‍💻',d:'Aprende rápido e quebra pouco.',cost:350,cps:4},
+ {n:'Dev pleno',i:'👨‍💻',d:'Resolve o bug antes do almoço.',cost:3000,cps:30},
+ {n:'Dev sênior',i:'🧙',d:'Sabe por que o código funciona.',cost:28000,cps:250},
+ {n:'Tech lead',i:'🦸',d:'Une o time e some das reuniões.',cost:2.7e5,cps:2200},
+ {n:'Time de IA',i:'🤖',d:'Escreve código enquanto você dorme.',cost:2.8e6,cps:2e4},
+ {n:'Laboratório',i:'🔬',d:'Pesquisa o futuro do software.',cost:3e7,cps:1.9e5},
+ {n:'Fábrica quântica',i:'⚛️',d:'Código em todos os estados ao mesmo tempo.',cost:3.5e8,cps:1.8e6},
+ {n:'Designer',i:'🎨',d:'Cada um deixa os apps 5% mais bonitos e rentáveis.',cost:4000,g:1.4},
+ {n:'Gerente de produto',i:'📋',d:'Cada um deixa a equipe 4% mais produtiva.',cost:20000,g:1.45}];
+const EQ=[
+ {n:'Teclado mecânico',i:'⌨️',d:'Toque ×2',cost:100,c:2},
+ {n:'Monitor extra',i:'🖥️',d:'Código +20%',cost:600,p:1.2},
+ {n:'Café premium',i:'☕',d:'Código +25%',cost:2000,p:1.25},
+ {n:'Notebook potente',i:'💻',d:'Toque ×3 e código +30%',cost:12000,c:3,p:1.3},
+ {n:'Servidor na nuvem',i:'☁️',d:'Receita dos apps ×1,5',cost:80000,i2:1.5},
+ {n:'Cadeiras ergonômicas',i:'🪑',d:'Código +50%',cost:4e5,p:1.5},
+ {n:'Rede 10 Gbps',i:'📡',d:'Receita ×1,5',cost:2.5e6,i2:1.5},
+ {n:'Supercomputador',i:'🧠',d:'Código ×2',cost:2e7,p:2},
+ {n:'Datacenter próprio',i:'🏭',d:'Receita ×2',cost:2e8,i2:2},
+ {n:'Chip personalizado',i:'💾',d:'Código ×2,5 e receita ×1,5',cost:2e9,p:2.5,i2:1.5},
+ {n:'Satélite de dados',i:'🛰️',d:'Receita ×2',cost:3e10,i2:2}];
+const STG=[
+ {n:'Garagem',e:'🏠',at:0,d:'Todo gigante começou aqui.'},
+ {n:'Coworking',e:'🏬',at:5e3,d:'Mesa compartilhada e wi-fi rápido.'},
+ {n:'Escritório',e:'🏢',at:3e5,d:'Agora tem sala de reunião.'},
+ {n:'Sede moderna',e:'🏙️',at:2e7,d:'Seu prédio aparece na paisagem.'},
+ {n:'Campus',e:'🏛️',at:2e9,d:'Tem até cafeteria própria.'},
+ {n:'Megacorporação',e:'🌐',at:1.5e11,d:'O mundo inteiro usa seus apps.'}];
+const ACH=[
+ {id:'c1',n:'Primeiro commit',i:'🌱',d:'Toque em Programar',t:s=>s.clicks>=1},
+ {id:'c100',n:'Dedos de aço',i:'💪',d:'Faça 100 toques',t:s=>s.clicks>=100},
+ {id:'c1k',n:'Maratona de teclado',i:'🔥',d:'Faça 1.000 toques',t:s=>s.clicks>=1000},
+ {id:'a1',n:'Hello, mundo',i:'🚀',d:'Lance seu primeiro app',t:s=>s.apps.some(x=>x)},
+ {id:'a5',n:'Portfólio',i:'📱',d:'Lance 5 apps',t:s=>s.apps.filter(x=>x).length>=5},
+ {id:'a10',n:'Todos os apps',i:'🏆',d:'Lance os 10 apps',t:s=>s.apps.every(x=>x)},
+ {id:'e10',n:'Startup de verdade',i:'👥',d:'Contrate 10 pessoas',t:s=>sum(s.emp)>=10},
+ {id:'e50',n:'Time gigante',i:'🏟️',d:'Contrate 50 pessoas',t:s=>sum(s.emp)>=50},
+ {id:'q5',n:'Setup gamer',i:'🎧',d:'Compre 5 equipamentos',t:s=>s.eq.filter(Boolean).length>=5},
+ {id:'q11',n:'Setup dos sonhos',i:'🛰️',d:'Compre todos os equipamentos',t:s=>s.eq.every(Boolean)},
+ {id:'s2',n:'Subiu de andar',i:'🏢',d:'Chegue ao Escritório',t:s=>s.stage>=2},
+ {id:'s4',n:'Dono do campus',i:'🏛️',d:'Chegue ao Campus',t:s=>s.stage>=4},
+ {id:'s5',n:'Megacorporação',i:'🌐',d:'Domine o mundo',t:s=>s.stage>=5},
+ {id:'b5',n:'Caçador de bônus',i:'⭐',d:'Pegue 5 estrelas bônus',t:s=>s.bon>=5}];
+
+const fresh=()=>({money:0,code:0,life:0,emp:EMP.map(()=>0),eq:EQ.map(()=>false),apps:APPS.map(()=>0),stage:0,t:Date.now(),clicks:0,boost:0,won:false,start:Date.now(),ach:[],bon:0,play:0});
+const norm=s=>Object.assign(fresh(),s,{ach:s.ach||[],emp:EMP.map((_,i)=>(s.emp||[])[i]||0),eq:EQ.map((_,i)=>!!(s.eq||[])[i]),apps:APPS.map((_,i)=>(s.apps||[])[i]||0)});
+let S=fresh(),loaded=false;
+try{const s=JSON.parse(localStorage.getItem(KEY));if(s){S=norm(s);loaded=true}}catch(e){}
+let leaving=false,Q=1;
+const save=()=>{if(leaving)return;try{S.t=Date.now();localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+
+const empCost=i=>EMP[i].cost*Math.pow(EMP[i].g||1.15,S.emp[i]);
+function bulk(i){
+  const g=EMP[i].g||1.15,b=empCost(i);
+  const tot=n=>b*(Math.pow(g,n)-1)/(g-1);
+  if(Q>0)return{n:Q,c:tot(Q)};
+  let n=0;while(n<5000&&tot(n+1)<=S.money)n++;
+  return{n:Math.max(1,n),c:tot(Math.max(1,n))};
+}
+const appUp=i=>APPS[i].inc*12*Math.pow(1.55,S.apps[i]-1);
+function calc(){
+  let cm=1,pm=1,im=1;EQ.forEach((e,k)=>{if(S.eq[k]){cm*=e.c||1;pm*=e.p||1;im*=e.i2||1}});
+  im*=Math.pow(1.5,S.stage)*(1+.02*S.ach.length);
+  let cps=0;for(let i=0;i<8;i++)cps+=S.emp[i]*EMP[i].cps;
+  cps*=pm*(1+.04*S.emp[9]);
+  let base=0;S.apps.forEach((lv,i)=>{if(lv>0)base
