@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Garagem Tech</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;800&display=swap" rel="stylesheet">
+<style>
+:root{--teal:#0f4c5c;--mint:#5fd1a8;--orange:#ff7a1a;--bg:#e6f0ef;--ink:#11292f;--muted:#5d7379;--card:#fff;--tab:#d7e5e3;--border:#cfe0dd;--gold:#ffc83d;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+body.dark{--teal:#5fd1a8;--mint:#0f4c5c;--orange:#ff8a36;--bg:#0c1315;--ink:#e6f1f3;--muted:#90a4a8;--card:#182427;--tab:#111b1e;--border:#2c4045;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+body{margin:0;background:radial-gradient(900px 400px at 50% -100px,rgba(95,209,168,.25),transparent),var(--bg);color:var(--ink);font-family:Outfit,system-ui,sans-serif;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none;touch-action:manipulation;transition:background .3s,color .3s}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+button:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
+[hidden]{display:none!important}
+.wrap{max-width:1000px;margin:0 auto;padding:12px 14px 50px}
+.bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.logo{font-weight:800;font-size:1.25rem;flex:1;letter-spacing:-.3px}
+.lvl{background:var(--card);border:2px solid var(--border);border-radius:99px;padding:4px 12px;font-weight:800;font-size:.85rem;color:var(--teal)}
+.ib{width:42px;height:42px;border-radius:14px;background:var(--card);border:2px solid var(--border);font-size:1.2rem;box-shadow:0 3px 0 var(--border)}
+.ib:active{transform:translateY(2px);box-shadow:none}
+.top{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.res{background:var(--card);border:2px solid var(--border);border-radius:18px;padding:10px 14px;transition:background .3s}
+.res small{color:var(--muted);font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.5px}
+.res b{display:block;font-size:1.55rem;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
+.res span{font-size:.82rem;color:var(--teal);font-weight:600}
+.main{display:grid;gap:14px}
+@media(min-width:860px){.main{grid-template-columns:400px 1fr;align-items:start}.side{position:sticky;top:14px}}
+.hero{border-radius:28px;padding:16px;position:relative;overflow:hidden;color:#fff;transition:background 1s;background:linear-gradient(#ffd9a8,#ff7a1a);box-shadow:0 14px 30px -16px rgba(0,0,0,.5)}
+body.dark .hero{color:#11292f}
+.hero[data-s="1"]{background:linear-gradient(#cfe8ff,#8fc5f0)}.hero[data-s="2"]{background:linear-gradient(#bfe6ff,#6cb8fb)}.hero[data-s="3"]{background:linear-gradient(#a9d8ff,#4f9cf0)}.hero[data-s="4"]{background:linear-gradient(#9bc2ff,#3f72e8)}.hero[data-s="5"]{background:linear-gradient(#8a7dff,#1fa0ff)}
+.cl{position:absolute;font-size:2.4rem;opacity:.5;animation:drift 38s linear infinite;pointer-events:none}
+@keyframes drift{from{transform:translateX(-80px)}to{transform:translateX(480px)}}
+.hero>*:not(.cl){position:relative}
+.hero h1{margin:0;font-size:1.5rem;font-weight:800;text-shadow:0 2px 10px rgba(15,60,80,.35)}
+.hero p{margin:2px 0 0;font-size:.95rem;font-weight:500;text-shadow:0 1px 8px rgba(15,60,80,.4)}
+.bld{font-size:88px;line-height:1;text-align:center;margin:8px 0 2px;filter:drop-shadow(0 8px 10px rgba(15,60,80,.35));animation:bob 3s ease-in-out infinite}
+.bld.pop{animation:pop .15s}
+@keyframes bob{50%{transform:translateY(-5px)}}
+@keyframes pop{50%{transform:scale(1.12) rotate(-2deg)}}
+.crew{min-height:2.4em;text-align:center;font-size:1.15rem;line-height:1.3;letter-spacing:1px}
+.gear{min-height:1.6em;text-align:center;font-size:1.1rem;margin-bottom:8px}
+.pg{height:12px;border-radius:7px;background:rgba(255,255,255,.4);overflow:hidden}.pg i{display:block;height:100%;width:0;background:#fff;border-radius:7px;transition:width .3s}
+.nx{font-size:.85rem;font-weight:600;margin:6px 0 12px;text-shadow:0 1px 8px rgba(15,60,80,.45)}
+#boost{display:none;margin:0 0 10px;background:var(--gold);color:#4a3200;border-radius:12px;padding:6px;text-align:center;font-weight:800;font-size:.9rem;animation:glow 1s infinite alternate}
+@keyframes glow{to{box-shadow:0 0 16px var(--gold)}}
+#clk{display:block;width:100%;background:var(--orange);color:#fff;font-weight:800;font-size:1.35rem;padding:16px;border-radius:20px;box-shadow:0 6px 0 #c85a00;transition:transform .06s,box-shadow .06s}
+#clk:active{transform:translateY(5px);box-shadow:0 1px 0 #c85a00}
+#clk small{display:block;font-weight:500;font-size:.88rem;opacity:.92}
+#star{position:absolute;z-index:3;font-size:2.2rem;background:var(--gold);border-radius:50%;width:62px;height:62px;box-shadow:0 0 22px var(--gold);animation:pulse 1s ease-in-out infinite}
+@keyframes pulse{50%{transform:scale(1.15)}}
+.tabs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;background:var(--tab);padding:5px;border-radius:16px;margin-bottom:12px}
+.tab{padding:10px 2px;border-radius:12px;font-weight:600;color:var(--muted);font-size:.85rem}
+.tab.on{background:var(--card);color:var(--ink);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+.qty{display:flex;gap:6px;margin-bottom:10px}
+.qty button{flex:1;padding:8px;border-radius:12px;background:var(--tab);font-weight:800;color:var(--muted)}
+.qty button.on{background:var(--teal);color:var(--card)}
+.it{display:flex;gap:12px;align-items:center;background:var(--card);border:2px solid var(--border);border-radius:20px;padding:12px;margin-bottom:10px;transition:background .3s}
+.it.done{opacity:.65}.it.lock .ic{filter:grayscale(1);opacity:.6}
+.ic{flex:none;width:52px;height:52px;border-radius:16px;background:var(--tab);display:grid;place-items:center;font-size:28px}
+.in{flex:1;min-width:0}.in b{display:block;font-weight:800}.in small{display:block;color:var(--muted);font-size:.84rem;line-height:1.3}
+.in .st{display:block;font-size:.84rem;font-weight:600;color:var(--teal);margin-top:2px}
+.bt{flex:none;background:var(--orange);color:#fff;font-weight:800;padding:10px 12px;border-radius:14px;box-shadow:0 4px 0 #c85a00;min-width:96px;text-align:center;font-size:.95rem;line-height:1.15}
+.bt small{display:block;font-weight:500;font-size:.78rem;opacity:.95}
+.bt:disabled{background:var(--tab);color:var(--muted);box-shadow:0 4px 0 var(--border);cursor:default}
+.bt:not(:disabled):active{transform:translateY(3px);box-shadow:0 1px 0 #c85a00}
+.ach.on{border-color:var(--gold)}.ach .ic{font-size:26px}
+.in input{width:100%;box-sizing:border-box;margin:6px 0;padding:10px;border-radius:12px;border:2px solid var(--border);background:var(--tab);color:var(--ink);font:inherit;user-select:text;-webkit-user-select:text}.nb{flex:none;background:var(--orange);color:#fff;font-weight:800;padding:10px 14px;border-radius:14px;box-shadow:0 4px 0 #c85a00}.nb:active{transform:translateY(3px);box-shadow:none}.rkr.me{border-color:var(--gold)}.rkr>b{color:var(--teal)}.rkr .ic{font-weight:800;font-size:22px}
+.foot{margin-top:16px;text-align:center;color:var(--muted);font-size:.85rem}
+.fl{position:fixed;font-weight:800;color:var(--orange);pointer-events:none;z-index:9;animation:up .8s forwards;text-shadow:0 2px 0 var(--card)}
+@keyframes up{to{transform:translateY(-70px);opacity:0}}
+#toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 20px);transform:translate(-50%,12px);background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-weight:600;opacity:0;pointer-events:none;transition:all .25s;z-index:30;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translate(-50%,0)}
+.ov{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20}
+.mc{background:var(--card);border-radius:28px;padding:24px 22px;max-width:360px;width:100%;text-align:center;box-shadow:0 20px 40px -20px rgba(0,0,0,.5);animation:in .25s}
+@keyframes in{from{transform:scale(.9);opacity:0}}
+.mc h2{margin:0 0 12px;font-size:1.7rem;font-weight:800}
+.mc p{margin:0 0 6px;line-height:1.45;color:var(--muted)}
+.mc .ok{display:block;width:100%;padding:14px;border-radius:14px;font-weight:800;margin-top:14px;background:var(--orange);color:#fff;box-shadow:0 4px 0 #c85a00}
+.row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border);font-weight:600;text-align:left}
+.row em{font-style:normal;color:var(--muted)}
+.sw{position:relative;width:50px;height:28px;flex:none}.sw input{opacity:0;width:0;height:0}
+.sl{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background:var(--tab);transition:.3s;border-radius:34px;border:2px solid var(--border)}
+.sl:before{position:absolute;content:"";height:20px;width:20px;left:2px;bottom:2px;background:var(--orange);transition:.3s;border-radius:50%}
+input:checked+.sl{background:var(--teal)}input:checked+.sl:before{transform:translateX(22px);background:#fff}
+.lk{text-decoration:underline;color:var(--muted);padding:8px;font-size:.85rem}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bar"><span class="logo">🚀 Garagem Tech</span><span class="lvl" id="lv"></span><button class="ib" id="cfgBtn" aria-label="Configurações">⚙️</button></div>
+  <div class="top">
+    <div class="res"><small>Dinheiro</small><b id="mo">0</b><span id="mr"></span></div>
+    <div class="res"><small>Código</small><b id="co">0</b><span id="cr"></span></div>
+  </div>
+  <div class="main">
+    <section class="side">
+      <div class="hero" id="hero" data-s="0">
+        <span class="cl" style="top:14px;left:0">☁️</span><span class="cl" style="top:70px;left:-200px;animation-delay:-15s;font-size:1.8rem">☁️</span>
+        <h1 id="sn"></h1><p id="sd"></p>
+        <div class="bld" id="be"></div>
+        <div class="crew" id="crew"></div><div class="gear" id="gear"></div>
+        <div id="boost"></div>
+        <div class="pg"><i id="pg"></i></div><div class="nx" id="nx"></div>
+        <button id="clk">⌨️ Programar<small id="cv"></small></button>
+      </div>
+    </section>
+    <section>
+      <div class="tabs" role="tablist"><button class="tab on" data-t="apps">Apps</button><button class="tab" data-t="emps">Equipe</button><button class="tab" data-t="eqs">Equip.</button><button class="tab" data-t="achs">Troféus</button><button class="tab" data-t="rk">Rank</button></div>
+      <div id="apps"></div>
+      <div id="emps" hidden><div class="qty" id="qty"><button data-q="1" class="on">x1</button><button data-q="10">x10</button><button data-q="100">x100</button><button data-q="0">Máx</button></div><div id="el"></div></div>
+      <div id="eqs" hidden></div><div id="achs" hidden></div><div id="rk" hidden></div>
+    </section>
+  </div>
+  <div class="foot">Tudo aqui é fictício. O jogo salva sozinho neste aparelho.</div>
+</div>
+
+<div class="ov" id="cfg" hidden><div class="mc">
+  <h2>⚙️ Configurações</h2>
+  <div class="row"><span>Modo escuro</span><label class="sw"><input type="checkbox" id="tD"><span class="sl"></span></label></div>
+  <div class="row"><span>Sons</span><label class="sw"><input type="checkbox" id="tS"><span
