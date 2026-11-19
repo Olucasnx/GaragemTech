@@ -148,7 +148,11 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
 .gcv{width:100%;image-rendering:pixelated;border:4px solid var(--bd);display:block;margin-bottom:10px;aspect-ratio:160/56;background:#2e2640}.gemb{width:36px;image-rendering:pixelated;flex:none}
 .gmb{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:10px}.gmb span{background:var(--tab);border:3px solid var(--bd);padding:6px;font:.45rem/1.7 'Press Start 2P',monospace;color:var(--muted)}.gmb span b{color:var(--ink);font-weight:400}.gmb span.me{border-color:var(--gold)}
 .face{width:96px;height:96px;image-rendering:pixelated;background:var(--tab);border:4px solid var(--bd);display:block;margin:0 auto 8px}
-#pvw{width:108px;height:144px;image-rendering:pixelated;background:#c4bcc9;border:4px solid var(--bd);display:block;margin:0 auto 8px}
+#pvw{width:108px;height:144px;image-rendering:pixelated;background:#c4bcc9;border:4px solid var(--bd);display:block;margin:0 auto}
+.pvrow{display:flex;justify-content:center;align-items:flex-end;gap:18px;margin-bottom:8px}
+.pvcol{display:flex;flex-direction:column;align-items:center;gap:4px}
+.pvcol small{color:var(--muted);font-size:1rem}
+#pciv{border:4px solid var(--bd);background:#2e2640;display:block}
 .pr{text-align:left;margin-top:10px}.pr>b{display:block;font:.55rem 'Press Start 2P',monospace;margin-bottom:6px}
 .sws{display:flex;flex-wrap:wrap;gap:6px}
 .cs{width:32px;height:32px;border:3px solid var(--bd);box-shadow:inset 0 -4px 0 rgba(0,0,0,.25),inset 0 3px 0 rgba(255,255,255,.3)}
@@ -160,7 +164,7 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
 </head>
 <body>
 <div class="wrap">
-  <div class="bar"><span class="logo" id="logo"><span>GARAGEM TECH</span></span><span class="lvl pxc" id="dmv" style="color:var(--blue)"></span><span class="lvl pxc" id="lv"></span><button class="ib pxc" id="pfBtn" aria-label="Perfil">👤</button><button class="ib pxc" id="cfgBtn" aria-label="Configurações">⚙️</button></div>
+  <div class="bar"><span class="logo" id="logo"><canvas id="hico" class="gemb" style="width:22px"></canvas><span id="hnm">GARAGEM TECH</span></span><span class="lvl pxc" id="dmv" style="color:var(--blue)"></span><span class="lvl pxc" id="lv"></span><button class="ib pxc" id="pfBtn" aria-label="Perfil">👤</button><button class="ib pxc" id="cfgBtn" aria-label="Configurações">⚙️</button></div>
   <div class="top">
     <div class="res pxc"><small id="rl1"></small><b id="mo">0</b><span id="mr"></span></div>
     <div class="res pxc"><small id="rl2"></small><b id="co">0</b><span id="cr"></span></div>
@@ -202,7 +206,10 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
 </div></div>
 <div class="ov" id="prof" hidden><div class="mc pxc">
   <h2>👤 MEU PERFIL</h2>
-  <canvas id="pvw" width="36" height="48"></canvas>
+  <div class="pvrow">
+    <div class="pvcol"><canvas id="pvw" width="36" height="48"></canvas><small>Personagem</small></div>
+    <div class="pvcol"><canvas id="pciv" class="gemb" style="width:52px"></canvas><small>Empresa</small></div>
+  </div>
   <p id="pst" style="color:var(--muted);margin-bottom:8px"></p>
   <div class="in" style="text-align:left"><b>Nome</b><input id="pnm" maxlength="14" placeholder="Seu nome"></div>
   <div class="pr"><b>Pele</b><div class="sws" id="psk"></div></div>
@@ -210,6 +217,9 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
   <div class="pr"><b>Estilo</b><div class="sws" id="phs"></div></div>
   <div class="pr"><b>Camisa</b><div class="sws" id="psh"></div></div>
   <div class="pr"><b>Calça</b><div class="sws" id="ppa"></div></div>
+  <div class="in" style="text-align:left;margin-top:16px;border-top:2px dashed var(--muted);padding-top:12px"><b>🏢 Nome da empresa</b><input id="pcn" maxlength="18" placeholder="Ex: Garagem Tech"></div>
+  <div class="pr"><b>Formato do ícone</b><div class="sws" id="pce"></div></div>
+  <div class="pr"><b>Cor do ícone</b><div class="sws" id="pcc"></div></div>
   <button class="ok" id="pfOk">SALVAR</button>
 </div></div>
 <div id="toast"></div>
@@ -229,7 +239,7 @@ const EM=[['🧑‍🎓','Estagiário',20,.5],['👨‍💻','Dev Júnior',150,3
 const EQ=[['⌨️','Teclado Mecânico','Código por clique x2',150,'c',2],['🖱️','Mouse Gamer','Código por clique x2',1e3,'c',2],['☕','Máquina de Café','Equipe +50% código/s',2500,'e',1.5],['🖥️','Monitor Extra','Código por clique x2',8e3,'c',2],['💺','Cadeira Ergonômica','Apps +25% dinheiro',2.5e4,'a',1.25],['⚡','Servidor Dedicado','Apps +50% dinheiro',1.5e5,'a',1.5],['🎓','Cursos de IA','Equipe x2 código/s',1.5e6,'e',2],['☁️','Nuvem Global','Apps x2 dinheiro',2e7,'a',2],['🔮','Computador Quântico','Tudo x2',5e8,'x',2]];
 const AC=[['👆','Primeiro Código','Programe 1 vez',s=>s.cl>=1],['⌨️','Dedos Rápidos','100 cliques',s=>s.cl>=100],['🔥','Mão de Ferro','1.000 cliques',s=>s.cl>=1000],['📱','App no Ar','Lance 1 app',s=>sum(s.a)>=1],['🧩','Portfólio','Lance os 8 tipos de app',s=>s.a.every(x=>x>0)],['💵','Primeiros 1K','Ganhe 1K de dinheiro',s=>s.tot>=1e3],['💰','Milionário','Ganhe 1M de dinheiro',s=>s.tot>=1e6],['🏆','Bilionário','Ganhe 1B de dinheiro',s=>s.tot>=1e9],['👥','Time Formado','Contrate 10 pessoas',s=>sum(s.e)>=10],['🏢','Time Gigante','Contrate 100 pessoas',s=>sum(s.e)>=100],['🛠️','Bem Equipado','Compre 5 equipamentos',s=>sum(s.q)>=5],['🌟','Estrela Cadente','Pegue 1 estrela turbo',s=>s.st>=1],['🏙️','Chegou lá','Chegue à fase Empresa',s=>stg()>=4],
 ['🐛','Caçador de Bugs','Esmague 25 bugs',s=>s.bg>=25],['📋','Funcionário do Mês','Complete 10 missões',s=>s.md>=10],['📈','Abriu Capital','Faça seu 1º IPO',s=>s.ipo>=1],['💥','Combo Mestre','Chegue a combo 50',s=>s.mx>=50],['📅','Fiel ao Jogo','Entre 3 dias seguidos',s=>s.ds>=3],['🎯','Sorte de Dev','Dê 25 cliques críticos',s=>s.cr>=25],['🔬','Amigo do Dr. Lucas','Converse com o Dr. Lucas',s=>s.lu>=1],['🛡️','Salvador do Mundo','Derrote o Mr. Malware',s=>s.bd>=1],['🏰','Fundador','Crie sua guilda',s=>!!s.gd]];
-const def=()=>({m:0,c:0,tot:0,cl:0,a:AP.map(()=>0),e:EM.map(()=>0),q:EQ.map(()=>0),t:[],st:0,n:'Jogador'+(1000+rnd(9000)),snd:1,dk:1,mus:0,ts:Date.now(),v:0,life:0,sh:0,ipo:0,bg:0,md:0,mx:0,cr:0,ds:0,dd:'',hkt:0,ms:[],un:0,mxl:0,lu:0,mg:[0,0,0,0,0],bd:0,gd:null,dm:0,own:[],bt:{m:0,c:0,x:0,nb:0},pf:{sk:1,hr:1,hs:0,sh:0,pa:0,ou:0,ac:0,bk:0}});
+const def=()=>({m:0,c:0,tot:0,cl:0,a:AP.map(()=>0),e:EM.map(()=>0),q:EQ.map(()=>0),t:[],st:0,n:'Jogador'+(1000+rnd(9000)),snd:1,dk:1,mus:0,ts:Date.now(),v:0,life:0,sh:0,ipo:0,bg:0,md:0,mx:0,cr:0,ds:0,dd:'',hkt:0,ms:[],un:0,mxl:0,lu:0,mg:[0,0,0,0,0],bd:0,gd:null,dm:0,own:[],bt:{m:0,c:0,x:0,nb:0},pf:{sk:1,hr:1,hs:0,sh:0,pa:0,ou:0,ac:0,bk:0},cn:'Garagem Tech',ci:{em:0,cl:0}});
 let s=def(),reset=0,tab='apps',qt=1,lastSt=0,tt,ac,fx=[],bugs=[],star=null,combo=0,lastClk=0,kf=0,msSig='',crew=[],crewSig='',ev=null,evT=0,flash=0,coinA=0,bitA=0,ipoSig='',P=[];
 try{const r=JSON.parse(localStorage.getItem(K));if(r)s=Object.assign(def(),r)}catch(e){}
 if(!s.v){s.v=2;s.dk=1}
@@ -708,7 +718,7 @@ if(!r.ok){toast(er(j.msg||j.error_description||j.error||'Erro ao entrar'));retur
 if(!j.access_token){toast('Confirme o e-mail enviado e depois toque em Entrar');return}
 setA(j);await sync();toast('✅ Conectado!');draw();pull()}catch(e){toast('Sem conexão')}}
 async function sync(){try{const r=await fetch(SB_URL+'/rest/v1/progresso?select=data&user_id=eq.'+A.uid,{headers:await hd()});const j=await r.json(),c=j[0]&&j[0].data;
-if(c&&((c.life||0)+(c.tot||0))>sc()){const keep={snd:s.snd,dk:s.dk,mus:s.mus};s=Object.assign(def(),c,keep);if(!s.v)s.v=2;fillM();msSig='';crewSig='';fx=[];applyBt();save();lastSt=stg();toast('☁️ Progresso carregado da nuvem')}else await cloud()}catch(e){}push()}
+if(c&&((c.life||0)+(c.tot||0))>sc()){const keep={snd:s.snd,dk:s.dk,mus:s.mus};s=Object.assign(def(),c,keep);if(!s.v)s.v=2;fillM();msSig='';crewSig='';fx=[];applyBt();save();lastSt=stg();hcoDraw();toast('☁️ Progresso carregado da nuvem')}else await cloud()}catch(e){}push()}
 async function cloud(){if(!A||sc()<1)return;try{await fetch(SB_URL+'/rest/v1/progresso?on_conflict=user_id',{method:'POST',headers:Object.assign({Prefer:'resolution=merge-duplicates,return=minimal'},await hd()),body:JSON.stringify({user_id:A.uid,data:s,updated_at:new Date().toISOString()}),keepalive:true})}catch(e){}}
 async function push(man,re){if(!A||sc()<1)return 0;try{const r=await fetch(SB_URL+'/rest/v1/placar?on_conflict=user_id',{method:'POST',headers:Object.assign({Prefer:'resolution=merge-duplicates,return=minimal'},await hd()),body:JSON.stringify({user_id:A.uid,name:s.n,score:sc()})});
 if(r.status==409&&!man&&!re){s.n=s.n.slice(0,10)+Math.floor(100+Math.random()*900);save();return push(0,1)}return r.status}catch(e){return 0}}
@@ -725,13 +735,19 @@ $('rk').addEventListener('click',async e=>{const i=e.target.id;if(i=='sv'){const
 let pfT;const pfx=$('pvw').getContext('2d');
 function pfPrev(){const o=g;g=pfx;pfx.setTransform(1,0,0,1,0,0);pfx.clearRect(0,0,36,48);pfx.setTransform(2,0,0,2,0,0);R(5,21,8,1,'rgba(0,0,0,.35)');person(9,21,PSK[s.pf.sk],PSH[s.pf.sh],PPA[s.pf.pa],((Date.now()/350)|0)%2,PHR[s.pf.hr],s.pf.hs,1,s.pf.ou,s.pf.ac,s.pf.bk);g=o}
 function pfBuild(){[['sk',PSK],['hr',PHR],['sh',PSH],['pa',PPA]].forEach(([k,a])=>$('p'+k).innerHTML=a.map((c,i)=>'<button class="cs'+(s.pf[k]==i?' on':'')+'" data-g="'+k+'" data-v="'+i+'" style="background:'+c+'" aria-label="Opção '+(i+1)+'"></button>').join(''));
-$('phs').innerHTML=PHS.map((n,i)=>'<button class="cs tx'+(s.pf.hs==i?' on':'')+'" data-g="hs" data-v="'+i+'">'+n+'</button>').join('');pfPrev()}
+$('phs').innerHTML=PHS.map((n,i)=>'<button class="cs tx'+(s.pf.hs==i?' on':'')+'" data-g="hs" data-v="'+i+'">'+n+'</button>').join('');
+$('pce').innerHTML=GPN.map((n,i)=>'<button class="cs tx'+(s.ci.em==i?' on':'')+'" data-ce="'+i+'">'+n+'</button>').join('');
+$('pcc').innerHTML=GCL.map((c,i)=>'<button class="cs'+(s.ci.cl==i?' on':'')+'" data-cc="'+i+'" style="background:'+c+'" aria-label="Cor '+(i+1)+'"></button>').join('');
+emb($('pciv'),s.ci.em,GCL[s.ci.cl],6);pfPrev()}
+function hcoDraw(){emb($('hico'),s.ci.em,GCL[s.ci.cl],3);$('hnm').textContent=esc(s.cn)}
 $('elu').onclick=()=>ride(me.f+1);$('eld').onclick=()=>ride(me.f-1);
-$('pfBtn').onclick=()=>{$('pnm').value=s.n;$('pst').textContent='Nv.'+lvl()+' · '+ST[stg()][0]+' · IPOs: '+s.ipo+(s.gd?' · Guilda: '+s.gd.n:'');pfBuild();$('prof').hidden=false;clearInterval(pfT);pfT=setInterval(pfPrev,350)};
-$('prof').addEventListener('click',e=>{const b=e.target.closest('.cs');if(!b)return;s.pf[b.dataset.g]=+b.dataset.v;sfx(500,.05);pfBuild();save()});
-$('pfOk').onclick=async()=>{const n=$('pnm').value.trim().slice(0,14);if(n&&n!=s.n){const o=s.n;s.n=n;if(A){const st=await push(1);if(st==409){s.n=o;toast('Esse nome já está em uso');return}}}toast('✅ Perfil salvo!');clearInterval(pfT);$('prof').hidden=true;save();cloud();if(tab=='rk')draw()};
+$('pfBtn').onclick=()=>{$('pnm').value=s.n;$('pcn').value=s.cn;$('pst').textContent='Nv.'+lvl()+' · '+ST[stg()][0]+' · IPOs: '+s.ipo+(s.gd?' · Guilda: '+s.gd.n:'');pfBuild();$('prof').hidden=false;clearInterval(pfT);pfT=setInterval(pfPrev,350)};
+$('prof').addEventListener('click',e=>{const b=e.target.closest('.cs');if(!b)return;if(b.dataset.g!=null)s.pf[b.dataset.g]=+b.dataset.v;else if(b.dataset.ce!=null)s.ci.em=+b.dataset.ce;else if(b.dataset.cc!=null)s.ci.cl=+b.dataset.cc;else return;sfx(500,.05);pfBuild();save()});
+$('pfOk').onclick=async()=>{const n=$('pnm').value.trim().slice(0,14);if(n&&n!=s.n){const o=s.n;s.n=n;if(A){const st=await push(1);if(st==409){s.n=o;toast('Esse nome já está em uso');return}}}
+const cn=$('pcn').value.trim().slice(0,18);if(cn)s.cn=cn;hcoDraw();
+toast('✅ Perfil salvo!');clearInterval(pfT);$('prof').hidden=true;save();cloud();if(tab=='rk')draw()};
 /* ===== GUILDA ===== */
-const GLV=50,GCOST=25000,GMAX=10,GPT=[['..#..','..#..','#####','.###.','.#.#.'],['..#..','..#..','#####','..#..','..#..'],['..#..','.###.','#####','.###.','..#..'],['..#..','.###.','.###.','#####','#####'],['..###','..##.','.###.','..##.','.##..'],['#.#.#','#####','#####','#####','.###.']],GCL=['#ff4d6d','#ff9a3c','#ffd23f','#3ee0a0','#4cc9f0','#c77dff'],GPN=['Estrela','Cruz','Diamante','Escudo','Raio','Coroa'],GSH=[7,7,7,7,7,5,3,1];
+const GLV=50,GCOST=25000,GMAX=10,GPT=[['..#..','..#..','#####','.###.','.#.#.'],['..#..','..#..','#####','..#..','..#..'],['..#..','.###.','#####','.###.','..#..'],['..#..','.###.','.###.','#####','#####'],['..###','..##.','.###.','..##.','.##..'],['#.#.#','#####','#####','#####','.###.'],['.#.#.','#####','#####','.###.','..#..'],['..#..','.##..','##.##','#####','.###.'],['.###.','#.#.#','#####','#.#.#','.###.'],['..#..','.#.#.','.###.','#####','.###.'],['#####','.###.','..#..','.###.','#####'],['..#..','.###.','#####','..#..','..#..'],['..##.','.##..','.##..','.##..','..##.'],['.....','.###.','#####','.###.','.....'],['.#.#.','#####','.#.#.','#####','.#.#.']],GCL=['#ff4d6d','#ff9a3c','#ffd23f','#3ee0a0','#4cc9f0','#c77dff'],GPN=['Estrela','Cruz','Diamante','Escudo','Raio','Coroa','Coração','Chama','Cristal','Poção','Ampulheta','Flecha','Lua','Olho','Trevo'],GSH=[7,7,7,7,7,5,3,1];
 const GN=['Ana','Bruno','Carla','Diego','Elisa','Fábio','Gabi','Hugo','Iris','João','Kátia','Léo','Mara','Nico','Olívia','Pedro','Quésia','Rafa','Sara','Téo','Uma','Vitor','Wesley','Yara'],GR=['Dev','Designer','QA','DevOps','Analista','Estagiário'];
 let gsg='';
 const gOk=()=>Math.max(s.mxl||0,lvl())>=GLV,gcost=l=>5e13*Math.pow(3,l-1),gmem=()=>s.gd?Math.min(24,3+s.gd.lv*2):0;
@@ -806,7 +822,7 @@ if(ev){const l=evT-Date.now();if(l<=0){ev=null;drawEv();toast('A oportunidade pa
 setInterval(()=>{if(tab=='rk'&&!/^(nm|em|pw)$/.test(document.activeElement.id))pull()},10000);
 const loop=(f,a,b)=>setTimeout(()=>{if(!document.hidden)f();loop(f,a,b)},a+Math.random()*(b-a));
 loop(spawnBug,25e3,50e3);loop(spawnStar,45e3,90e3);loop(showEv,80e3,140e3);
-lastSt=stg();qv();draw();head();msUpd();music();requestAnimationFrame(frame);setInterval(tick,100);setInterval(save,5000);if(A)setTimeout(sync,1500);setInterval(()=>{push();cloud()},30000);setTimeout(push,4000);
+lastSt=stg();qv();draw();head();hcoDraw();msUpd();music();requestAnimationFrame(frame);setInterval(tick,100);setInterval(save,5000);if(A)setTimeout(sync,1500);setInterval(()=>{push();cloud()},30000);setTimeout(push,4000);
 let ip;addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;const b=document.createElement('button');b.textContent='📲 INSTALAR JOGO';b.style.cssText='position:fixed;right:14px;bottom:14px;z-index:60;background:#ff9a3c;color:#fff;border:4px solid #000;padding:12px 14px;font:700 .6rem "Press Start 2P",monospace;box-shadow:inset 0 -5px 0 rgba(0,0,0,.28)';b.onclick=()=>{ip.prompt();ip.userChoice.finally(()=>b.remove())};document.body.appendChild(b)});
 addEventListener('appinstalled',()=>toast('✅ Jogo instalado!'));
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
