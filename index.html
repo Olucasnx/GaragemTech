@@ -101,6 +101,9 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-o
 .nb{flex:none;background:var(--orange);color:#fff;font:.6rem 'Press Start 2P',monospace;padding:12px 14px;border:4px solid var(--bd);box-shadow:inset 0 -5px 0 rgba(0,0,0,.28),inset 0 3px 0 rgba(255,255,255,.3)}
 .nb:active{transform:translateY(3px)}
 .rkr.me{background:linear-gradient(90deg,rgba(255,210,63,.3),transparent),var(--card)}
+.rkr .in{min-width:0}.rkr .in b,.rkr .in small{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rkr .av{flex:none;image-rendering:pixelated;background:radial-gradient(circle at 50% 80%,#3a3f78,#1c1f40);border:3px solid var(--bd);display:block}
+.rkr.r1 .av{border-color:#ffd23f;box-shadow:0 0 10px rgba(255,210,63,.55)}.rkr.r2 .av{border-color:#d7dbe8}.rkr.r3 .av{border-color:#d9904f}
 .rkr>b{font:.6rem 'Press Start 2P',monospace;color:var(--gold)}
 .foot{margin-top:16px;text-align:center;color:var(--muted);font-size:1.1rem}
 .fl{position:fixed;font:.7rem 'Press Start 2P',monospace;color:var(--orange);pointer-events:none;z-index:9;animation:up .8s steps(8) forwards;text-shadow:2px 2px 0 #000}
@@ -755,7 +758,7 @@ else{st=own?'Ativo ✓':'Compra única';bt=own?'✓':'💎 '+fmt(pr);dis=own||s.
 return '<div class="it pxc'+(ct=='x'?' ex':'')+(own&&!cl?' done':'')+'"><div class="ic">'+ico(ic)+'</div><div class="in"><b>'+nm+'</b><small>'+ds+'</small><span class="st">'+st+'</span></div><button class="bt" data-sh="'+id+'" '+(dis?'disabled':'')+'>'+bt+'</button></div>'};
 $('shop').innerHTML='<div class="foot" style="margin:0 0 8px;color:var(--blue)">Seus diamantes: <b>💎 '+fmt(s.dm)+'</b><br>Ganhe 💎 subindo de nível, em missões, troféus, minigames, IPO e presente diário. É raro e valioso!</div><div class="qty">'+TT.map(t=>'<button data-st="'+t[0]+'" class="'+(shopTab==t[0]?'on':'')+'">'+t[1]+'</button>').join('')+'</div>'+SHOP.filter(it=>cats.includes(it[1])).map(row).join('')}
 function shopBuy(id){const it=SHOP.find(q=>q[0]==id);if(!it)return;const[,ct,,nm,,pr]=it,cl='oak'.includes(ct),ix=+id.slice(1);
-if(cl&&has(id)){s.pf[CK[ct]]=s.pf[CK[ct]]==ix?0:ix;sfx(500,.06);save();shopDraw();return}
+if(cl&&has(id)){s.pf[CK[ct]]=s.pf[CK[ct]]==ix?0:ix;sfx(500,.06);save();push();shopDraw();return}
 if(s.dm<pr||(!cl&&ct!='b'&&has(id)))return;s.dm-=pr;
 if(cl){s.own.push(id);s.pf[CK[ct]]=ix;toast('👕 '+nm+' equipado!')}
 else if(ct=='b'){const n=Date.now(),k=BK[id];
@@ -763,7 +766,7 @@ if(k){s.bt[k]=Math.max(n,s.bt[k]||0)+BTD[k][4];applyBt();toast('⚡ '+nm+' ativa
 else if(id=='t4'){const q=Math.max(1000,mps()*3600);gain(q);toast('🎁 +'+fmt(q)+' 💰')}
 else{s.bt.nb=Math.max(n,s.bt.nb||0)+18e5;bugs=[];toast('🛡️ Sem bugs por 30 minutos!')}}
 else{s.own.push(id);toast('✨ '+nm+' desbloqueado!')}
-burst(100,40,['#4cc9f0','#fff','#ffd23f'],24,70);sfx(880,.15);setTimeout(()=>sfx(1175,.2),120);save();cloud();shopDraw();head()}
+burst(100,40,['#4cc9f0','#fff','#ffd23f'],24,70);sfx(880,.15);setTimeout(()=>sfx(1175,.2),120);save();cloud();push();shopDraw();head()}
 $('shop').addEventListener('click',e=>{const t=e.target.closest('[data-st]');if(t){shopTab=t.dataset.st;shopDraw();return}const b=e.target.closest('[data-sh]');if(b&&!b.disabled)shopBuy(b.dataset.sh)});
 function drawPet(T){if(!has('x2'))return;const px=Math.round(pet.x),py=Math.round(me.y-4+Math.sin(T/260)*1.5),d=me.dr>0?1:-2;
 R(px-3,me.y,7,1,'rgba(0,0,0,.25)');R(px-3,py-7,7,5,'#c9ced9');R(px-3,py-7,7,1,'#fff');R(px-3,py-3,7,1,'#8a8fa8');R(px+d,py-5,2,2,'#4cc9f0');R(px,py-10,1,3,'#8a8fa8');if((T/400|0)%2)R(px,py-11,1,1,'#ff4d6d');else R(px,py-11,1,1,'#3ee0a0');R(px-2,py-2,5,1,(T/90|0)%2?'#ff9a3c':'#ffd23f')}
@@ -855,16 +858,26 @@ setA(j);await sync();toast('✅ Conectado!');draw();pull()}catch(e){toast('Sem c
 async function sync(){try{const r=await fetch(SB_URL+'/rest/v1/progresso?select=data&user_id=eq.'+A.uid,{headers:await hd()});const j=await r.json(),c=j[0]&&j[0].data;
 if(c&&((c.life||0)+(c.tot||0))>sc()){const keep={snd:s.snd,dk:s.dk,mus:s.mus};s=Object.assign(def(),c,keep);delete s.gd;if(!s.v)s.v=2;fillM();msSig='';crewSig='';fx=[];applyBt();save();lastSt=stg();hcoDraw();toast('☁️ Progresso carregado da nuvem')}else await cloud()}catch(e){}push();chkAdm();claimCmds()}
 async function cloud(){if(!A||sc()<1)return;try{await fetch(SB_URL+'/rest/v1/progresso?on_conflict=user_id',{method:'POST',headers:Object.assign({Prefer:'resolution=merge-duplicates,return=minimal'},await hd()),body:JSON.stringify({user_id:A.uid,data:s,updated_at:new Date().toISOString()}),keepalive:true})}catch(e){}}
-async function push(man,re){if(!A||sc()<1)return 0;try{const r=await fetch(SB_URL+'/rest/v1/placar?on_conflict=user_id',{method:'POST',headers:Object.assign({Prefer:'resolution=merge-duplicates,return=minimal'},await hd()),body:JSON.stringify({user_id:A.uid,name:s.n,score:sc()})});
+async function push(man,re){if(!A||sc()<1)return 0;try{const pb=async()=>fetch(SB_URL+'/rest/v1/placar?on_conflict=user_id',{method:'POST',headers:Object.assign({Prefer:'resolution=merge-duplicates,return=minimal'},await hd()),body:JSON.stringify(noAvP?{user_id:A.uid,name:s.n,score:sc()}:{user_id:A.uid,name:s.n,score:sc(),av:avEnc()})});let r=await pb();if(r.status==400&&!noAvP){noAvP=1;r=await pb()}
 if(r.status==409&&!man&&!re){s.n=s.n.slice(0,10)+Math.floor(100+Math.random()*900);save();return push(0,1)}return r.status}catch(e){return 0}}
-async function pull(){gM='';try{const r=await fetch(SB_URL+'/rest/v1/placar?select=user_id,name,score&order=score.desc&limit=50',{headers:H0});if(!r.ok){gM=r.status+' '+(await r.text()).slice(0,100);throw 0}G=await r.json();gErr=0}catch(e){gErr=1;if(!gM)gM=String(e&&e.message||e)}if(tab=='rk'&&!/^(nm|em|pw)$/.test(document.activeElement.id))draw()}
+async function pull(){gM='';try{const q=()=>fetch(SB_URL+'/rest/v1/placar?select=user_id,name,score'+(noAvG?'':',av')+'&order=score.desc&limit=50',{headers:H0});let r=await q();if(r.status==400&&!noAvG){noAvG=1;r=await q()}if(!r.ok){gM=r.status+' '+(await r.text()).slice(0,100);throw 0}G=await r.json();gErr=0}catch(e){gErr=1;if(!gM)gM=String(e&&e.message||e)}if(tab=='rk'&&!/^(nm|em|pw)$/.test(document.activeElement.id))draw()}
 const priv=()=>modal('PRIVACIDADE 🔒','<b>O que guardamos:</b> seu e-mail, sua senha (criptografada), o nome que você escolher, sua pontuação e o progresso do jogo.<br><br><b>Para quê:</b> entrar na conta, salvar seu progresso e montar o ranking global. Nome e pontuação aparecem para todos. Administradores autorizados podem consultar e-mail, nome e pontuação para moderação, e toda ação administrativa fica registrada.<br><br><b>Onde:</b> no Supabase, serviço de banco de dados na nuvem. Não vendemos nem compartilhamos seus dados.<br><br><b>Seus direitos:</b> em Configurações você pode apagar o progresso e o ranking (Reiniciar) ou excluir a conta e todos os dados (Excluir minha conta).<br><br>Menores de 18 anos devem usar com autorização de um responsável.');
 function delAcc(){if(!A){toast('Entre na sua conta primeiro');return}ask('EXCLUIR CONTA?','Excluir sua conta e TODOS os dados? Isso não pode ser desfeito.','EXCLUIR',delRun)}
 async function delRun(){try{const r=await fetch(SB_URL+'/rest/v1/rpc/delete_user',{method:'POST',headers:await hd(),body:'{}'});if(!r.ok)throw 0}catch(e){toast('Não foi possível excluir. Tente de novo');return}reset=1;try{localStorage.removeItem(K)}catch(x){}setA(null);location.reload()}
-function rankDraw(){const ok=G&&!gErr;let L=ok?G.map(r=>A&&r.user_id==A.uid?[s.n,sc(),1]:[r.name,+r.score,0]):[];if(ok&&A&&!L.some(r=>r[2]))L.push([s.n,sc(),1]);L.sort((x,y)=>y[1]-x[1]);
+/* ===== AVATAR NO RANKING ===== */
+let noAvP=0,noAvG=0;
+const AVMAX=[5,7,3,7,4,5,5,3],AVDEF='110000000';
+const avEnc=()=>{const p=s.pf;return [p.sk,p.hr,p.hs,p.sh,p.pa,p.ou,p.ac,p.bk].map(v=>Math.max(0,Math.min(9,+v||0))).join('')+(has('x3')?1:0)};
+const avDec=v=>{v=/^\d{9}$/.test(String(v||''))?String(v):AVDEF;const n=[...v].map(Number);for(let i=0;i<8;i++)n[i]=Math.min(n[i],AVMAX[i]);return n};
+function avPaint(){document.querySelectorAll('#rk canvas.av').forEach(c=>{const k=+c.dataset.k||2,a=avDec(c.dataset.av),x=c.getContext('2d'),o=g,T=Date.now();
+c.width=18*k;c.height=24*k;x.setTransform(k,0,0,k,0,0);g=x;
+if(a[8]){g.globalAlpha=.2+.06*Math.sin(T/300);R(3,4,13,17,'#ffd23f');g.globalAlpha=1;for(let q=0;q<4;q++){const w=T/300+q*1.57;R(9+Math.cos(w)*8,13+Math.sin(w)*7,1,1,q%2?'#fff6b0':'#ffd23f')}}
+R(5,21,8,1,'rgba(0,0,0,.35)');person(9,21,PSK[a[0]],PSH[a[3]],PPA[a[4]],0,PHR[a[1]],a[2],1,a[5],a[6],a[7]);g=o})}
+setInterval(()=>{if(tab=='rk'&&!document.hidden)avPaint()},400);
+function rankDraw(){const ok=G&&!gErr;let L=ok?G.map(r=>A&&r.user_id==A.uid?[s.n,sc(),1,avEnc()]:[r.name,+r.score,0,r.av]):[];if(ok&&A&&!L.some(r=>r[2]))L.push([s.n,sc(),1,avEnc()]);L.sort((x,y)=>y[1]-x[1]);
 const tag=gErr?'Sem conexão: '+esc(gM):ok?'🌎 Ranking global · jogadores reais':'Carregando ranking global…';
 const card=A?'<div class="it pxc"><div class="in"><b>Seu nome no ranking</b><input id="nm" maxlength="14" value="'+esc(s.n)+'"><small>'+esc(A.em)+' · progresso salvo na nuvem ☁️</small></div><button class="nb" id="sv">SALVAR</button></div>':'<div class="it pxc"><div class="in"><b>Entre para competir</b><input id="em" type="email" placeholder="Seu e-mail" autocomplete="email"><input id="pw" type="password" placeholder="Senha (mínimo 6)" autocomplete="current-password" style="margin-top:6px"><small>Salva seu progresso na nuvem e coloca você no ranking. Usamos seu e-mail só para o login.<br><span id="prv2" class="lk" style="display:inline-block;padding:8px 0">Privacidade</span></small></div></div><div class="it pxc" style="gap:8px"><button class="nb" id="li">ENTRAR</button><button class="nb" id="su">CRIAR CONTA</button></div>';
-$('rk').innerHTML='<div class="foot" style="margin:0 0 10px">'+tag+'</div>'+card+L.map((r,i)=>{let f=0;ST.forEach((x,j)=>{if(r[1]>=x[3])f=j});return '<div class="it pxc rkr '+(r[2]?'me':'')+'"><div class="ic">'+(i<3?ico(['🥇','🥈','🥉'][i]):i+1)+'</div><div class="in"><b>'+esc(r[0])+'</b><small>'+ST[f][0]+'</small></div><b>💰 '+fmt(r[1])+'</b></div>'}).join('')+(A?'<div class="it pxc"><div class="in"><b>Conta</b><small>Sair apaga o progresso deste aparelho (ele fica salvo na nuvem).</small></div><button class="nb" id="lo">SAIR</button></div>':'')}
+$('rk').innerHTML='<div class="foot" style="margin:0 0 10px">'+tag+'</div>'+card+L.map((r,i)=>{let f=0;ST.forEach((x,j)=>{if(r[1]>=x[3])f=j});const kk=i<3?3:2;return '<div class="it pxc rkr '+(r[2]?'me ':'')+(i<3?'r'+(i+1):'')+'"><div class="ic">'+(i<3?ico(['🥇','🥈','🥉'][i]):i+1)+'</div><canvas class="av" data-av="'+esc(r[3]||AVDEF)+'" data-k="'+kk+'" width="'+18*kk+'" height="'+24*kk+'" style="width:'+18*kk+'px;height:'+24*kk+'px" aria-hidden="true"></canvas><div class="in"><b>'+esc(r[0])+'</b><small>'+ST[f][0]+'</small></div><b>💰 '+fmt(r[1])+'</b></div>'}).join('')+(A?'<div class="it pxc"><div class="in"><b>Conta</b><small>Sair apaga o progresso deste aparelho (ele fica salvo na nuvem).</small></div><button class="nb" id="lo">SAIR</button></div>':'');avPaint()}
 $('rk').addEventListener('click',async e=>{const i=e.target.id;if(i=='sv'){const n=$('nm').value.trim().slice(0,14)||s.n,o=s.n;s.n=n;const st=await push(1);if(st==409){s.n=o;toast('Esse nome já está em uso')}else toast('Nome salvo!');save();draw();pull()}else if(i=='li'||i=='su')auth(i);else if(i=='prv2')priv();else if(i=='lo'){await cloud();reset=1;try{localStorage.removeItem(K)}catch(x){}setA(null);location.reload()}});
 /* ===== PAINEL ADMIN =====
    A aba só aparece para administradores, mas a SEGURANÇA real está no Supabase:
@@ -942,7 +955,7 @@ $('pfBtn').onclick=()=>{$('pnm').value=s.n;$('pcn').value=s.cn;$('pst').textCont
 $('prof').addEventListener('click',e=>{const b=e.target.closest('.cs');if(!b)return;if(b.dataset.g!=null)s.pf[b.dataset.g]=+b.dataset.v;else if(b.dataset.ce!=null)s.ci.em=+b.dataset.ce;else if(b.dataset.cc!=null)s.ci.cl=+b.dataset.cc;else return;sfx(500,.05);pfBuild();save()});
 $('pfOk').onclick=async()=>{const n=$('pnm').value.trim().slice(0,14);if(n&&n!=s.n){const o=s.n;s.n=n;if(A){const st=await push(1);if(st==409){s.n=o;toast('Esse nome já está em uso');return}}}
 const cn=$('pcn').value.trim().slice(0,18);if(cn)s.cn=cn;hcoDraw();
-toast('✅ Perfil salvo!');clearInterval(pfT);$('prof').hidden=true;save();cloud();if(tab=='rk')draw()};
+toast('✅ Perfil salvo!');clearInterval(pfT);$('prof').hidden=true;save();cloud();push();if(tab=='rk')draw()};
 const GPT=[['..#..','..#..','#####','.###.','.#.#.'],['..#..','..#..','#####','..#..','..#..'],['..#..','.###.','#####','.###.','..#..'],['..#..','.###.','.###.','#####','#####'],['..###','..##.','.###.','..##.','.##..'],['#.#.#','#####','#####','#####','.###.'],['.#.#.','#####','#####','.###.','..#..'],['..#..','.##..','##.##','#####','.###.'],['.###.','#.#.#','#####','#.#.#','.###.'],['..#..','.#.#.','.###.','#####','.###.'],['#####','.###.','..#..','.###.','#####'],['..#..','.###.','#####','..#..','..#..'],['..##.','.##..','.##..','.##..','..##.'],['.....','.###.','#####','.###.','.....'],['.#.#.','#####','.#.#.','#####','.#.#.']],GCL=['#ff4d6d','#ff9a3c','#ffd23f','#3ee0a0','#4cc9f0','#c77dff'],GPN=['Estrela','Cruz','Diamante','Escudo','Raio','Coroa','Coração','Chama','Cristal','Poção','Ampulheta','Flecha','Lua','Olho','Trevo'],GSH=[7,7,7,7,7,5,3,1];
 function emb(c,pi,col,q){c.width=9*q;c.height=10*q;const x=c.getContext('2d');x.imageSmoothingEnabled=false;
 const row=(r,w,f,e)=>{x.fillStyle=f;x.fillRect((1+(7-w)/2-e)*q,(1+r)*q,(w+2*e)*q,q)};
