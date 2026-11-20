@@ -402,10 +402,10 @@ const qn=i=>qx('e',i),can=(k,i)=>k=='a'?(!i||s.a[i-1]>0)&&!qx('a',i)[2]:k=='e'?!
 const ebt=i=>{const q=qx('e',i);return '+'+(q[0]||1)+'<small>💰 '+fmt(q[1])+'</small>'},abt=i=>{const q=qx('a',i);return '+'+(q[0]||1)+'<small>💻 '+fmt(q[1])+'</small>'};
 function buy(k,i){if(!can(k,i))return;if(k=='a'){const q=qx('a',i);s.c-=q[1];s.a[i]+=q[0]}else if(k=='e'){const q=qx('e',i);s.m-=q[1];s.e[i]+=q[0]}else{s.m-=EQ[i][3];s.q[i]=1}sfx(520);setTimeout(()=>sfx(700,.08),70);burst(80+rnd(40),62,['#ffd23f','#3ee0a0','#fff'],10,45);mp('buy',1);save();draw();head()}
 const row=(k,i,ic,nm,ds,st,bt,cls)=>'<div class="it pxc '+(cls||'')+'"><div class="ic">'+ico(ic)+'</div><div class="in"><b>'+nm+'</b><small>'+ds+'</small><span class="st">'+st+'</span></div><button class="bt" data-k="'+k+'" data-i="'+i+'" '+(can(k,i)?'':'disabled')+'>'+bt+'</button></div>';
-const ipoGain=()=>s.tot>=5e9?Math.max(1,Math.floor(Math.pow(s.tot/5e9,.35))):0;
-function ipoDraw(){const gn=ipoGain();$('ipo').innerHTML='<div class="it pxc"><div class="ic">'+ico('📈')+'</div><div class="in"><b>Ações: '+s.sh+'</b><small>Cada ação dá +2% em toda a produção, para sempre. Bônus atual: +'+s.sh*2+'%</small><span class="st">IPOs realizados: '+s.ipo+'</span></div></div><div class="it pxc"><div class="in"><b>Abrir capital (IPO)</b><small>Reinicia dinheiro, código, apps, equipe e equipamentos. Mantém troféus, ações e ranking. Disponível a partir de '+fmt(5e9)+' 💰 ganhos na rodada.</small><span class="st">Ganhos: '+fmt(s.tot)+' 💰 → você receberia 📈 '+gn+'</span></div><button class="bt" id="ipoB" '+(gn<1?'disabled':'')+'>IPO<small>+'+gn+' 📈</small></button></div>'}
-function doIpo(){const g0=ipoGain();if(g0<1)return;ask('ABRIR CAPITAL? 📈','Você ganha <b>'+g0+' ações</b>. Sua empresa será reiniciada (troféus e ações ficam).','FAZER IPO',ipoRun)}
-function ipoRun(){const gn=ipoGain();if(gn<1)return;s.life+=s.tot;s.sh+=gn;s.ipo++;s.dm+=1;s.m=0;s.c=0;s.tot=0;s.a=AP.map(()=>0);s.e=EM.map(()=>0);s.q=EQ.map(()=>0);s.ms=[];fillM();msSig='';fx=[];applyBt();bugs=[];star=null;ev=null;drawEv();lastSt=0;crewSig='';save();cloud();push();modal('IPO CONCLUÍDO! 📈','Você ganhou '+gn+' ações e 💎 '+1+'. Bônus total de produção: +'+s.sh*2+'%.');sfx(988,.3);burst(100,40,['#ffd23f','#fff','#c77dff'],40,90);draw();head()}
+const IPO_MAX=50,ipoDia=()=>{if(s.tot<5e9)return 0;const v=1000+9000*Math.log10(s.tot/5e9)/4;return Math.min(10000,Math.max(1000,Math.round(v/50)*50))},ipoGain=()=>s.tot>=5e9?Math.max(1,Math.floor(Math.pow(s.tot/5e9,.35))):0;
+function ipoDraw(){const gn=ipoGain(),mx=s.ipo>=IPO_MAX,dg=ipoDia();$('ipo').innerHTML='<div class="it pxc"><div class="ic">'+ico('📈')+'</div><div class="in"><b>Ações: '+s.sh+'</b><small>Cada ação dá +2% em toda a produção, para sempre. Bônus atual: +'+s.sh*2+'%</small><span class="st">IPOs realizados: '+s.ipo+' / '+IPO_MAX+'</span></div></div><div class="it pxc"><div class="in"><b>Abrir capital (IPO)</b><small>Reinicia dinheiro, código, apps, equipe e equipamentos. Mantém troféus, ações e ranking. Cada IPO também rende de 💎 1.000 a 💎 10.000, conforme o dinheiro ganho na rodada. Limite de '+IPO_MAX+' IPOs. Disponível a partir de '+fmt(5e9)+' 💰 ganhos na rodada.</small><span class="st">Ganhos: '+fmt(s.tot)+' 💰 → você receberia 📈 '+gn+' e 💎 '+fmt(dg)+'</span></div><button class="bt" id="ipoB" '+(mx||gn<1?'disabled':'')+'>'+(mx?'MÁXIMO<small>'+IPO_MAX+' IPOs</small>':'IPO<small>+'+gn+' 📈</small>')+'</button></div>'}
+function doIpo(){const g0=ipoGain();if(g0<1)return;if(s.ipo>=IPO_MAX){toast('Limite de '+IPO_MAX+' IPOs atingido');return}ask('ABRIR CAPITAL? 📈','Você ganha <b>'+g0+' ações</b> e <b>💎 '+fmt(ipoDia())+'</b>. Sua empresa será reiniciada (troféus e ações ficam).','FAZER IPO',ipoRun)}
+function ipoRun(){const gn=ipoGain();if(gn<1||s.ipo>=IPO_MAX)return;const dg=ipoDia();s.life+=s.tot;s.sh+=gn;s.ipo++;s.dm+=dg;s.m=0;s.c=0;s.tot=0;s.a=AP.map(()=>0);s.e=EM.map(()=>0);s.q=EQ.map(()=>0);s.ms=[];fillM();msSig='';fx=[];applyBt();bugs=[];star=null;ev=null;drawEv();lastSt=0;crewSig='';save();cloud();push();modal('IPO CONCLUÍDO! 📈','Você ganhou '+gn+' ações e 💎 '+fmt(dg)+'. Bônus total de produção: +'+s.sh*2+'%.');sfx(988,.3);burst(100,40,['#ffd23f','#fff','#c77dff'],40,90);draw();head()}
 /* ===== EXPANSÃO INTERNACIONAL ===== */
 const WORLD=[
 {id:'br',name:'Brasil',x:29,y:66,cost:0,requires:null,desc:'Seu mercado de origem.',bonus:'Mercado inicial'},
@@ -743,30 +743,30 @@ P.forEach(p=>{g.globalAlpha=Math.max(0,p.l/p.m);if(p.k){R(p.x,p.y,3,3,'#ffd23f')
 if(flash>0){g.globalAlpha=Math.min(1,flash);R(0,0,W,H,'#fff');g.globalAlpha=1;flash=Math.max(0,flash-dt*3)}}
 const pet={x:60};let shopTab='b',shopSig='';
 const SHOP=[
-['t1','b','⚡','Turbo de Dinheiro','💰 x2 por 10 minutos',2500],
-['t2','b','💻','Turbo de Código','💻 x2 por 10 minutos',2500],
-['t3','b','🚀','Mega Turbo','💰 e 💻 x3 por 5 minutos',7500],
-['t4','b','🎁','Pacote de Dinheiro','Receba 1 hora de produção agora',4000],
-['t5','b','🛡️','Anti-Bug','Nenhum bug aparece por 30 minutos',3000],
-['u1','p','🧠','Mentoria Premium','Equipe +10% código/s (permanente)',20000],
-['u2','p','💼','Contrato Global','Apps +10% dinheiro/s (permanente)',20000],
-['u3','p','🌌','Data Center Orbital','Tudo +25% (permanente)',100000],
-['o1','o','🧥','Moletom','Conforto de programador',5000],
-['o2','o','🥼','Jaleco','Visual de cientista',7500],
-['o3','o','🤵','Terno','Para fechar grandes negócios',12500],
-['o4','o','🧥','Jaqueta de Couro','Estilo rebelde',17500],
-['o5','o','🛡️','Armadura Dourada','Brilha mais que o servidor',75000],
-['a1','a','👓','Óculos','Para ver melhor os bugs',2500],
-['a2','a','🎧','Fone Gamer','Foco total',4500],
-['a3','a','🕶️','Óculos Escuros','Estilo hacker',3000],
-['a4','a','🧙','Chapéu de Mago','Magia na programação',25000],
-['a5','a','👑','Coroa','Realeza da tecnologia',45000],
-['k1','k','🎒','Mochila','Cabe um notebook e um lanche',3500],
-['k2','k','🦸','Capa','Herói do deploy',30000],
-['k3','k','🕊️','Asas','Voe sobre os concorrentes',60000],
-['x1','x','🦸','Programador Lendário','Um dev lendário entra na equipe, com mesa dourada: +60% código/s',250000],
-['x2','x','🤖','Robô Pet','Um robozinho segue você pela empresa: +10% de tudo',100000],
-['x3','x','✨','Aura Dourada','Brilho exclusivo no seu personagem: +15% código por clique',150000]];
+['t1','b','⚡','Turbo de Dinheiro','💰 x2 por 10 minutos',3000],
+['t2','b','💻','Turbo de Código','💻 x2 por 10 minutos',3000],
+['t3','b','🚀','Mega Turbo','💰 e 💻 x3 por 5 minutos',9000],
+['t4','b','🎁','Pacote de Dinheiro','Receba 1 hora de produção agora',5000],
+['t5','b','🛡️','Anti-Bug','Nenhum bug aparece por 30 minutos',4000],
+['u1','p','🧠','Mentoria Premium','Equipe +10% código/s (permanente)',15000],
+['u2','p','💼','Contrato Global','Apps +10% dinheiro/s (permanente)',15000],
+['u3','p','🌌','Data Center Orbital','Tudo +25% (permanente)',80000],
+['o1','o','🧥','Moletom','Conforto de programador',3000],
+['o2','o','🥼','Jaleco','Visual de cientista',6000],
+['o3','o','🤵','Terno','Para fechar grandes negócios',9000],
+['o4','o','🧥','Jaqueta de Couro','Estilo rebelde',13000],
+['o5','o','🛡️','Armadura Dourada','Brilha mais que o servidor',50000],
+['a1','a','👓','Óculos','Para ver melhor os bugs',2000],
+['a2','a','🎧','Fone Gamer','Foco total',3500],
+['a3','a','🕶️','Óculos Escuros','Estilo hacker',4000],
+['a4','a','🧙','Chapéu de Mago','Magia na programação',20000],
+['a5','a','👑','Coroa','Realeza da tecnologia',35000],
+['k1','k','🎒','Mochila','Cabe um notebook e um lanche',4000],
+['k2','k','🦸','Capa','Herói do deploy',25000],
+['k3','k','🕊️','Asas','Voe sobre os concorrentes',45000],
+['x1','x','🦸','Programador Lendário','Um dev lendário entra na equipe, com mesa dourada: +60% código/s',120000],
+['x2','x','🤖','Robô Pet','Um robozinho segue você pela empresa: +10% de tudo',50000],
+['x3','x','✨','Aura Dourada','Brilho exclusivo no seu personagem: +15% código por clique',80000]];
 const BTD={m:['Turbo Din.','⚡',2,1,6e5],c:['Turbo Cód.','💻',1,2,6e5],x:['Mega Turbo','🚀',3,3,3e5]},BK={t1:'m',t2:'c',t3:'x'},CK={o:'ou',a:'ac',k:'bk'};
 function applyBt(){const n=Date.now();for(const k in BTD)if((s.bt[k]||0)>n){const d=BTD[k];addFx({k:'sh'+k,nm:d[0],ic:d[1],m:d[2],c:d[3],u:s.bt[k]})}}
 function shopDraw(){shopSig=s.dm+'|'+s.own.length;const TT=[['b','⚡ BOOSTS'],['o','👕 ROUPAS'],['x','👑 EXCLUSIVOS']],cats={b:'bp',o:'oak',x:'x'}[shopTab];
