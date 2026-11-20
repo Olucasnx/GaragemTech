@@ -354,7 +354,8 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
 <script>
 (()=>{
 const $=i=>document.getElementById(i),sum=a=>a.reduce((x,y)=>x+y,0),K='garagemtech_v1',rnd=n=>Math.floor(Math.random()*n);
-const fmt=n=>{if(n<1e3)return n<10&&n%1?n.toFixed(1):''+Math.floor(n);const u=['K','M','B','T','Qa','Qi'];let i=-1;while(n>=1e3&&i<5){n/=1e3;i++}return n.toFixed(n<10?2:n<100?1:0)+u[i]};
+const FMT_U=['K','M','B','T','Qa','Qi','Sx','Sp','Oc','No','Dc','Ud','Dd','Td','Qad','Qid','Sxd','Spd','Ocd','Nod','Vg'];
+const fmt=n=>{if(!isFinite(n))return n>0?'∞':'0';if(n<1e3)return n<10&&n%1?n.toFixed(1):''+Math.floor(n);let i=-1;while(n>=1e3&&i<FMT_U.length-1){n/=1e3;i++}const d=n<10?2:n<100?1:0;let r=n.toFixed(d);if(+r>=1e3&&i<FMT_U.length-1){n/=1e3;i++;r=n.toFixed(2)}return r+FMT_U[i]};
 const esc=t=>String(t).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
 const setH=(el,h)=>{if(el._h!==h){el._h=h;el.innerHTML=h}};
 /* ícones emoji convertidos em pixel art (16x16 ampliado) */
