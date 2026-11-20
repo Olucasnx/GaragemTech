@@ -266,6 +266,23 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
 .fr-empty{color:var(--muted);font-size:1.1rem;padding:8px 2px}
 .fr-count{color:var(--green);font-size:1rem;margin-left:5px}
 
+/* ===== BOSS LV50 ===== */
+.boss-wrap{padding:2px 0}.boss-h{display:flex;align-items:center;gap:10px;margin:0 0 8px}.boss-h b{font-size:.62rem;line-height:1.5;color:var(--red)}.boss-h .px{width:32px;height:32px}
+.boss-hp{height:16px;background:#0d0f20;border:3px solid var(--bd);margin-bottom:8px;overflow:hidden}.boss-hp i{display:block;height:100%;width:100%;background:repeating-linear-gradient(90deg,var(--red) 0 8px,#c23550 8px 16px);transition:width .3s steps(6)}
+.boss-phase{font-size:.5rem;line-height:1.7;color:var(--gold);margin:0 0 8px}
+.boss-arena{background:var(--tab);border:4px solid var(--bd);box-shadow:inset 3px 3px 0 var(--hi),inset -3px -3px 0 var(--lo);padding:10px;min-height:150px;text-align:center}
+.boss-arena button,.boss-wrap .bt{touch-action:manipulation;cursor:pointer}
+.boss-row{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:2px dashed var(--muted);text-align:left}.boss-row .px{width:36px;height:36px}.boss-row>div{flex:1;font-size:1.2rem;line-height:1.1}.boss-row b{display:block;font:.55rem/1.6 'Press Start 2P',monospace;color:var(--red)}.boss-row small{color:var(--muted);font-size:1.05rem}.boss-row .bt{width:92px;max-width:92px;background:var(--red)}.boss-row .bt:disabled{background:var(--tab);color:var(--muted);box-shadow:none}
+.mg-res{font:.55rem/1.8 'Press Start 2P',monospace;color:var(--red);margin:14px 0}.mg-res.ok{color:var(--green)}
+.mg-seq .sq{font-size:1.1rem;min-height:2.2em;line-height:2.2;margin-bottom:8px;color:var(--gold)}.mg-seq .pad{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.mg-seq button,.mg-mem .c,.mg-whack .c{background:var(--card);border:4px solid var(--bd);box-shadow:inset 0 -4px 0 rgba(0,0,0,.28),inset 0 3px 0 rgba(255,255,255,.25);font-size:1.5rem;padding:10px 0;color:var(--ink)}
+.mg-seq button:disabled{opacity:.5}
+.mg-timing .tbar{position:relative;height:34px;background:#0d0f20;border:4px solid var(--bd);margin:14px 0}.mg-timing .zn{position:absolute;top:0;bottom:0;background:var(--green);opacity:.85}.mg-timing .nd{position:absolute;top:-4px;bottom:-4px;width:6px;margin-left:-3px;background:var(--gold);border:2px solid var(--bd)}
+.mg-whack .g,.mg-mem .g{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:260px;margin:8px auto}.mg-whack .c,.mg-mem .c{height:62px;line-height:1;font-size:1.7rem}
+.mg-whack .st{font:.5rem 'Press Start 2P',monospace;color:var(--gold);margin-bottom:6px}
+.capture{background:rgba(40,10,80,.92)}.capture .mc{background:#4b1f8f;color:#fff}.capture h2{color:#e8c8ff}
+.capture .cap-av{margin:10px auto;animation:capfl 1.2s steps(4) infinite}.capture .cap-av .px,.capture .cap-av span{width:72px;height:72px;font-size:3rem;margin:0 auto}
+@keyframes capfl{50%{transform:translateY(-8px) scale(1.06)}}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#14162a"><link rel="apple-touch-icon" href="icon-192.png">
 </head>
@@ -289,6 +306,7 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
       </div>
       <div class="pxc" id="evt" hidden></div>
       <div class="pxc" id="mis"></div>
+      <div class="pxc" id="bossArea" style="margin-top:12px"></div>
     </section>
     <section>
       <div class="tabs" id="tabs" role="tablist"></div>
@@ -1112,6 +1130,49 @@ let ip;addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;const 
 addEventListener('appinstalled',()=>toast('✅ Jogo instalado!'));
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
 addEventListener('pagehide',save);document.addEventListener('visibilitychange',()=>{if(document.hidden){save();cloud();push()}});
+/* ===== SISTEMA DE BOSS LV50 ===== */
+const BOSS_DEFS=[
+{id:'malware',ic:'👾',lv:25,nm:'MR. MALWARE',hp:100,ph:['seq','timing','whack'],dmg:[25,35,40],req:0,
+onWin(){const m=Math.max(5000,mps()*300),c=Math.max(2000,cps()*200);gain(m);s.c+=c;s.dm+=5;s.bd=Math.max(s.bd||0,1);return 'Recompensa: +'+fmt(m)+' 💰 +'+fmt(c)+' 💻 +5 💎'}},
+{id:'lucas',ic:'🧑‍🔬',lv:50,nm:'DR. LUCAS',hp:150,ph:['mem','seq','timing','whack'],dmg:[20,30,35,45],req:1,
+onWin(){const m=Math.max(50000,mps()*500),c=Math.max(20000,cps()*300);gain(m);s.c+=c;s.dm+=15;s.bd=2;s.lu=1;addFx({k:'lucas',nm:'Dr. Lucas',ic:'🧑‍🔬',m:1.5,c:1.5,u:Date.now()+86400000*365});return 'Recompensa: +'+fmt(m)+' 💰 +'+fmt(c)+' 💻 +15 💎'},
+cap(){const o=document.createElement('div');o.className='ov capture';o.innerHTML='<div class="mc pxc"><h2>🔮 CAPTURA CONCLUÍDA</h2><div class="cap-av">'+ico('🧑‍🔬')+'</div><p>Você o capturou e o levou para sua empresa!</p><p style="color:var(--gold)">Bônus permanente: x1.5 de produção</p><button class="ok">LEVAR DR. LUCAS EMBORA</button></div>';o.querySelector('button').onclick=()=>o.remove();document.body.appendChild(o);sfx(988,.4);setTimeout(()=>sfx(1319,.4),180)}}
+];
+let bossFight=null;
+function canFightBoss(i){const b=BOSS_DEFS[i];if(!b)return{ok:0,why:'—'};if(lvl()<b.lv)return{ok:0,why:'🔒 Precisa ser Nível '+b.lv};if((s.bd||0)>i)return{ok:0,done:1,why:'✅ Derrotado'};if(b.req&&(s.bd||0)<b.req)return{ok:0,why:'🔒 Derrote o boss anterior'};return{ok:1,why:''}}
+function bossClear(){if(bossFight){bossFight.tm.forEach(x=>{clearTimeout(x);clearInterval(x)});bossFight.tm=[]}}
+const bT=(f,id)=>{f.tm.push(id);return id};
+function drawBoss(){const el=$('bossArea');if(!el)return;
+if(bossFight){el.style.display='';if(!bossFight.built){bossFight.built=1;const d=BOSS_DEFS[bossFight.i];el.innerHTML='<div class="boss-wrap"><div class="boss-h">'+ico(d.ic)+'<b class="pf">'+d.nm+'</b></div><div class="boss-hp"><i></i></div><div class="boss-phase pf"></div><div class="boss-arena"></div><button class="bt" data-bx="1" style="margin-top:10px;width:100%;max-width:none;background:var(--tab);color:var(--ink)">FUGIR</button></div>';el._sig=null;nextBossPhase()}return}
+const L=lvl(),nw=BOSS_DEFS.filter((b,i)=>L>=b.lv&&(s.bn||0)<=i);if(nw.length){s.bn=BOSS_DEFS.indexOf(nw[nw.length-1])+1;save();sfx(520,.12);setTimeout(()=>sfx(780,.15),120);modal('⚔️ BOSS DISPONÍVEL!',nw.map(b=>b.nm+' (Nível '+b.lv+') já pode ser enfrentado!').join('<br>')+'<br>Vá até a <b>Arena de Boss</b>, no painel abaixo das missões.')}
+const vis=L>=BOSS_DEFS[0].lv,sig=(vis?1:0)+'|'+BOSS_DEFS.map(b=>L>=b.lv?1:0).join('')+'|'+(s.bd||0);if(el._sig===sig)return;el._sig=sig;el.style.display=vis?'':'none';if(!vis){el.innerHTML='';return}
+el.innerHTML='<div class="boss-wrap"><div class="boss-h pf"><b>☠️ ARENA DE BOSS</b></div>'+BOSS_DEFS.map((b,i)=>{const c=canFightBoss(i);return '<div class="boss-row">'+ico(b.ic)+'<div><b>'+b.nm+'</b><small>'+(c.ok?'HP '+b.hp+' · '+b.ph.length+' fases':c.why)+'</small></div>'+(c.ok?'<button class="bt" data-bs="'+i+'">LUTAR</button>':c.done?'<span style="color:var(--green)">✅</span>':'<button class="bt" disabled>🔒</button>')+'</div>'}).join('')+'</div>'}
+function startBoss(i){const c=canFightBoss(i);if(!c.ok){toast(c.why);return}bossClear();bossFight={i,hp:BOSS_DEFS[i].hp,max:BOSS_DEFS[i].hp,ph:0,tm:[],lock:0,built:0};sfx(200,.3,.05,'sawtooth');drawBoss()}
+function nextBossPhase(){const f=bossFight;if(!f)return;const d=BOSS_DEFS[f.i];if(f.ph>=d.ph.length||f.hp<=0){winBoss();return}
+const N={seq:'SEQUÊNCIA',timing:'TIMING',whack:'CAÇA-BUGS',mem:'MEMÓRIA'};$('bossArea').querySelector('.boss-phase').textContent='FASE '+(f.ph+1)+'/'+d.ph.length+' · '+N[d.ph[f.ph]];renderMiniGame()}
+function phaseEnd(ok){const f=bossFight;if(!f||f.lock)return;f.lock=1;bossClear();if(!ok){failBoss();return}const d=BOSS_DEFS[f.i],last=f.ph>=d.ph.length-1;damageBoss(last?f.hp:d.dmg[f.ph]);f.ph++;bT(f,setTimeout(nextBossPhase,700))}
+function damageBoss(n){const f=bossFight;if(!f)return;f.hp=Math.max(0,f.hp-n);const b=$('bossArea').querySelector('.boss-hp i');if(b)b.style.width=f.hp/f.max*100+'%';burst(100,50,['#ff4d6d','#fff','#ffd23f'],18,70);sfx(660,.15,.05);toast('💥 -'+n+' HP no boss!')}
+function failBoss(){const f=bossFight;if(!f)return;const l=Math.min(s.m,Math.max(100,mps()*30));s.m-=l;shake();sfx(120,.4,.06,'sawtooth');const a=$('bossArea').querySelector('.boss-arena');a.innerHTML='<div class="mg-res">💥 '+BOSS_DEFS[f.i].nm+' atacou!<br>-'+fmt(l)+' 💰</div><button class="bt" data-br="1" style="width:100%;max-width:none">TENTAR DE NOVO</button>';save()}
+function winBoss(){const f=bossFight;if(!f)return;const d=BOSS_DEFS[f.i];bossClear();const r=d.onWin();bossFight=null;const el=$('bossArea');el._sig=null;burst(100,50,['#ffd23f','#fff','#3ee0a0','#4cc9f0'],50,100);flash=.9;sfx(988,.4);
+if(typeof msUpd=='function')msUpd();if(typeof checkAch=='function')checkAch();save();try{cloud();push()}catch(e){}
+if(d.cap)d.cap();else modal('🏆 BOSS DERROTADO!',d.nm+' foi derrotado!<br>'+r);drawBoss();head()}
+function renderMiniGame(){const f=bossFight;if(!f)return;f.lock=0;const a=$('bossArea').querySelector('.boss-arena'),t=BOSS_DEFS[f.i].ph[f.ph];({seq:mgSeq,timing:mgTiming,whack:mgWhack,mem:mgMem})[t](a,f)}
+function mgSeq(a,f){const A=['⬆️','⬇️','⬅️','➡️'],q=[0,0,0,0].map(()=>rnd(4));let k=0,on=0;a.innerHTML='<div class="mg-seq"><div class="sq">Memorize!</div><div class="pad">'+A.map((x,i)=>'<button data-i="'+i+'" disabled>'+x+'</button>').join('')+'</div></div>';const sq=a.querySelector('.sq'),pad=a.querySelector('.pad');sq.textContent=q.map(i=>A[i]).join(' ');
+bT(f,setTimeout(()=>{sq.textContent='❓ ❓ ❓ ❓';pad.querySelectorAll('button').forEach(b=>b.disabled=0);on=1},1800));
+pad.onclick=e=>{const b=e.target.closest('button');if(!b||!on)return;const i=+b.dataset.i;if(i!=q[k]){on=0;phaseEnd(0);return}sfx(440+k*110,.08);k++;sq.textContent=q.slice(0,k).map(x=>A[x]).join(' ')+' ❓'.repeat(4-k);if(k>=4){on=0;phaseEnd(1)}}}
+function mgTiming(a,f){const w=Math.max(12,24-f.ph*3),zc=20+rnd(60),sp=1.6+f.ph*.35;a.innerHTML='<div class="mg-timing"><div class="sq pf" style="font-size:.5rem;color:var(--gold)">Pare a agulha na zona verde!</div><div class="tbar"><div class="zn" style="left:'+(zc-w/2)+'%;width:'+w+'%"></div><div class="nd"></div></div><button class="bt" style="width:100%;max-width:none">PARAR!</button></div>';const nd=a.querySelector('.nd'),t0=performance.now();let pos=50;
+bT(f,setInterval(()=>{pos=50+50*Math.sin((performance.now()-t0)/1000*sp*2);nd.style.left=pos+'%'},16));
+a.querySelector('button').onclick=()=>{if(f.lock)return;sfx(600,.08);phaseEnd(Math.abs(pos-zc)<=w/2)}}
+function mgWhack(a,f){const need=5+f.ph;let hit=0,miss=0,cur=-1;a.innerHTML='<div class="mg-whack"><div class="st"></div><div class="g">'+'<button class="c"></button>'.repeat(9)+'</div></div>';const cs=a.querySelectorAll('.c'),st=a.querySelector('.st'),upd=()=>{st.textContent='🐛 '+hit+'/'+need+' · ERROS '+miss+'/3'};upd();
+const show=()=>{if(cur>=0)cs[cur].textContent='';let n;do{n=rnd(9)}while(n==cur);cur=n;cs[n].textContent='🐛'};
+bT(f,setInterval(show,Math.max(450,800-f.ph*80)));show();
+cs.forEach((c,i)=>c.onclick=()=>{if(f.lock)return;if(i==cur){hit++;cs[i].textContent='💥';cur=-1;sfx(520+hit*40,.06);upd();if(hit>=need)phaseEnd(1)}else{miss++;sfx(160,.1);upd();if(miss>=3)phaseEnd(0)}})}
+function mgMem(a,f){const S=['🔴','🟢','🔵','🟡'],pos=[0,1,2,3,4,5,6,7,8].sort(()=>Math.random()-.5).slice(0,4),m={};pos.forEach((p,i)=>m[p]=S[i]);let found=0,on=0;a.innerHTML='<div class="mg-mem"><div class="st pf" style="font-size:.5rem;color:var(--gold)">Memorize as posições!</div><div class="g">'+'<button class="c"></button>'.repeat(9)+'</div></div>';const cs=a.querySelectorAll('.c'),st=a.querySelector('.st');pos.forEach(p=>cs[p].textContent=m[p]);
+bT(f,setTimeout(()=>{cs.forEach(c=>c.textContent='');st.textContent='Toque nas posições!';on=1},2500));
+cs.forEach((c,i)=>c.onclick=()=>{if(!on||f.lock||c.dataset.f)return;if(m[i]){c.textContent=m[i];c.dataset.f=1;found++;sfx(500+found*80,.08);if(found>=4){on=0;phaseEnd(1)}}else{on=0;c.textContent='❌';phaseEnd(0)}})}
+$('bossArea').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.bs!=null)startBoss(+b.dataset.bs);else if(b.dataset.br){if(bossFight)renderMiniGame()}else if(b.dataset.bx){bossClear();bossFight=null;$('bossArea')._sig=null;drawBoss();toast('Você fugiu da luta...')}});
+{const _d=draw,_h=head;draw=function(){const r=_d.apply(this,arguments);drawBoss();return r};head=function(){const r=_h.apply(this,arguments);drawBoss();return r}}
+setTimeout(drawBoss,0);
 })();
 </script>
 </body>
