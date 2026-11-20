@@ -384,7 +384,7 @@ function mp(k,a,mx){s.ms.forEach(m=>{if(m.k==k&&m.p<m.n){m.p=mx?Math.max(m.p,a):
 const rw=()=>Math.max(30,mps()*25);
 function drawMs(){$('mis').innerHTML='<div class="mh pf">📋 MISSÕES</div>'+s.ms.map((m,i)=>{const d=m.p>=m.n;return '<div class="ms '+(d?'ok':'')+'"><div class="mt">'+MT.find(x=>x[0]==m.k)[2](m.n)+'</div><div class="pg sm"><i style="width:'+m.p/m.n*100+'%"></i></div>'+(d?'<button class="bt sm" data-m="'+i+'">RESGATAR<small class="rwd">+'+fmt(rw())+' 💰</small></button>':'<span class="mp">'+fmt(m.p)+'/'+fmt(m.n)+'</span>')+'</div>'}).join('')}
 function msUpd(){const sig=s.ms.map(m=>m.k+m.n+(m.p>=m.n?1:0)).join('|');if(sig!=msSig){msSig=sig;drawMs();return}const L=$('mis').querySelectorAll('.ms');s.ms.forEach((m,i)=>{const r=L[i];if(!r)return;r.querySelector('.pg i').style.width=m.p/m.n*100+'%';const c=r.querySelector('.mp');if(c)c.textContent=fmt(m.p)+'/'+fmt(m.n);const w=r.querySelector('.rwd');if(w)w.textContent='+'+fmt(rw())+' 💰'})}
-function claimM(i){const m=s.ms[i];if(!m||m.p<m.n)return;const r=rw(),c=Math.max(20,cps()*60);gain(r);s.c+=c;s.md++;s.dm+=1;s.ms.splice(i,1);s.ms.push(newM(s.ms.map(x=>x.k)));burst(100,50,['#ffd23f','#3ee0a0','#fff'],18,60);sfx(880,.15);toast('✅ Missão cumprida! +'+fmt(r)+' 💰 +'+fmt(c)+' 💻 +1 💎');save()}
+function claimM(i){const m=s.ms[i];if(!m||m.p<m.n)return;const r=rw(),c=Math.max(20,cps()*60);gain(r);s.c+=c;s.md++;if(s.md%5===0)s.dm+=1;s.ms.splice(i,1);s.ms.push(newM(s.ms.map(x=>x.k)));burst(100,50,['#ffd23f','#3ee0a0','#fff'],18,60);sfx(880,.15);toast('✅ Missão cumprida! +'+fmt(r)+' 💰 +'+fmt(c)+' 💻'+(s.md%5===0?' +1 💎':''));save()}
 /* ===== EVENTOS ALEATÓRIOS ===== */
 const gm=x=>{gain(x);return '+'+fmt(x)+' 💰'};
 const EV=[
@@ -402,10 +402,10 @@ const qn=i=>qx('e',i),can=(k,i)=>k=='a'?(!i||s.a[i-1]>0)&&!qx('a',i)[2]:k=='e'?!
 const ebt=i=>{const q=qx('e',i);return '+'+(q[0]||1)+'<small>💰 '+fmt(q[1])+'</small>'},abt=i=>{const q=qx('a',i);return '+'+(q[0]||1)+'<small>💻 '+fmt(q[1])+'</small>'};
 function buy(k,i){if(!can(k,i))return;if(k=='a'){const q=qx('a',i);s.c-=q[1];s.a[i]+=q[0]}else if(k=='e'){const q=qx('e',i);s.m-=q[1];s.e[i]+=q[0]}else{s.m-=EQ[i][3];s.q[i]=1}sfx(520);setTimeout(()=>sfx(700,.08),70);burst(80+rnd(40),62,['#ffd23f','#3ee0a0','#fff'],10,45);mp('buy',1);save();draw();head()}
 const row=(k,i,ic,nm,ds,st,bt,cls)=>'<div class="it pxc '+(cls||'')+'"><div class="ic">'+ico(ic)+'</div><div class="in"><b>'+nm+'</b><small>'+ds+'</small><span class="st">'+st+'</span></div><button class="bt" data-k="'+k+'" data-i="'+i+'" '+(can(k,i)?'':'disabled')+'>'+bt+'</button></div>';
-const ipoGain=()=>s.tot>=1e9?Math.floor(Math.sqrt(s.tot/1e9)):0;
-function ipoDraw(){const gn=ipoGain();$('ipo').innerHTML='<div class="it pxc"><div class="ic">'+ico('📈')+'</div><div class="in"><b>Ações: '+s.sh+'</b><small>Cada ação dá +5% em toda a produção, para sempre. Bônus atual: +'+s.sh*5+'%</small><span class="st">IPOs realizados: '+s.ipo+'</span></div></div><div class="it pxc"><div class="in"><b>Abrir capital (IPO)</b><small>Reinicia dinheiro, código, apps, equipe e equipamentos. Mantém troféus, ações e ranking. Disponível a partir de '+fmt(1e9)+' 💰 ganhos na rodada.</small><span class="st">Ganhos: '+fmt(s.tot)+' 💰 → você receberia 📈 '+gn+'</span></div><button class="bt" id="ipoB" '+(gn<1?'disabled':'')+'>IPO<small>+'+gn+' 📈</small></button></div>'}
+const ipoGain=()=>s.tot>=5e9?Math.max(1,Math.floor(Math.pow(s.tot/5e9,.35))):0;
+function ipoDraw(){const gn=ipoGain();$('ipo').innerHTML='<div class="it pxc"><div class="ic">'+ico('📈')+'</div><div class="in"><b>Ações: '+s.sh+'</b><small>Cada ação dá +2% em toda a produção, para sempre. Bônus atual: +'+s.sh*2+'%</small><span class="st">IPOs realizados: '+s.ipo+'</span></div></div><div class="it pxc"><div class="in"><b>Abrir capital (IPO)</b><small>Reinicia dinheiro, código, apps, equipe e equipamentos. Mantém troféus, ações e ranking. Disponível a partir de '+fmt(5e9)+' 💰 ganhos na rodada.</small><span class="st">Ganhos: '+fmt(s.tot)+' 💰 → você receberia 📈 '+gn+'</span></div><button class="bt" id="ipoB" '+(gn<1?'disabled':'')+'>IPO<small>+'+gn+' 📈</small></button></div>'}
 function doIpo(){const g0=ipoGain();if(g0<1)return;ask('ABRIR CAPITAL? 📈','Você ganha <b>'+g0+' ações</b>. Sua empresa será reiniciada (troféus e ações ficam).','FAZER IPO',ipoRun)}
-function ipoRun(){const gn=ipoGain();if(gn<1)return;s.life+=s.tot;s.sh+=gn;s.ipo++;s.dm+=10+gn*5;s.m=0;s.c=0;s.tot=0;s.a=AP.map(()=>0);s.e=EM.map(()=>0);s.q=EQ.map(()=>0);s.ms=[];fillM();msSig='';fx=[];applyBt();bugs=[];star=null;ev=null;drawEv();lastSt=0;crewSig='';save();cloud();push();modal('IPO CONCLUÍDO! 📈','Você ganhou '+gn+' ações e 💎 '+(10+gn*5)+'. Bônus total de produção: +'+s.sh*5+'%.');sfx(988,.3);burst(100,40,['#ffd23f','#fff','#c77dff'],40,90);draw();head()}
+function ipoRun(){const gn=ipoGain();if(gn<1)return;s.life+=s.tot;s.sh+=gn;s.ipo++;s.dm+=1;s.m=0;s.c=0;s.tot=0;s.a=AP.map(()=>0);s.e=EM.map(()=>0);s.q=EQ.map(()=>0);s.ms=[];fillM();msSig='';fx=[];applyBt();bugs=[];star=null;ev=null;drawEv();lastSt=0;crewSig='';save();cloud();push();modal('IPO CONCLUÍDO! 📈','Você ganhou '+gn+' ações e 💎 '+1+'. Bônus total de produção: +'+s.sh*2+'%.');sfx(988,.3);burst(100,40,['#ffd23f','#fff','#c77dff'],40,90);draw();head()}
 /* ===== EXPANSÃO INTERNACIONAL ===== */
 const WORLD=[
 {id:'br',name:'Brasil',x:29,y:66,cost:0,requires:null,desc:'Seu mercado de origem.',bonus:'Mercado inicial'},
@@ -694,8 +694,8 @@ ob=ob.filter(b=>{const bx=b.l*LW+20;if(Math.abs(px-bx)<(b.k?10:15)&&b.y>PY-4&&b.
 pt.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt});pt=pt.filter(p=>p.l>0);
 draw();m.hud(life,'CHIPS '+chips,t/TT);if(life<=0)m.end(0,0,'O pacote foi destruído!');else if(t<=0)m.end(1,life)};
 m.hud(3,'CHIPS 0',1);draw();m.msg('PREPARE-SE');m.start(()=>{run=1;m.msg('');m.loop(upd)})};
-function mgDone(i){if(s.mg[i])return;s.mg[i]=1;s.dm+=10;bhit=Date.now()+600;shake();burst(80,GY-52,['#fff','#ff4d6d','#ffd23f'],24,80);sfx(220,.3,.05,'sawtooth');const d=sum(s.mg);gain(Math.max(150,mps()*180));if(d>=5)setTimeout(bossDown,900);else toast('💥 Mr. Malware perdeu força! '+d+'/5 · +10 💎');save()}
-function bossDown(){dialog([['M','NÃOOO! Meu plano... destruído por uma simples empresa de garagem?!'],['L','Conseguimos! Os dados do mundo estão salvos, graças a você!'],['L','Como recompensa, instalei um servidor quântico na sua empresa: +25% de produção para sempre!']],()=>{s.bd=1;s.dm+=100;gain(Math.max(1000,mps()*900));burst(80,50,['#ffd23f','#fff','#3ee0a0','#4cc9f0'],50,100);flash=.9;sfx(988,.4);save();cloud();push()})}
+function mgDone(i){if(s.mg[i])return;s.mg[i]=1;if(sum(s.mg)%5===0)s.dm+=1;bhit=Date.now()+600;shake();burst(80,GY-52,['#fff','#ff4d6d','#ffd23f'],24,80);sfx(220,.3,.05,'sawtooth');const d=sum(s.mg);gain(Math.max(150,mps()*180));if(d>=5)setTimeout(bossDown,900);else toast('💥 Mr. Malware perdeu força! '+d+'/5'+(d%5===0?' · +1 💎':''));save()}
+function bossDown(){dialog([['M','NÃOOO! Meu plano... destruído por uma simples empresa de garagem?!'],['L','Conseguimos! Os dados do mundo estão salvos, graças a você!'],['L','Como recompensa, instalei um servidor quântico na sua empresa: +25% de produção para sempre!']],()=>{s.bd=1;s.dm+=5;gain(Math.max(1000,mps()*900));burst(80,50,['#ffd23f','#fff','#3ee0a0','#4cc9f0'],50,100);flash=.9;sfx(988,.4);save();cloud();push()})}
 function subClick(x,y){y-=GY-92;if(y>64&&x<32){talkLucas();return 1}
 for(let i=0;i<5;i++)if(x>=RX(i)-2&&x<=RX(i)+13&&y>=56&&y<=93){me.tx=RX(i)+5;me.ty=89;if(!s.lu)talkLucas();else if(s.mg[i])toast('✅ Servidor '+(i+1)+' já restaurado');else playMG(i);return 1}return 0}
 function ride(t){if(elv.busy)return;const N=nFl();if(t>N-1||t<-1||t==me.f)return;
@@ -743,30 +743,30 @@ P.forEach(p=>{g.globalAlpha=Math.max(0,p.l/p.m);if(p.k){R(p.x,p.y,3,3,'#ffd23f')
 if(flash>0){g.globalAlpha=Math.min(1,flash);R(0,0,W,H,'#fff');g.globalAlpha=1;flash=Math.max(0,flash-dt*3)}}
 const pet={x:60};let shopTab='b',shopSig='';
 const SHOP=[
-['t1','b','⚡','Turbo de Dinheiro','💰 x2 por 10 minutos',500],
-['t2','b','💻','Turbo de Código','💻 x2 por 10 minutos',500],
-['t3','b','🚀','Mega Turbo','💰 e 💻 x3 por 5 minutos',1500],
-['t4','b','🎁','Pacote de Dinheiro','Receba 1 hora de produção agora',800],
-['t5','b','🛡️','Anti-Bug','Nenhum bug aparece por 30 minutos',600],
-['u1','p','🧠','Mentoria Premium','Equipe +10% código/s (permanente)',4000],
-['u2','p','💼','Contrato Global','Apps +10% dinheiro/s (permanente)',4000],
-['u3','p','🌌','Data Center Orbital','Tudo +25% (permanente)',20000],
-['o1','o','🧥','Moletom','Conforto de programador',1000],
-['o2','o','🥼','Jaleco','Visual de cientista',1500],
-['o3','o','🤵','Terno','Para fechar grandes negócios',2500],
-['o4','o','🧥','Jaqueta de Couro','Estilo rebelde',3500],
-['o5','o','🛡️','Armadura Dourada','Brilha mais que o servidor',15000],
-['a1','a','👓','Óculos','Para ver melhor os bugs',500],
-['a2','a','🎧','Fone Gamer','Foco total',900],
-['a3','a','🕶️','Óculos Escuros','Estilo hacker',600],
-['a4','a','🧙','Chapéu de Mago','Magia na programação',5000],
-['a5','a','👑','Coroa','Realeza da tecnologia',9000],
-['k1','k','🎒','Mochila','Cabe um notebook e um lanche',700],
-['k2','k','🦸','Capa','Herói do deploy',6000],
-['k3','k','🕊️','Asas','Voe sobre os concorrentes',12000],
-['x1','x','🦸','Programador Lendário','Um dev lendário entra na equipe, com mesa dourada: +60% código/s',50000],
-['x2','x','🤖','Robô Pet','Um robozinho segue você pela empresa: +10% de tudo',20000],
-['x3','x','✨','Aura Dourada','Brilho exclusivo no seu personagem: +15% código por clique',30000]];
+['t1','b','⚡','Turbo de Dinheiro','💰 x2 por 10 minutos',2500],
+['t2','b','💻','Turbo de Código','💻 x2 por 10 minutos',2500],
+['t3','b','🚀','Mega Turbo','💰 e 💻 x3 por 5 minutos',7500],
+['t4','b','🎁','Pacote de Dinheiro','Receba 1 hora de produção agora',4000],
+['t5','b','🛡️','Anti-Bug','Nenhum bug aparece por 30 minutos',3000],
+['u1','p','🧠','Mentoria Premium','Equipe +10% código/s (permanente)',20000],
+['u2','p','💼','Contrato Global','Apps +10% dinheiro/s (permanente)',20000],
+['u3','p','🌌','Data Center Orbital','Tudo +25% (permanente)',100000],
+['o1','o','🧥','Moletom','Conforto de programador',5000],
+['o2','o','🥼','Jaleco','Visual de cientista',7500],
+['o3','o','🤵','Terno','Para fechar grandes negócios',12500],
+['o4','o','🧥','Jaqueta de Couro','Estilo rebelde',17500],
+['o5','o','🛡️','Armadura Dourada','Brilha mais que o servidor',75000],
+['a1','a','👓','Óculos','Para ver melhor os bugs',2500],
+['a2','a','🎧','Fone Gamer','Foco total',4500],
+['a3','a','🕶️','Óculos Escuros','Estilo hacker',3000],
+['a4','a','🧙','Chapéu de Mago','Magia na programação',25000],
+['a5','a','👑','Coroa','Realeza da tecnologia',45000],
+['k1','k','🎒','Mochila','Cabe um notebook e um lanche',3500],
+['k2','k','🦸','Capa','Herói do deploy',30000],
+['k3','k','🕊️','Asas','Voe sobre os concorrentes',60000],
+['x1','x','🦸','Programador Lendário','Um dev lendário entra na equipe, com mesa dourada: +60% código/s',250000],
+['x2','x','🤖','Robô Pet','Um robozinho segue você pela empresa: +10% de tudo',100000],
+['x3','x','✨','Aura Dourada','Brilho exclusivo no seu personagem: +15% código por clique',150000]];
 const BTD={m:['Turbo Din.','⚡',2,1,6e5],c:['Turbo Cód.','💻',1,2,6e5],x:['Mega Turbo','🚀',3,3,3e5]},BK={t1:'m',t2:'c',t3:'x'},CK={o:'ou',a:'ac',k:'bk'};
 function applyBt(){const n=Date.now();for(const k in BTD)if((s.bt[k]||0)>n){const d=BTD[k];addFx({k:'sh'+k,nm:d[0],ic:d[1],m:d[2],c:d[3],u:s.bt[k]})}}
 function shopDraw(){shopSig=s.dm+'|'+s.own.length;const TT=[['b','⚡ BOOSTS'],['o','👕 ROUPAS'],['x','👑 EXCLUSIVOS']],cats={b:'bp',o:'oak',x:'x'}[shopTab];
@@ -775,7 +775,7 @@ if(cl){st=own?(on?'Equipado ✓':'Comprado'):'Compra única';bt=own?(on?'TIRAR':
 else if(ct=='b'){st='Consumível: pode comprar de novo';bt='💎 '+fmt(pr);dis=s.dm<pr}
 else{st=own?'Ativo ✓':'Compra única';bt=own?'✓':'💎 '+fmt(pr);dis=own||s.dm<pr}
 return '<div class="it pxc'+(ct=='x'?' ex':'')+(own&&!cl?' done':'')+'"><div class="ic">'+ico(ic)+'</div><div class="in"><b>'+nm+'</b><small>'+ds+'</small><span class="st">'+st+'</span></div><button class="bt" data-sh="'+id+'" '+(dis?'disabled':'')+'>'+bt+'</button></div>'};
-$('shop').innerHTML='<div class="foot" style="margin:0 0 8px;color:var(--blue)">Seus diamantes: <b>💎 '+fmt(s.dm)+'</b><br>Ganhe 💎 subindo de nível, em missões, troféus, minigames, IPO e presente diário. É raro e valioso!</div><div class="qty">'+TT.map(t=>'<button data-st="'+t[0]+'" class="'+(shopTab==t[0]?'on':'')+'">'+t[1]+'</button>').join('')+'</div>'+SHOP.filter(it=>cats.includes(it[1])).map(row).join('')}
+$('shop').innerHTML='<div class="foot" style="margin:0 0 8px;color:var(--blue)">Seus diamantes: <b>💎 '+fmt(s.dm)+'</b><br>Ganhe 💎 em marcos especiais, conquistas e eventos raros. Diamantes são muito raros e valiosos!</div><div class="qty">'+TT.map(t=>'<button data-st="'+t[0]+'" class="'+(shopTab==t[0]?'on':'')+'">'+t[1]+'</button>').join('')+'</div>'+SHOP.filter(it=>cats.includes(it[1])).map(row).join('')}
 function shopBuy(id){const it=SHOP.find(q=>q[0]==id);if(!it)return;const[,ct,,nm,,pr]=it,cl='oak'.includes(ct),ix=+id.slice(1);
 if(cl&&has(id)){s.pf[CK[ct]]=s.pf[CK[ct]]==ix?0:ix;sfx(500,.06);save();push();shopDraw();return}
 if(s.dm<pr||(!cl&&ct!='b'&&has(id)))return;s.dm-=pr;
@@ -836,8 +836,8 @@ const redu=matchMedia('(prefers-reduced-motion: reduce)').matches;let lastF=0;
 function frame(now){requestAnimationFrame(frame);if(now-lastF<(redu?250:33))return;const dt=Math.min((now-lastF)/1000,.1);lastF=now;upd(dt);scene(Date.now(),dt);elkPos()}
 function spawnBug(){if(s.tot<30||bugs.length>=3||view||Date.now()<(s.bt.nb||0))return;bugs.push({x:18+rnd(92),y:fy(0)-6+rnd(6),d:rnd(2)?1:-1,v:8+rnd(10),e:Date.now()+14000})}
 function spawnStar(){if(!star&&s.tot>=50)star={x:-8,y:26}}
-function squash(b){bugs=bugs.filter(x=>x!==b);s.bg++;const dg=Math.random()<.1?1:0;s.dm+=dg;const m=Math.max(10,mps()*5),c=Math.max(5,cps()*5);gain(m);s.c+=c;burst(b.x,b.y,['#ff4d6d','#ffd23f','#fff'],14,50);shake();sfx(660,.1,.04);toast('🐛 Bug esmagado! +'+fmt(m)+' 💰 +'+fmt(c)+' 💻'+(dg?' +1 💎':''));mp('bug',1)}
-function catchStar(){star=null;s.st++;s.dm++;addFx({k:'star',nm:'TURBO',ic:'⭐',m:5,c:5,u:Date.now()+20000});burst(100,30,['#ffd23f','#fff'],24,70);toast('⭐ Turbo x5 por 20s! +1 💎');sfx(900,.2);mp('star',1)}
+function squash(b){bugs=bugs.filter(x=>x!==b);s.bg++;const dg=Math.random()<.01?1:0;s.dm+=dg;const m=Math.max(10,mps()*5),c=Math.max(5,cps()*5);gain(m);s.c+=c;burst(b.x,b.y,['#ff4d6d','#ffd23f','#fff'],14,50);shake();sfx(660,.1,.04);toast('🐛 Bug esmagado! +'+fmt(m)+' 💰 +'+fmt(c)+' 💻'+(dg?' +1 💎':''));mp('bug',1)}
+function catchStar(){star=null;s.st++;if(s.st%10===0)s.dm++;addFx({k:'star',nm:'TURBO',ic:'⭐',m:5,c:5,u:Date.now()+20000});burst(100,30,['#ffd23f','#fff'],24,70);toast('⭐ Turbo x5 por 20s!'+(s.st%10===0?' +1 💎':''));sfx(900,.2);mp('star',1)}
 cvs.addEventListener('pointerdown',e=>{const r=cvs.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;if(star&&Math.hypot(x-star.x,y-star.y)<13){catchStar();return}if(!view)for(const b of bugs){if(Math.hypot(x-b.x,y-b.y)<12){squash(b);return}}
 if(elv.busy)return;if(elvHit(x,y)){toast('🛗 Use os botões ▲ ▼ ao lado do elevador');sfx(400,.1);return}
 if(view&&subClick(x,y))return;
@@ -1090,14 +1090,14 @@ $('rst').onclick=()=>ask('APAGAR TUDO?','Apagar todo o progresso? Isso também a
 async function rstRun(){{reset=1;if(A){try{const q=await hd();await fetch(SB_URL+'/rest/v1/progresso?user_id=eq.'+A.uid,{method:'DELETE',headers:q});await fetch(SB_URL+'/rest/v1/placar?user_id=eq.'+A.uid,{method:'DELETE',headers:q})}catch(x){}}try{localStorage.removeItem(K)}catch(x){}location.reload()}};
 /* ===== INÍCIO ===== */
 let last=Date.now();
-function tick(){const n=Date.now(),dt=Math.min((n-last)/1000,3600);last=n;const v=mps()*dt;gain(v);s.c+=cps()*dt;const LV=lvl();if(LV>(s.mxl||0)){const dd=LV-(s.mxl||0);s.mxl=LV;s.dm+=dd;toast('⬆️ Nível '+LV+'! +'+dd+' 💎');if(LV>=25&&!s.un){s.un=1;modal('SINAL DO SUBTERRÂNEO 📡','Um chamado urgente chegou! O Dr. Lucas precisa de você. O elevador agora desce até o <b>Subterrâneo</b>: use o botão ▼ no térreo.')}}head()}
+function tick(){const n=Date.now(),dt=Math.min((n-last)/1000,3600);last=n;const v=mps()*dt;gain(v);s.c+=cps()*dt;const LV=lvl();if(LV>(s.mxl||0)){const dd=LV-(s.mxl||0),gemLv=Math.floor(LV/5)-Math.floor((s.mxl||0)/5);s.mxl=LV;if(gemLv>0)s.dm+=gemLv;toast('⬆️ Nível '+LV+'! '+(gemLv>0?'+'+gemLv+' 💎':'sem diamantes desta vez'));if(LV>=25&&!s.un){s.un=1;modal('SINAL DO SUBTERRÂNEO 📡','Um chamado urgente chegou! O Dr. Lucas precisa de você. O elevador agora desce até o <b>Subterrâneo</b>: use o botão ▼ no térreo.')}}head()}
 const dkey=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
 const off=Math.min((Date.now()-s.ts)/1000,14400)*.2;
 fillM();applyBt();
 if(off>60&&(sum(s.a)||sum(s.e))){const gv=mps()*off,c=cps()*off;s.m+=gv;s.tot+=gv;s.c+=c;modal('BEM-VINDO DE VOLTA! 👋','Enquanto você estava fora, o time rendeu 💰 '+fmt(gv)+' e 💻 '+fmt(c)+'.')}
-{const today=dkey(new Date());if(s.dd!==today){s.ds=s.dd===dkey(new Date(Date.now()-864e5))?s.ds+1:1;s.dd=today;if(s.tot>=100){const m=Math.max(100,mps()*60)*Math.min(s.ds,7);gain(m);const dq=3;s.dm+=dq;modal('PRESENTE DIÁRIO 🎁','Dia '+s.ds+' seguido! Você ganhou 💰 '+fmt(m)+' e 💎 '+dq+'.<br>Volte amanhã para ganhar ainda mais (até 7 dias).')}}}
+{const today=dkey(new Date());if(s.dd!==today){s.ds=s.dd===dkey(new Date(Date.now()-864e5))?s.ds+1:1;s.dd=today;if(s.tot>=100){const m=Math.max(100,mps()*60)*Math.min(s.ds,7);gain(m);const dq=s.ds>=7?1:0;s.dm+=dq;modal('PRESENTE DIÁRIO 🎁','Dia '+s.ds+' seguido! Você ganhou 💰 '+fmt(m)+(dq?' e 💎 '+dq:'')+'.<br>Volte amanhã para ganhar ainda mais (até 7 dias).')}}}
 setInterval(()=>{document.querySelectorAll('.bt[data-k]').forEach(b=>{b.disabled=!can(b.dataset.k,+b.dataset.i);if(b.dataset.k=='e')setH(b,ebt(+b.dataset.i));else if(b.dataset.k=='a')setH(b,abt(+b.dataset.i))});
-AC.forEach((a,i)=>{if(!s.t.includes(i)&&a[3](s)){s.t.push(i);s.dm+=2;toast('🏆 Troféu: '+a[1]+' · +2 💎');sfx(700,.2);if(tab=='achs')draw()}});msUpd();
+AC.forEach((a,i)=>{if(!s.t.includes(i)&&a[3](s)){s.t.push(i);s.dm+=1;toast('🏆 Troféu: '+a[1]+' · +1 💎');sfx(700,.2);if(tab=='achs')draw()}});msUpd();
 if(tab=='shop'&&shopSig!=s.dm+'|'+s.own.length)shopDraw();
 if(tab=='ipo'){const k=ipoGain()+'|'+s.sh;if(k!=ipoSig){ipoSig=k;ipoDraw()}}
 if(ev){const l=evT-Date.now();if(l<=0){ev=null;drawEv();toast('A oportunidade passou...')}else{const b=$('evb');if(b)b.style.width=l/250+'%'}}},500);
