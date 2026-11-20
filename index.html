@@ -373,7 +373,7 @@ try{const r=JSON.parse(localStorage.getItem(K));if(r)s=Object.assign(def(),r)}ca
 delete s.gd; // Remove dados antigos de guilda dos saves existentes
 s.world=s.world&&Array.isArray(s.world.countries)?s.world:{countries:['br']};if(!s.world.countries.includes('br'))s.world.countries.unshift('br');
 if(!s.v){s.v=2;s.dk=1}
-const save=()=>{if(reset)return;s.ts=Date.now();try{localStorage.setItem(K,JSON.stringify(s))}catch(e){}};
+let rankSyncTimer=null;const save=()=>{if(reset)return;s.ts=Date.now();try{localStorage.setItem(K,JSON.stringify(s))}catch(e){};if(rankSyncTimer)clearTimeout(rankSyncTimer);rankSyncTimer=setTimeout(()=>{if(A){cloud();push()}},5000)};
 /* ===== CÁLCULOS ===== */
 const has=id=>(s.own||[]).includes(id),mil=n=>{let m=1;[10,25,50,100].forEach(t=>{if(n>=t)m*=1.35});return m},nxm=n=>[10,25,50,100].find(t=>n<t)||0;
 const cost=(b,n)=>Math.ceil(b*Math.pow(1.23,n)),bonus=()=>(1+s.t.length*.015)*(1+s.sh*.05)*(1+(s.bd?.25:0))*(has('u3')?1.25:1)*(has('x2')?1.1:1)*(1+Math.max(0,s.world.countries.length-1)*.04);
