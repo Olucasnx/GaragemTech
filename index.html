@@ -354,8 +354,8 @@ s.world=s.world&&Array.isArray(s.world.countries)?s.world:{countries:['br']};if(
 if(!s.v){s.v=2;s.dk=1}
 const save=()=>{if(reset)return;s.ts=Date.now();try{localStorage.setItem(K,JSON.stringify(s))}catch(e){}};
 /* ===== CÁLCULOS ===== */
-const has=id=>(s.own||[]).includes(id),mil=n=>{let m=1;[10,25,50,100].forEach(t=>{if(n>=t)m*=2});return m},nxm=n=>[10,25,50,100].find(t=>n<t)||0;
-const cost=(b,n)=>Math.ceil(b*Math.pow(1.15,n)),bonus=()=>(1+s.t.length*.02)*(1+s.sh*.1)*(1+(s.bd?.25:0))*(has('u3')?1.25:1)*(has('x2')?1.1:1)*(1+Math.max(0,s.world.countries.length-1)*.04);
+const has=id=>(s.own||[]).includes(id),mil=n=>{let m=1;[10,25,50,100].forEach(t=>{if(n>=t)m*=1.35});return m},nxm=n=>[10,25,50,100].find(t=>n<t)||0;
+const cost=(b,n)=>Math.ceil(b*Math.pow(1.23,n)),bonus=()=>(1+s.t.length*.015)*(1+s.sh*.05)*(1+(s.bd?.25:0))*(has('u3')?1.25:1)*(has('x2')?1.1:1)*(1+Math.max(0,s.world.countries.length-1)*.04);
 const fm=p=>{const n=Date.now();let r=1;for(const f of fx)if(f.u>n)r*=f[p];return r};
 const mult=k=>EQ.reduce((m,q,i)=>s.q[i]&&(q[4]==k||q[4]=='x')?m*q[5]:m,1);
 const cpsB=()=>EM.reduce((x,e,i)=>x+e[3]*s.e[i]*mil(s.e[i]),0)*mult('e')*bonus()*(has('u1')?1.1:1)*(has('x1')?1.6:1);
@@ -381,7 +381,7 @@ const MT=[['click',()=>[40,80,150][rnd(3)],n=>'Programe '+n+' vezes'],['bug',()=
 function newM(ex){const o=MT.filter(m=>!ex.includes(m[0])),m=o[rnd(o.length)];return{k:m[0],n:m[1](),p:0}}
 function fillM(){if(!Array.isArray(s.ms))s.ms=[];s.ms=s.ms.filter(m=>MT.some(x=>x[0]==m.k)).slice(0,3);while(s.ms.length<3)s.ms.push(newM(s.ms.map(x=>x.k)))}
 function mp(k,a,mx){s.ms.forEach(m=>{if(m.k==k&&m.p<m.n){m.p=mx?Math.max(m.p,a):m.p+a;if(m.p>=m.n){m.p=m.n;toast('📋 Missão pronta! Resgate o prêmio');sfx(760,.2)}}})}
-const rw=()=>Math.max(100,mps()*100);
+const rw=()=>Math.max(30,mps()*25);
 function drawMs(){$('mis').innerHTML='<div class="mh pf">📋 MISSÕES</div>'+s.ms.map((m,i)=>{const d=m.p>=m.n;return '<div class="ms '+(d?'ok':'')+'"><div class="mt">'+MT.find(x=>x[0]==m.k)[2](m.n)+'</div><div class="pg sm"><i style="width:'+m.p/m.n*100+'%"></i></div>'+(d?'<button class="bt sm" data-m="'+i+'">RESGATAR<small class="rwd">+'+fmt(rw())+' 💰</small></button>':'<span class="mp">'+fmt(m.p)+'/'+fmt(m.n)+'</span>')+'</div>'}).join('')}
 function msUpd(){const sig=s.ms.map(m=>m.k+m.n+(m.p>=m.n?1:0)).join('|');if(sig!=msSig){msSig=sig;drawMs();return}const L=$('mis').querySelectorAll('.ms');s.ms.forEach((m,i)=>{const r=L[i];if(!r)return;r.querySelector('.pg i').style.width=m.p/m.n*100+'%';const c=r.querySelector('.mp');if(c)c.textContent=fmt(m.p)+'/'+fmt(m.n);const w=r.querySelector('.rwd');if(w)w.textContent='+'+fmt(rw())+' 💰'})}
 function claimM(i){const m=s.ms[i];if(!m||m.p<m.n)return;const r=rw(),c=Math.max(20,cps()*60);gain(r);s.c+=c;s.md++;s.dm+=1;s.ms.splice(i,1);s.ms.push(newM(s.ms.map(x=>x.k)));burst(100,50,['#ffd23f','#3ee0a0','#fff'],18,60);sfx(880,.15);toast('✅ Missão cumprida! +'+fmt(r)+' 💰 +'+fmt(c)+' 💻 +1 💎');save()}
@@ -402,10 +402,10 @@ const qn=i=>qx('e',i),can=(k,i)=>k=='a'?(!i||s.a[i-1]>0)&&!qx('a',i)[2]:k=='e'?!
 const ebt=i=>{const q=qx('e',i);return '+'+(q[0]||1)+'<small>💰 '+fmt(q[1])+'</small>'},abt=i=>{const q=qx('a',i);return '+'+(q[0]||1)+'<small>💻 '+fmt(q[1])+'</small>'};
 function buy(k,i){if(!can(k,i))return;if(k=='a'){const q=qx('a',i);s.c-=q[1];s.a[i]+=q[0]}else if(k=='e'){const q=qx('e',i);s.m-=q[1];s.e[i]+=q[0]}else{s.m-=EQ[i][3];s.q[i]=1}sfx(520);setTimeout(()=>sfx(700,.08),70);burst(80+rnd(40),62,['#ffd23f','#3ee0a0','#fff'],10,45);mp('buy',1);save();draw();head()}
 const row=(k,i,ic,nm,ds,st,bt,cls)=>'<div class="it pxc '+(cls||'')+'"><div class="ic">'+ico(ic)+'</div><div class="in"><b>'+nm+'</b><small>'+ds+'</small><span class="st">'+st+'</span></div><button class="bt" data-k="'+k+'" data-i="'+i+'" '+(can(k,i)?'':'disabled')+'>'+bt+'</button></div>';
-const ipoGain=()=>s.tot>=2e8?Math.floor(Math.sqrt(s.tot/2e8)):0;
-function ipoDraw(){const gn=ipoGain();$('ipo').innerHTML='<div class="it pxc"><div class="ic">'+ico('📈')+'</div><div class="in"><b>Ações: '+s.sh+'</b><small>Cada ação dá +10% em toda a produção, para sempre. Bônus atual: +'+s.sh*10+'%</small><span class="st">IPOs realizados: '+s.ipo+'</span></div></div><div class="it pxc"><div class="in"><b>Abrir capital (IPO)</b><small>Reinicia dinheiro, código, apps, equipe e equipamentos. Mantém troféus, ações e ranking. Disponível a partir de '+fmt(2e8)+' 💰 ganhos na rodada.</small><span class="st">Ganhos: '+fmt(s.tot)+' 💰 → você receberia 📈 '+gn+'</span></div><button class="bt" id="ipoB" '+(gn<1?'disabled':'')+'>IPO<small>+'+gn+' 📈</small></button></div>'}
+const ipoGain=()=>s.tot>=1e9?Math.floor(Math.sqrt(s.tot/1e9)):0;
+function ipoDraw(){const gn=ipoGain();$('ipo').innerHTML='<div class="it pxc"><div class="ic">'+ico('📈')+'</div><div class="in"><b>Ações: '+s.sh+'</b><small>Cada ação dá +5% em toda a produção, para sempre. Bônus atual: +'+s.sh*5+'%</small><span class="st">IPOs realizados: '+s.ipo+'</span></div></div><div class="it pxc"><div class="in"><b>Abrir capital (IPO)</b><small>Reinicia dinheiro, código, apps, equipe e equipamentos. Mantém troféus, ações e ranking. Disponível a partir de '+fmt(1e9)+' 💰 ganhos na rodada.</small><span class="st">Ganhos: '+fmt(s.tot)+' 💰 → você receberia 📈 '+gn+'</span></div><button class="bt" id="ipoB" '+(gn<1?'disabled':'')+'>IPO<small>+'+gn+' 📈</small></button></div>'}
 function doIpo(){const g0=ipoGain();if(g0<1)return;ask('ABRIR CAPITAL? 📈','Você ganha <b>'+g0+' ações</b>. Sua empresa será reiniciada (troféus e ações ficam).','FAZER IPO',ipoRun)}
-function ipoRun(){const gn=ipoGain();if(gn<1)return;s.life+=s.tot;s.sh+=gn;s.ipo++;s.dm+=10+gn*5;s.m=0;s.c=0;s.tot=0;s.a=AP.map(()=>0);s.e=EM.map(()=>0);s.q=EQ.map(()=>0);s.ms=[];fillM();msSig='';fx=[];applyBt();bugs=[];star=null;ev=null;drawEv();lastSt=0;crewSig='';save();cloud();push();modal('IPO CONCLUÍDO! 📈','Você ganhou '+gn+' ações e 💎 '+(10+gn*5)+'. Bônus total de produção: +'+s.sh*10+'%.');sfx(988,.3);burst(100,40,['#ffd23f','#fff','#c77dff'],40,90);draw();head()}
+function ipoRun(){const gn=ipoGain();if(gn<1)return;s.life+=s.tot;s.sh+=gn;s.ipo++;s.dm+=10+gn*5;s.m=0;s.c=0;s.tot=0;s.a=AP.map(()=>0);s.e=EM.map(()=>0);s.q=EQ.map(()=>0);s.ms=[];fillM();msSig='';fx=[];applyBt();bugs=[];star=null;ev=null;drawEv();lastSt=0;crewSig='';save();cloud();push();modal('IPO CONCLUÍDO! 📈','Você ganhou '+gn+' ações e 💎 '+(10+gn*5)+'. Bônus total de produção: +'+s.sh*5+'%.');sfx(988,.3);burst(100,40,['#ffd23f','#fff','#c77dff'],40,90);draw();head()}
 /* ===== EXPANSÃO INTERNACIONAL ===== */
 const WORLD=[
 {id:'br',name:'Brasil',x:29,y:66,cost:0,requires:null,desc:'Seu mercado de origem.',bonus:'Mercado inicial'},
@@ -462,7 +462,7 @@ function head(){const T=Date.now(),k=stg();if(k>lastSt){toast('🎉 Você evolui
 $('mo').textContent=fmt(s.m);$('co').textContent=fmt(s.c);$('mr').textContent='+'+fmt(mps())+'/s';$('cr').textContent='+'+fmt(cps())+'/s';$('lv').textContent='Nv.'+lvl()+(s.sh?' 📈'+s.sh:'');setH($('dmv'),ico('💎')+' '+fmt(s.dm));
 $('sn').textContent='FASE '+(k+1)+' · '+ST[k][0].toUpperCase();$('sd').textContent=ST[k][1];
 const sg=s.e.map(x=>Math.min(x,2)).join('');if(sg!=crewSig){crewSig=sg;crew=[];EM.forEach((e,i)=>{for(let j=0;j<Math.min(s.e[i],2);j++)crew.push({i,sd:crew.length*1.9,sk:SKIN[(i+j)%4],hs:(i+j)%4,ou:[0,1,2,3,0,1,2,3][(i+j*3)%8],ac:[0,1,0,2,3,0,1,0][(i+j)%8]})})}
-if(T-lastClk>1300)combo=0;const cm=1+Math.min(combo,50)*.02;$('cmt').textContent=combo>1?'COMBO x'+cm.toFixed(2)+' ('+combo+')':'Clique rápido para combar!';$('cmi').style.width=Math.min(combo,50)*2+'%';
+if(T-lastClk>1300)combo=0;const cm=1+Math.min(combo,50)*.01;$('cmt').textContent=combo>1?'COMBO x'+cm.toFixed(2)+' ('+combo+')':'Clique rápido para combar!';$('cmi').style.width=Math.min(combo,50)*2+'%';
 const nx=ST[k+1];$('pg').style.width=nx?Math.min(100,(s.tot-ST[k][3])/(nx[3]-ST[k][3])*100)+'%':'100%';
 $('nx').textContent=nx?'Próxima fase: '+nx[0]+' ('+fmt(nx[3])+' 💰 ganhos)':'Fase máxima alcançada! Abra capital (IPO).';
 $('cv').textContent='+'+fmt(cv())+' código por clique';
@@ -694,8 +694,8 @@ ob=ob.filter(b=>{const bx=b.l*LW+20;if(Math.abs(px-bx)<(b.k?10:15)&&b.y>PY-4&&b.
 pt.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.l-=dt});pt=pt.filter(p=>p.l>0);
 draw();m.hud(life,'CHIPS '+chips,t/TT);if(life<=0)m.end(0,0,'O pacote foi destruído!');else if(t<=0)m.end(1,life)};
 m.hud(3,'CHIPS 0',1);draw();m.msg('PREPARE-SE');m.start(()=>{run=1;m.msg('');m.loop(upd)})};
-function mgDone(i){if(s.mg[i])return;s.mg[i]=1;s.dm+=10;bhit=Date.now()+600;shake();burst(80,GY-52,['#fff','#ff4d6d','#ffd23f'],24,80);sfx(220,.3,.05,'sawtooth');const d=sum(s.mg);gain(Math.max(500,mps()*600));if(d>=5)setTimeout(bossDown,900);else toast('💥 Mr. Malware perdeu força! '+d+'/5 · +10 💎');save()}
-function bossDown(){dialog([['M','NÃOOO! Meu plano... destruído por uma simples empresa de garagem?!'],['L','Conseguimos! Os dados do mundo estão salvos, graças a você!'],['L','Como recompensa, instalei um servidor quântico na sua empresa: +25% de produção para sempre!']],()=>{s.bd=1;s.dm+=100;gain(Math.max(1e4,mps()*7200));burst(80,50,['#ffd23f','#fff','#3ee0a0','#4cc9f0'],50,100);flash=.9;sfx(988,.4);save();cloud();push()})}
+function mgDone(i){if(s.mg[i])return;s.mg[i]=1;s.dm+=10;bhit=Date.now()+600;shake();burst(80,GY-52,['#fff','#ff4d6d','#ffd23f'],24,80);sfx(220,.3,.05,'sawtooth');const d=sum(s.mg);gain(Math.max(150,mps()*180));if(d>=5)setTimeout(bossDown,900);else toast('💥 Mr. Malware perdeu força! '+d+'/5 · +10 💎');save()}
+function bossDown(){dialog([['M','NÃOOO! Meu plano... destruído por uma simples empresa de garagem?!'],['L','Conseguimos! Os dados do mundo estão salvos, graças a você!'],['L','Como recompensa, instalei um servidor quântico na sua empresa: +25% de produção para sempre!']],()=>{s.bd=1;s.dm+=100;gain(Math.max(1000,mps()*900));burst(80,50,['#ffd23f','#fff','#3ee0a0','#4cc9f0'],50,100);flash=.9;sfx(988,.4);save();cloud();push()})}
 function subClick(x,y){y-=GY-92;if(y>64&&x<32){talkLucas();return 1}
 for(let i=0;i<5;i++)if(x>=RX(i)-2&&x<=RX(i)+13&&y>=56&&y<=93){me.tx=RX(i)+5;me.ty=89;if(!s.lu)talkLucas();else if(s.mg[i])toast('✅ Servidor '+(i+1)+' já restaurado');else playMG(i);return 1}return 0}
 function ride(t){if(elv.busy)return;const N=nFl();if(t>N-1||t<-1||t==me.f)return;
@@ -782,7 +782,7 @@ if(s.dm<pr||(!cl&&ct!='b'&&has(id)))return;s.dm-=pr;
 if(cl){s.own.push(id);s.pf[CK[ct]]=ix;toast('👕 '+nm+' equipado!')}
 else if(ct=='b'){const n=Date.now(),k=BK[id];
 if(k){s.bt[k]=Math.max(n,s.bt[k]||0)+BTD[k][4];applyBt();toast('⚡ '+nm+' ativado!')}
-else if(id=='t4'){const q=Math.max(1000,mps()*3600);gain(q);toast('🎁 +'+fmt(q)+' 💰')}
+else if(id=='t4'){const q=Math.max(250,mps()*900);gain(q);toast('🎁 +'+fmt(q)+' 💰')}
 else{s.bt.nb=Math.max(n,s.bt.nb||0)+18e5;bugs=[];toast('🛡️ Sem bugs por 30 minutos!')}}
 else{s.own.push(id);toast('✨ '+nm+' desbloqueado!')}
 burst(100,40,['#4cc9f0','#fff','#ffd23f'],24,70);sfx(880,.15);setTimeout(()=>sfx(1175,.2),120);save();cloud();push();shopDraw();head()}
@@ -836,14 +836,14 @@ const redu=matchMedia('(prefers-reduced-motion: reduce)').matches;let lastF=0;
 function frame(now){requestAnimationFrame(frame);if(now-lastF<(redu?250:33))return;const dt=Math.min((now-lastF)/1000,.1);lastF=now;upd(dt);scene(Date.now(),dt);elkPos()}
 function spawnBug(){if(s.tot<30||bugs.length>=3||view||Date.now()<(s.bt.nb||0))return;bugs.push({x:18+rnd(92),y:fy(0)-6+rnd(6),d:rnd(2)?1:-1,v:8+rnd(10),e:Date.now()+14000})}
 function spawnStar(){if(!star&&s.tot>=50)star={x:-8,y:26}}
-function squash(b){bugs=bugs.filter(x=>x!==b);s.bg++;const dg=Math.random()<.1?1:0;s.dm+=dg;const m=Math.max(20,mps()*15),c=Math.max(8,cps()*15);gain(m);s.c+=c;burst(b.x,b.y,['#ff4d6d','#ffd23f','#fff'],14,50);shake();sfx(660,.1,.04);toast('🐛 Bug esmagado! +'+fmt(m)+' 💰 +'+fmt(c)+' 💻'+(dg?' +1 💎':''));mp('bug',1)}
+function squash(b){bugs=bugs.filter(x=>x!==b);s.bg++;const dg=Math.random()<.1?1:0;s.dm+=dg;const m=Math.max(10,mps()*5),c=Math.max(5,cps()*5);gain(m);s.c+=c;burst(b.x,b.y,['#ff4d6d','#ffd23f','#fff'],14,50);shake();sfx(660,.1,.04);toast('🐛 Bug esmagado! +'+fmt(m)+' 💰 +'+fmt(c)+' 💻'+(dg?' +1 💎':''));mp('bug',1)}
 function catchStar(){star=null;s.st++;s.dm++;addFx({k:'star',nm:'TURBO',ic:'⭐',m:5,c:5,u:Date.now()+20000});burst(100,30,['#ffd23f','#fff'],24,70);toast('⭐ Turbo x5 por 20s! +1 💎');sfx(900,.2);mp('star',1)}
 cvs.addEventListener('pointerdown',e=>{const r=cvs.getBoundingClientRect(),x=(e.clientX-r.left)/r.width*W,y=(e.clientY-r.top)/r.height*H;if(star&&Math.hypot(x-star.x,y-star.y)<13){catchStar();return}if(!view)for(const b of bugs){if(Math.hypot(x-b.x,y-b.y)<12){squash(b);return}}
 if(elv.busy)return;if(elvHit(x,y)){toast('🛗 Use os botões ▲ ▼ ao lado do elevador');sfx(400,.1);return}
 if(view&&subClick(x,y))return;
 const fb=fy(Math.max(me.f,0));me.tx=Math.min(112,Math.max(16,x));me.ty=Math.min(fb-1,Math.max(fb-6,y));me.mk=Date.now()+900;sfx(420,.04,.02)});
 /* ===== CLIQUE ===== */
-$('clk').addEventListener('click',e=>{const now=Date.now();if(now-lastClk>1300)combo=0;lastClk=now;combo++;s.mx=Math.max(s.mx,combo);const cm=1+Math.min(combo,50)*.02,crit=Math.random()<.08,v=cv()*cm*(crit?5:1);s.c+=v;s.cl++;kf=.25;if(crit){s.cr++;shake();sfx(1046,.12,.04)}else sfx(300+Math.min(combo,50)*8+Math.random()*60,.05);mp('click',1);mp('combo',combo,1);burst(me.x,me.y-8,['#3ee0a0','#ff9a3c','#fff'],crit?10:4,35);flt((e.clientX||innerWidth/2)-14,(e.clientY||300)-30,(crit?'CRÍTICO! ':'')+'+'+fmt(v),crit?'cr':'')});
+$('clk').addEventListener('click',e=>{const now=Date.now();if(now-lastClk>1300)combo=0;lastClk=now;combo++;s.mx=Math.max(s.mx,combo);const cm=1+Math.min(combo,50)*.01,crit=Math.random()<.06,v=cv()*cm*(crit?3:1);s.c+=v;s.cl++;kf=.25;if(crit){s.cr++;shake();sfx(1046,.12,.04)}else sfx(300+Math.min(combo,50)*8+Math.random()*60,.05);mp('click',1);mp('combo',combo,1);burst(me.x,me.y-8,['#3ee0a0','#ff9a3c','#fff'],crit?10:4,35);flt((e.clientX||innerWidth/2)-14,(e.clientY||300)-30,(crit?'CRÍTICO! ':'')+'+'+fmt(v),crit?'cr':'')});
 $('hk').onclick=()=>{const n=Date.now();if(s.hkt>n)return;s.hkt=n+120000;addFx({k:'hk',nm:'Hackathon',ic:'☕',m:3,c:3,u:n+15000});burst(100,50,['#4cc9f0','#fff','#ffd23f'],24,70);shake();sfx(440,.15);setTimeout(()=>sfx(660,.2),120);toast('☕ Hackathon! Produção x3 por 15s');save()};
 addEventListener('keydown',e=>{if(e.code=='Space'&&!e.repeat&&document.activeElement.tagName!='BUTTON'&&!/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)&&!document.querySelector('.ov:not([hidden])')){e.preventDefault();$('clk').click()}});
 /* ===== ABAS ===== */
@@ -1092,10 +1092,10 @@ async function rstRun(){{reset=1;if(A){try{const q=await hd();await fetch(SB_URL
 let last=Date.now();
 function tick(){const n=Date.now(),dt=Math.min((n-last)/1000,3600);last=n;const v=mps()*dt;gain(v);s.c+=cps()*dt;const LV=lvl();if(LV>(s.mxl||0)){const dd=LV-(s.mxl||0);s.mxl=LV;s.dm+=dd;toast('⬆️ Nível '+LV+'! +'+dd+' 💎');if(LV>=25&&!s.un){s.un=1;modal('SINAL DO SUBTERRÂNEO 📡','Um chamado urgente chegou! O Dr. Lucas precisa de você. O elevador agora desce até o <b>Subterrâneo</b>: use o botão ▼ no térreo.')}}head()}
 const dkey=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
-const off=Math.min((Date.now()-s.ts)/1000,28800)*.5;
+const off=Math.min((Date.now()-s.ts)/1000,14400)*.2;
 fillM();applyBt();
 if(off>60&&(sum(s.a)||sum(s.e))){const gv=mps()*off,c=cps()*off;s.m+=gv;s.tot+=gv;s.c+=c;modal('BEM-VINDO DE VOLTA! 👋','Enquanto você estava fora, o time rendeu 💰 '+fmt(gv)+' e 💻 '+fmt(c)+'.')}
-{const today=dkey(new Date());if(s.dd!==today){s.ds=s.dd===dkey(new Date(Date.now()-864e5))?s.ds+1:1;s.dd=today;if(s.tot>=100){const m=Math.max(300,mps()*240)*Math.min(s.ds,7);gain(m);const dq=3;s.dm+=dq;modal('PRESENTE DIÁRIO 🎁','Dia '+s.ds+' seguido! Você ganhou 💰 '+fmt(m)+' e 💎 '+dq+'.<br>Volte amanhã para ganhar ainda mais (até 7 dias).')}}}
+{const today=dkey(new Date());if(s.dd!==today){s.ds=s.dd===dkey(new Date(Date.now()-864e5))?s.ds+1:1;s.dd=today;if(s.tot>=100){const m=Math.max(100,mps()*60)*Math.min(s.ds,7);gain(m);const dq=3;s.dm+=dq;modal('PRESENTE DIÁRIO 🎁','Dia '+s.ds+' seguido! Você ganhou 💰 '+fmt(m)+' e 💎 '+dq+'.<br>Volte amanhã para ganhar ainda mais (até 7 dias).')}}}
 setInterval(()=>{document.querySelectorAll('.bt[data-k]').forEach(b=>{b.disabled=!can(b.dataset.k,+b.dataset.i);if(b.dataset.k=='e')setH(b,ebt(+b.dataset.i));else if(b.dataset.k=='a')setH(b,abt(+b.dataset.i))});
 AC.forEach((a,i)=>{if(!s.t.includes(i)&&a[3](s)){s.t.push(i);s.dm+=2;toast('🏆 Troféu: '+a[1]+' · +2 💎');sfx(700,.2);if(tab=='achs')draw()}});msUpd();
 if(tab=='shop'&&shopSig!=s.dm+'|'+s.own.length)shopDraw();
