@@ -109,7 +109,6 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-o
 .fl{position:fixed;font:.7rem 'Press Start 2P',monospace;color:var(--orange);pointer-events:none;z-index:9;animation:up .8s steps(8) forwards;text-shadow:2px 2px 0 #000}
 .fl.cr{color:var(--gold);font-size:.95rem}
 @keyframes up{to{transform:translateY(-70px);opacity:0}}
-.frbox{background:var(--tab);border:3px solid var(--bd);padding:10px;margin:10px 0}.frrow{display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px dashed var(--muted);padding:9px 0}.frrow:last-child{border:0}.frname{min-width:0;overflow-wrap:anywhere}.frstatus{font-size:1.1rem;color:var(--muted)}.frdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#777;margin-right:6px}.frdot.on{background:#3ee0a0;box-shadow:0 0 7px #3ee0a0}.frinput{width:100%;padding:10px;background:var(--bg);color:var(--ink);border:3px solid var(--bd);font:1.2rem VT323,monospace}.frbtn{padding:8px;background:var(--orange);color:white;border:3px solid var(--bd);font:.48rem 'Press Start 2P',monospace}.frmuted{color:var(--muted);font-size:1.1rem}
 #toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 82px);transform:translate(-50%,12px);background:var(--ink);color:var(--bg);padding:12px 16px;border:4px solid var(--bd);font-size:1.3rem;opacity:0;pointer-events:none;transition:all .2s steps(3);z-index:30;max-width:92vw;text-align:center}
 #toast.show{opacity:1;transform:translate(-50%,0)}
 .ov{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.75);display:flex;align-items:center;justify-content:center;padding:20px;z-index:20;overflow:auto}
@@ -149,19 +148,17 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
   #dmv{grid-area:dmv;justify-self:start}
   #lv{grid-area:lv;justify-self:start}
   #pfBtn{grid-area:pf}
-  #frBtn{grid-area:fr}
+  #frTop{grid-area:fr}
   #cfgBtn{grid-area:cfg}
   .lvl{font-size:clamp(.37rem,2.35vw,.45rem);padding:9px 9px;min-width:0}
   .ib{width:40px;height:40px;min-width:40px;font-size:1.2rem}
-  #frBtn{width:40px;min-width:40px}
   .tab{font-size:.9rem}
 }
 @media(max-width:360px){
-  .bar{grid-template-columns:minmax(0,1fr) 34px 34px 34px;column-gap:5px;row-gap:6px}
+  .bar{grid-template-columns:minmax(0,1fr) 36px 36px 36px;column-gap:6px;row-gap:6px}
   .logo{font-size:.48rem;gap:5px}
   .logo .gemb{width:21px!important;height:21px}
   .lvl{font-size:.34rem;padding:8px 6px}
-  .ib,#frBtn{width:34px;height:36px;min-width:34px;font-size:1rem}
   .ib{width:36px;height:36px;min-width:36px;font-size:1.1rem}
 }
 .mgw{max-width:420px}.mgn{font:.5rem 'Press Start 2P',monospace;color:var(--blue);margin-bottom:8px}.mgd{font-size:1.05rem!important;line-height:1.1!important;margin-bottom:6px!important}
@@ -252,12 +249,29 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
 .adm-log{font-size:1.15rem;line-height:1.15;border-bottom:2px dashed var(--muted);padding:6px 0}
 .adm-log b{color:var(--gold)}
 
+
+/* ===== AMIZADES E PRESENÇA ===== */
+.friend-box{padding:12px;margin-bottom:10px}
+.friend-box h3{font:.58rem/1.6 'Press Start 2P',monospace;color:var(--gold);margin:0 0 9px}
+.friend-search{display:flex;gap:6px;margin-bottom:10px}
+.friend-search input{flex:1;min-width:0;padding:10px;border:3px solid var(--bd);background:var(--tab);color:var(--ink);font:1.2rem VT323,monospace;user-select:text}
+.friend-search button,.fr-btn{padding:9px 10px;background:var(--orange);color:#fff;border:3px solid var(--bd);font:.45rem 'Press Start 2P',monospace}
+.fr-item{display:flex;align-items:center;gap:9px;padding:10px;margin:7px 0;background:var(--card);border:3px solid var(--bd);min-width:0}
+.fr-dot{width:11px;height:11px;border-radius:50%;background:#777;flex:none;border:2px solid #000}
+.fr-dot.online{background:#3ee0a0;box-shadow:0 0 7px #3ee0a0}
+.fr-info{flex:1;min-width:0}.fr-info b{display:block;font:.48rem/1.5 'Press Start 2P',monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.fr-info small{display:block;color:var(--muted);font-size:1.05rem}
+.fr-actions{display:flex;gap:5px;flex-wrap:wrap;justify-content:flex-end}
+.fr-actions button{padding:7px;background:var(--tab);border:2px solid var(--bd);font-size:1rem}
+.fr-empty{color:var(--muted);font-size:1.1rem;padding:8px 2px}
+.fr-count{color:var(--green);font-size:1rem;margin-left:5px}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#14162a"><link rel="apple-touch-icon" href="icon-192.png">
 </head>
 <body>
 <div class="wrap">
-  <div class="bar"><span class="logo" id="logo"><canvas id="hico" class="gemb" style="width:22px"></canvas><span id="hnm">GARAGEM TECH</span></span><span class="lvl pxc" id="dmv" style="color:var(--blue)"></span><span class="lvl pxc" id="lv"></span><button class="ib pxc" id="pfBtn" aria-label="Perfil">👤</button><button class="ib pxc" id="frBtn" aria-label="Amigos">🤝</button><button class="ib pxc" id="cfgBtn" aria-label="Configurações">⚙️</button></div>
+  <div class="bar"><span class="logo" id="logo"><canvas id="hico" class="gemb" style="width:22px"></canvas><span id="hnm">GARAGEM TECH</span></span><span class="lvl pxc" id="dmv" style="color:var(--blue)"></span><span class="lvl pxc" id="lv"></span><button class="ib pxc" id="pfBtn" aria-label="Perfil e personagem" title="Perfil e personagem">👤</button><button class="ib pxc" id="frTop" aria-label="Amizades" title="Amizades">🤝</button><button class="ib pxc" id="cfgBtn" aria-label="Configurações">⚙️</button></div>
   <div class="top">
     <div class="res pxc"><small id="rl1"></small><b id="mo">0</b><span id="mr"></span></div>
     <div class="res pxc"><small id="rl2"></small><b id="co">0</b><span id="cr"></span></div>
@@ -281,7 +295,7 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
       <div class="qty" id="qty"><button data-q="1" class="on">x1</button><button data-q="10">x10</button><button data-q="50">x50</button><button data-q="100">x100</button><button data-q="0">MÁX</button></div>
       <div id="apps"></div>
       <div id="emps" hidden><div id="el"></div></div>
-      <div id="eqs" hidden></div><div id="achs" hidden></div><div id="rk" hidden></div><div id="ipo" hidden></div><div id="shop" hidden></div><div id="world" hidden></div><div id="admin" hidden></div>
+      <div id="eqs" hidden></div><div id="achs" hidden></div><div id="rk" hidden></div><div id="ipo" hidden></div><div id="shop" hidden></div><div id="world" hidden></div><div id="admin" hidden></div><div id="friends" hidden></div>
     </section>
   </div>
   <div class="foot">Tudo aqui é fictício. O jogo salva sozinho neste aparelho.</div>
@@ -315,7 +329,6 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
   <div class="pr"><b>Cor do ícone</b><div class="sws" id="pcc"></div></div>
   <button class="ok" id="pfOk">SALVAR</button>
 </div></div>
-<div class="ov" id="friendsModal" hidden><div class="mc pxc" style="max-width:520px;text-align:left;max-height:85vh;overflow:auto"><h2>🤝 AMIGOS</h2><div id="frContent"><p>Carregando amizades...</p></div><button class="ok" id="frClose">FECHAR</button></div></div>
 <div id="toast"></div>
 <script>
 (()=>{
@@ -442,6 +455,7 @@ else if(tab=='shop')shopDraw();
 else if(tab=='ipo'){ipoSig=ipoGain()+'|'+s.sh;ipoDraw()}
 else if(tab=='world')worldDraw();
 else if(tab=='admin')adminDraw();
+else if(tab=='friends')friendsDraw();
 else rankDraw()}
 /* ===== CABEÇALHO / HUD ===== */
 function head(){const T=Date.now(),k=stg();if(k>lastSt){toast('🎉 Você evoluiu: '+ST[k][0]+'!');sfx(880,.25);setTimeout(()=>sfx(1175,.3),150);burst(100,50,['#ffd23f','#fff','#3ee0a0','#4cc9f0'],40,90);shake();flash=.8}lastSt=k;
@@ -837,9 +851,10 @@ const qv=()=>{$('qty').style.display=(tab=='apps'||tab=='emps')?'':'none'};
 const TB0=[['apps','🧩','Apps'],['emps','👥','Equipe'],['eqs','🖥️','Equip.'],['achs','🏆','Troféus'],['rk','🏅','Rank'],['shop','🛍️','Loja'],['ipo','📈','IPO'],['world','🌐','Mundo']];let TB=TB0,isAdm=false;
 function buildTabs(){TB=isAdm?TB0.concat([['admin','🛡️','Admin']]):TB0;const tb=$('tabs');tb.style.gridTemplateColumns='repeat('+TB.length+',minmax(0,1fr))';
 tb.innerHTML=TB.map(t=>'<button type="button" class="tab'+(t[0]==tab?' on':'')+'" data-t="'+t[0]+'" title="'+t[2]+'" aria-label="Abrir '+t[2]+'" aria-pressed="'+(t[0]==tab)+'">'+ico(t[1])+'<span>'+t[2]+'</span></button>').join('');
-tb.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;tb.querySelectorAll('.tab').forEach(x=>{const active=x==b;x.classList.toggle('on',active);x.setAttribute('aria-pressed',String(active))});TB.forEach(t=>$(t[0]).hidden=t[0]!=tab);qv();draw();if(tab=='rk'){push();pull()}});
-TB.forEach(t=>$(t[0]).hidden=t[0]!=tab);qv()}
+tb.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;tb.querySelectorAll('.tab').forEach(x=>{const active=x==b;x.classList.toggle('on',active);x.setAttribute('aria-pressed',String(active))});TB.forEach(t=>$(t[0]).hidden=t[0]!=tab);$('friends').hidden=true;qv();draw();if(tab=='rk'){push();pull()}});
+TB.forEach(t=>$(t[0]).hidden=t[0]!=tab);$('friends').hidden=true;qv()}
 buildTabs();
+$('frTop').addEventListener('click',()=>{tab='friends';TB.forEach(t=>$(t[0]).hidden=true);$('friends').hidden=false;document.querySelectorAll('#tabs .tab').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-pressed','false')});qv();draw();frLoad();frHeartbeat()});
 $('logo').insertAdjacentHTML('afterbegin',ico('🚀'));$('rl1').innerHTML=ico('💰')+' DINHEIRO';$('rl2').innerHTML=ico('💻')+' CÓDIGO';
 document.querySelectorAll('#qty button').forEach(b=>b.onclick=()=>{qt=+b.dataset.q;document.querySelectorAll('#qty button').forEach(x=>x.classList.toggle('on',x==b));draw()});
 ['apps','el','eqs'].forEach(id=>$(id).addEventListener('click',e=>{const b=e.target.closest('.bt');if(b&&!b.disabled)buy(b.dataset.k,+b.dataset.i)}));
@@ -861,38 +876,11 @@ if(!r.ok){toast(er(j.msg||j.error_description||j.error||'Erro ao entrar'));retur
 if(!j.access_token){toast('Confirme o e-mail enviado e depois toque em Entrar');return}
 setA(j);await sync();toast('✅ Conectado!');draw();pull()}catch(e){toast('Sem conexão')}}
 async function sync(){try{const r=await fetch(SB_URL+'/rest/v1/progresso?select=data&user_id=eq.'+A.uid,{headers:await hd()});const j=await r.json(),c=j[0]&&j[0].data;
-if(c&&((c.life||0)+(c.tot||0))>sc()){const keep={snd:s.snd,dk:s.dk,mus:s.mus};s=Object.assign(def(),c,keep);delete s.gd;if(!s.v)s.v=2;fillM();msSig='';crewSig='';fx=[];applyBt();save();lastSt=stg();hcoDraw();toast('☁️ Progresso carregado da nuvem')}else await cloud()}catch(e){}push();try{await frReq('player_presence?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:A.uid,last_seen:new Date().toISOString()})})}catch(e){}chkAdm();claimCmds()}
+if(c&&((c.life||0)+(c.tot||0))>sc()){const keep={snd:s.snd,dk:s.dk,mus:s.mus};s=Object.assign(def(),c,keep);delete s.gd;if(!s.v)s.v=2;fillM();msSig='';crewSig='';fx=[];applyBt();save();lastSt=stg();hcoDraw();toast('☁️ Progresso carregado da nuvem')}else await cloud()}catch(e){}await push();chkAdm();claimCmds();frHeartbeat();await frLoad()}
 async function cloud(){if(!A||sc()<1)return;try{await fetch(SB_URL+'/rest/v1/progresso?on_conflict=user_id',{method:'POST',headers:Object.assign({Prefer:'resolution=merge-duplicates,return=minimal'},await hd()),body:JSON.stringify({user_id:A.uid,data:s,updated_at:new Date().toISOString()}),keepalive:true})}catch(e){}}
 async function push(man,re){if(!A)return 0;try{const pb=async()=>fetch(SB_URL+'/rest/v1/placar?on_conflict=user_id',{method:'POST',headers:Object.assign({Prefer:'resolution=merge-duplicates,return=minimal'},await hd()),body:JSON.stringify(noAvP?{user_id:A.uid,name:s.n,score:sc()}:{user_id:A.uid,name:s.n,score:sc(),av:avEnc()})});let r=await pb();if(r.status==400&&!noAvP){try{avErr=(await r.clone().text()).slice(0,120)}catch(e){}noAvP=1;r=await pb()}
 if(r.status==409&&!man&&!re){s.n=s.n.slice(0,10)+Math.floor(100+Math.random()*900);save();return push(0,1)}return r.status}catch(e){return 0}}
 async function pull(){gM='';try{const q=()=>fetch(SB_URL+'/rest/v1/placar?select=user_id,name,score'+(noAvG?'':',av')+'&order=score.desc&limit=50',{headers:H0});let r=await q();if(r.status==400&&!noAvG){try{avErr=(await r.clone().text()).slice(0,120)}catch(e){}noAvG=1;r=await q()}if(!r.ok){gM=r.status+' '+(await r.text()).slice(0,100);throw 0}G=await r.json();gErr=0}catch(e){gErr=1;if(!gM)gM=String(e&&e.message||e)}if(tab=='rk'&&!/^(nm|em|pw)$/.test(document.activeElement.id))draw()}
-
-/* ===== AMIZADES ===== */
-const fr=$('frContent');let frBusy=false,frLast=[];
-async function frJson(r){const t=await r.text();if(!r.ok)throw new Error(t||('HTTP '+r.status));return t?JSON.parse(t):null}
-async function frReq(path,opts={}){return frJson(await fetch(SB_URL+'/rest/v1/'+path,{...opts,headers:Object.assign({},await hd(),opts.headers||{})}))}
-function frButton(label,attrs){return '<button class="frbtn" '+attrs+'>'+label+'</button>'}
-async function frLoad(){if(!A){fr.innerHTML='<div class="frbox"><p>Entre na sua conta pelo Ranking para usar amizades.</p><button class="frbtn" data-frrank="1">IR PARA RANKING</button></div>';return}
-if(frBusy)return;frBusy=true;fr.innerHTML='<p class="frmuted">Atualizando amizades...</p>';
-try{
- const base=await frReq('friend_requests?select=id,sender_id,receiver_id,status,created_at&or=(sender_id.eq.'+A.uid+',receiver_id.eq.'+A.uid+')&order=created_at.desc');
- const incoming=base.filter(x=>x.receiver_id===A.uid&&x.status==='pending'),outgoing=base.filter(x=>x.sender_id===A.uid&&x.status==='pending'),accepted=base.filter(x=>x.status==='accepted');
- const ids=[...new Set(accepted.map(x=>x.sender_id===A.uid?x.receiver_id:x.sender_id))];
- let profiles=[],pres=[];if(ids.length){profiles=await frReq('placar?select=user_id,name&user_id=in.('+ids.join(',')+')');pres=await frReq('player_presence?select=user_id,last_seen&user_id=in.('+ids.join(',')+')')}
- const online=new Set(pres.filter(x=>Date.now()-Date.parse(x.last_seen)<90000).map(x=>x.user_id));
- const nameById=new Map(profiles.map(x=>[x.user_id,x.name]));
- const section=(title,items,kind)=>'<div class="frbox"><b>'+title+' ('+items.length+')</b>'+(items.length?items.map(x=>{const id=kind==='friend'?(x.sender_id===A.uid?x.receiver_id:x.sender_id):(kind==='in'?x.sender_id:x.receiver_id);const nm=nameById.get(id)||'Jogador';return '<div class="frrow"><div class="frname"><b>'+esc(nm)+'</b><div class="frstatus">'+(kind==='friend'?'<i class="frdot '+(online.has(id)?'on':'')+'"></i>'+(online.has(id)?'Online':'Offline'):'Pedido pendente')+'</div></div>'+(kind==='in'?frButton('ACEITAR','data-fraccept="'+x.id+'"'):'')+'</div>'}).join(''):'<p class="frmuted">Nenhum por enquanto.</p>')+'</div>';
- fr.innerHTML='<div class="frbox"><b>🔎 ENCONTRAR JOGADORES</b><div style="display:flex;gap:6px;margin-top:8px"><input class="frinput" id="frSearch" maxlength="14" placeholder="Nome do jogador"><button class="frbtn" id="frFind">BUSCAR</button></div><div id="frResults"></div></div>'+section('🟢 MEUS AMIGOS',accepted,'friend')+section('📩 PEDIDOS RECEBIDOS',incoming,'in')+section('📤 PEDIDOS ENVIADOS',outgoing,'out')+'<p class="frmuted">Status online atualizado automaticamente. Você precisa estar conectado à sua conta.</p>';
- frLast=base;
-}catch(e){fr.innerHTML='<div class="frbox"><b>Não foi possível carregar as amizades.</b><p class="frmuted">'+esc(e.message)+'</p><button class="frbtn" id="frRetry">TENTAR NOVAMENTE</button></div>'}
-finally{frBusy=false}}
-async function frSearch(){if(!A){toast('Entre na sua conta primeiro');return}const q=$('frSearch')?.value.trim();if(!q){toast('Digite o nome do jogador');return}const box=$('frResults');box.innerHTML='<p class="frmuted">Buscando...</p>';try{const rows=await frReq('placar?select=user_id,name,score&name=ilike.*'+encodeURIComponent(q)+'*&order=score.desc&limit=20');const base=frLast;const known=new Set(base.map(x=>x.sender_id===A.uid?x.receiver_id:x.sender_id));const found=rows.filter(x=>x.user_id!==A.uid);box.innerHTML=found.length?found.map(x=>'<div class="frrow"><div class="frname"><b>'+esc(x.name)+'</b><div class="frmuted">Nv. '+fmt(x.score||0)+'</div></div>'+(known.has(x.user_id)?'<span class="frmuted">Já existe um pedido</span>':frButton('ADICIONAR','data-fradd="'+x.user_id+'"'))+'</div>').join(''):'<p class="frmuted">Nenhum jogador encontrado. Ele precisa entrar no jogo e ter uma conta.</p>'}catch(e){box.innerHTML='<p class="frmuted">Erro na busca: '+esc(e.message)+'</p>'}}
-async function frAdd(id){try{await frReq('friend_requests',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({sender_id:A.uid,receiver_id:id,status:'pending'})});toast('Pedido de amizade enviado!');await frLoad()}catch(e){toast('Não foi possível enviar. Verifique se já existe um pedido.')}}
-async function frAccept(id){try{await frReq('friend_requests?id=eq.'+id+'&receiver_id=eq.'+A.uid+'&status=eq.pending',{method:'PATCH',headers:{Prefer:'return=minimal'},body:JSON.stringify({status:'accepted'})});toast('Amizade aceita!');await frLoad()}catch(e){toast('Não foi possível aceitar o pedido')}}
-$('frBtn').onclick=()=>{$('friendsModal').hidden=false;frLoad()};$('frClose').onclick=()=>$('friendsModal').hidden=true;
-fr.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='frFind')frSearch();if(b.id==='frRetry')frLoad();if(b.dataset.fradd)frAdd(b.dataset.fradd);if(b.dataset.fraccept)frAccept(b.dataset.fraccept);if(b.dataset.frrank){$('friendsModal').hidden=true;const rb=document.querySelector('[data-t="rk"]');if(rb)rb.click()}});
-setInterval(async()=>{if(!A||document.hidden)return;try{await frReq('player_presence?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:A.uid,last_seen:new Date().toISOString()})})}catch(e){}if(!$('friendsModal').hidden)frLoad()},30000);
-
 const priv=()=>modal('PRIVACIDADE 🔒','<b>O que guardamos:</b> seu e-mail, sua senha (criptografada), o nome que você escolher, sua pontuação e o progresso do jogo.<br><br><b>Para quê:</b> entrar na conta, salvar seu progresso e montar o ranking global. Nome e pontuação aparecem para todos. Administradores autorizados podem consultar e-mail, nome e pontuação para moderação, e toda ação administrativa fica registrada.<br><br><b>Onde:</b> no Supabase, serviço de banco de dados na nuvem. Não vendemos nem compartilhamos seus dados.<br><br><b>Seus direitos:</b> em Configurações você pode apagar o progresso e o ranking (Reiniciar) ou excluir a conta e todos os dados (Excluir minha conta).<br><br>Menores de 18 anos devem usar com autorização de um responsável.');
 function delAcc(){if(!A){toast('Entre na sua conta primeiro');return}ask('EXCLUIR CONTA?','Excluir sua conta e TODOS os dados? Isso não pode ser desfeito.','EXCLUIR',delRun)}
 async function delRun(){try{const r=await fetch(SB_URL+'/rest/v1/rpc/delete_user',{method:'POST',headers:await hd(),body:'{}'});if(!r.ok)throw 0}catch(e){toast('Não foi possível excluir. Tente de novo');return}reset=1;try{localStorage.removeItem(K)}catch(x){}setA(null);location.reload()}
@@ -916,6 +904,103 @@ $('rk').addEventListener('click',async e=>{const i=e.target.id;if(i=='sv'){const
    todas as funções admin_* checam a tabela "admins" no servidor. Esconder a aba é só cosmético. */
 const AD={q:'',list:null,sel:null,det:null,log:null,err:'',t:0};let noCmd=0,claiming=0;
 async function rpc(fn,a){const r=await fetch(SB_URL+'/rest/v1/rpc/'+fn,{method:'POST',headers:await hd(),body:JSON.stringify(a||{})});if(!r.ok){let m='';try{m=(await r.json()).message||''}catch(e){}throw new Error(m||('erro '+r.status))}const t=await r.text();return t?JSON.parse(t):null}
+
+/* ===== AMIZADES E STATUS ONLINE =====
+   Requer friend_requests e player_presence + políticas RLS do SQL de amizades. */
+let friendRows=[],friendProfiles={},friendPresence={},friendSearchRows=[],friendBusy=false;
+const friendErr=async r=>{let msg='Erro '+r.status;try{const j=await r.json();msg=j.message||j.details||j.hint||msg}catch(e){}throw new Error(msg)};
+async function frFetch(path,opts={}){
+ const h=Object.assign({},await hd(),opts.headers||{});
+ const r=await fetch(SB_URL+'/rest/v1/'+path,Object.assign({},opts,{headers:h}));
+ if(!r.ok)await friendErr(r);
+ const body=await r.text();if(!body||!body.trim())return null;
+ try{return JSON.parse(body)}catch(e){throw new Error('Resposta inválida do servidor de amizades.')}
+}
+function frOnline(id){const p=friendPresence[id];return !!p&&Date.now()-new Date(p.last_seen).getTime()<90000}
+function frRelation(id){return friendRows.find(x=>(x.sender_id===A.uid&&x.receiver_id===id)||(x.receiver_id===A.uid&&x.sender_id===id))||null}
+function frPlayerCard(p,kind){
+ const hasProfile=!!p.name,online=frOnline(p.user_id),status=online?'Online':'Offline';let action='';
+ if(kind==='search')action='<button data-fr-add="'+esc(p.user_id)+'">ADICIONAR</button>';
+ if(kind==='incoming')action='<button data-fr-accept="'+esc(p.id)+'">ACEITAR</button><button data-fr-decline="'+esc(p.id)+'">RECUSAR</button>';
+ if(kind==='outgoing')action='<span style="color:var(--muted);font-size:1rem">PENDENTE</span>';
+ if(kind==='friend')action='<span style="color:var(--green);font-size:1rem">AMIGO</span>';
+ return '<div class="fr-item"><i class="fr-dot '+(online?'online':'')+'"></i><div class="fr-info"><b>'+esc(p.name||(hasProfile?'Jogador':'Conta sem perfil'))+'</b><small>'+(hasProfile?status:'Perfil ainda não publicado')+'</small></div><div class="fr-actions">'+action+'</div></div>';
+}
+function frSearchCard(p){const rel=frRelation(p.user_id);if(rel?.status==='accepted')return frPlayerCard(p,'friend');if(rel?.status==='pending')return frPlayerCard(Object.assign({},p,{id:rel.id}),rel.sender_id===A.uid?'outgoing':'incoming');return frPlayerCard(p,'search')}
+async function frLoad(){
+ if(!A){friendRows=[];friendProfiles={};friendPresence={};friendsDraw();return}
+ if(friendBusy)return;friendBusy=true;friendLoadError='';
+ try{
+  const rows=await frFetch('friend_requests?select=id,sender_id,receiver_id,status,created_at&or=(sender_id.eq.'+A.uid+',receiver_id.eq.'+A.uid+')&order=created_at.desc');
+  friendRows=Array.isArray(rows)?rows:[];
+  // Carrega o perfil de TODOS os participantes, inclusive pedidos pendentes.
+  const ids=[...new Set([A.uid,...friendRows.flatMap(x=>[x.sender_id,x.receiver_id])])];
+  if(ids.length){
+   const list='('+ids.join(',')+')';
+   const [profiles,pres]=await Promise.all([
+    frFetch('placar?select=user_id,name,score&user_id=in.'+encodeURIComponent(list)),
+    frFetch('player_presence?select=user_id,last_seen&user_id=in.'+encodeURIComponent(list))
+   ]);
+   friendProfiles={};(profiles||[]).forEach(x=>friendProfiles[x.user_id]=x);
+   friendPresence={};(pres||[]).forEach(x=>friendPresence[x.user_id]=x);
+  }else{friendProfiles={};friendPresence={}}
+ }catch(e){console.warn('Amizades:',e);friendLoadError=e.message;friendRows=[];friendProfiles={};friendPresence={}}
+ finally{friendBusy=false}
+ if(tab==='friends')friendsDraw();
+}
+let friendLoadError='';
+function friendsDraw(){
+ const el=$('friends');if(!el)return;
+ if(!A){el.innerHTML='<div class="friend-box pxc"><h3>🤝 AMIZADES</h3><p>Entre na sua conta pela aba Rank para enviar e receber pedidos de amizade.</p><button class="nb" id="frGoRank">IR PARA RANK</button></div>';return}
+ const incoming=friendRows.filter(x=>x.receiver_id===A.uid&&x.status==='pending');
+ const outgoing=friendRows.filter(x=>x.sender_id===A.uid&&x.status==='pending');
+ const accepted=friendRows.filter(x=>x.status==='accepted');
+ const profile=id=>friendProfiles[id]||{user_id:id,name:''};
+ el.innerHTML='<div class="friend-box pxc"><h3>🔎 ENCONTRAR JOGADORES</h3><div class="friend-search"><input id="frQuery" maxlength="14" placeholder="Digite o nome do jogador"><button id="frSearch">BUSCAR</button></div><div id="frResults"></div></div>'
+ +'<div class="friend-box pxc"><h3>🟢 MEUS AMIGOS <span class="fr-count">'+accepted.length+'</span></h3>'
+ +(accepted.length?accepted.map(x=>frPlayerCard(profile(x.sender_id===A.uid?x.receiver_id:x.sender_id),'friend')).join(''):'<div class="fr-empty">Você ainda não tem amigos adicionados.</div>')+'</div>'
+ +'<div class="friend-box pxc"><h3>📩 PEDIDOS RECEBIDOS <span class="fr-count">'+incoming.length+'</span></h3>'
+ +(incoming.length?incoming.map(x=>frPlayerCard(Object.assign({},profile(x.sender_id),{id:x.id}),'incoming')).join(''):'<div class="fr-empty">Nenhum pedido recebido.</div>')+'</div>'
+ +'<div class="friend-box pxc"><h3>📤 PEDIDOS ENVIADOS <span class="fr-count">'+outgoing.length+'</span></h3>'
+ +(outgoing.length?outgoing.map(x=>frPlayerCard(Object.assign({},profile(x.receiver_id),{id:x.id}),'outgoing')).join(''):'<div class="fr-empty">Nenhum pedido enviado.</div>')+'</div>'
+ +'<div class="foot">'+(friendLoadError?'Não foi possível carregar: '+esc(friendLoadError):'Os pedidos e o status são atualizados ao abrir esta aba.')+' <button class="lk" id="frRefresh">ATUALIZAR</button></div>';
+}
+async function frSearch(){
+ if(!A){toast('Entre na sua conta primeiro');return}
+ const q=$('frQuery')?.value.trim();if(!q){toast('Digite o nome de um jogador');return}
+ const out=$('frResults');out.innerHTML='<div class="fr-empty">Buscando…</div>';
+ try{
+  const safe=q.replace(/[%_*]/g,'').trim();if(!safe){out.innerHTML='<div class="fr-empty">Digite um nome válido.</div>';return}
+  const rows=await frFetch('placar?select=user_id,name,score&name=ilike.*'+encodeURIComponent(safe)+'*&order=score.desc&limit=30');
+  const found=(rows||[]).filter(x=>x.user_id!==A.uid);
+  const ids=found.map(x=>x.user_id);
+  if(ids.length){const pres=await frFetch('player_presence?select=user_id,last_seen&user_id=in.('+ids.join(',')+')');(pres||[]).forEach(x=>friendPresence[x.user_id]=x)}
+  friendSearchRows=found;
+  out.innerHTML=found.length?found.map(frSearchCard).join(''):'<div class="fr-empty">Nenhum jogador encontrado com esse nome. A pessoa precisa entrar no jogo para cadastrar o perfil.</div>';
+ }catch(e){out.innerHTML='<div class="fr-empty">Falha na busca: '+esc(e.message)+'</div>'}
+}
+async function frSend(id){
+ if(!A||!id||id===A.uid)return;
+ const rel=frRelation(id);
+ if(rel?.status==='accepted'){toast('Vocês já são amigos');return}
+ if(rel?.status==='pending'){toast(rel.sender_id===A.uid?'Você já enviou um pedido para esse jogador':'Esse jogador já enviou um pedido para você. Aceite em Pedidos recebidos.');return}
+ try{
+  await frFetch('friend_requests',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({sender_id:A.uid,receiver_id:id,status:'pending'})});
+  toast('Pedido de amizade enviado!');await frLoad();if(tab==='friends')frSearchRefresh();
+ }catch(e){await frLoad();const now=frRelation(id);if(now?.status==='pending')toast(now.sender_id===A.uid?'O pedido já estava enviado.':'Esse jogador já enviou um pedido para você.');else if(now?.status==='accepted')toast('Vocês já são amigos');else toast('Não foi possível enviar: '+e.message);if(tab==='friends')friendsDraw()}
+}
+function frSearchRefresh(){const q=$('frQuery');if(q&&q.value.trim())frSearch()}
+async function frRespond(id,status){
+ try{
+  const rows=await frFetch('friend_requests?id=eq.'+encodeURIComponent(id)+'&receiver_id=eq.'+A.uid+'&status=eq.pending',{method:'PATCH',headers:{Prefer:'return=representation'},body:JSON.stringify({status,updated_at:new Date().toISOString()})});
+  if(!Array.isArray(rows)||!rows.length)throw new Error('Esse pedido já foi respondido ou não está mais disponível.');
+  toast(status==='accepted'?'Amizade aceita!':'Pedido recusado.');await frLoad();
+ }catch(e){toast('Não foi possível atualizar: '+e.message);await frLoad()}
+}
+async function frHeartbeat(){if(!A||document.hidden)return;try{await frFetch('player_presence?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:A.uid,last_seen:new Date().toISOString()})})}catch(e){console.warn('Presença:',e.message)}}
+async function frPresenceRefresh(){if(!A)return;try{const ids=[...new Set([A.uid,...friendRows.filter(x=>x.status==='accepted').map(x=>x.sender_id===A.uid?x.receiver_id:x.sender_id)])];const pres=await frFetch('player_presence?select=user_id,last_seen&user_id=in.('+ids.join(',')+')');friendPresence={};(pres||[]).forEach(x=>friendPresence[x.user_id]=x);if(tab==='friends')friendsDraw()}catch(e){}}
+$('friends').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.id==='frGoRank'){tab='rk';buildTabs();draw()}else if(b.id==='frSearch')frSearch();else if(b.id==='frRefresh'){friendLoadError='';frLoad()}else if(b.dataset.frAdd)frSend(b.dataset.frAdd);else if(b.dataset.frAccept)frRespond(b.dataset.frAccept,'accepted');else if(b.dataset.frDecline)frRespond(b.dataset.frDecline,'declined')});
+
 async function chkAdm(){let v=false;if(A){try{v=(await rpc('is_admin'))===true}catch(e){}}if(v===isAdm)return;isAdm=v;if(!v&&tab=='admin')tab='apps';buildTabs();draw();if(v)toast('🛡️ Modo administrador ativo')}
 const parseAmt=t=>{const m=String(t).trim().toUpperCase().replace(',','.').match(/^(\d+(?:\.\d+)?)\s*(K|M|B|T|QA)?$/);return m?+m[1]*({K:1e3,M:1e6,B:1e9,T:1e12,QA:1e15}[m[2]]||1):NaN};
 const ACTN={money:'Dinheiro',diamonds:'Diamantes',code:'Código',level:'Nível',trophy:'Troféu',delete_user:'EXCLUIU CONTA'};
@@ -1017,13 +1102,16 @@ if(tab=='shop'&&shopSig!=s.dm+'|'+s.own.length)shopDraw();
 if(tab=='ipo'){const k=ipoGain()+'|'+s.sh;if(k!=ipoSig){ipoSig=k;ipoDraw()}}
 if(ev){const l=evT-Date.now();if(l<=0){ev=null;drawEv();toast('A oportunidade passou...')}else{const b=$('evb');if(b)b.style.width=l/250+'%'}}},500);
 setInterval(()=>{if(tab=='rk'&&!/^(nm|em|pw)$/.test(document.activeElement.id))pull()},10000);
+setInterval(()=>{frHeartbeat();if(tab==='friends')frPresenceRefresh()},30000);
+addEventListener('pagehide',()=>{if(A)frFetch('player_presence?user_id=eq.'+A.uid,{method:'DELETE',keepalive:true}).catch(()=>{})});
+document.addEventListener('visibilitychange',()=>{if(!document.hidden&&A){frHeartbeat();if(tab==='friends')frLoad()}});
 const loop=(f,a,b)=>setTimeout(()=>{if(!document.hidden)f();loop(f,a,b)},a+Math.random()*(b-a));
 loop(spawnBug,25e3,50e3);loop(spawnStar,45e3,90e3);loop(showEv,80e3,140e3);
-lastSt=stg();qv();draw();head();hcoDraw();msUpd();music();requestAnimationFrame(frame);setInterval(tick,100);setInterval(save,5000);if(A)setTimeout(sync,1500);setInterval(()=>{push();cloud()},30000);setTimeout(push,4000);
+lastSt=stg();qv();draw();head();hcoDraw();msUpd();music();requestAnimationFrame(frame);setInterval(tick,100);setInterval(save,5000);if(A){setTimeout(sync,1500);setTimeout(frHeartbeat,1800);}setInterval(()=>{push();cloud()},30000);setTimeout(push,4000);
 let ip;addEventListener('beforeinstallprompt',e=>{e.preventDefault();ip=e;const b=document.createElement('button');b.textContent='📲 INSTALAR JOGO';b.style.cssText='position:fixed;right:14px;bottom:88px;z-index:60;background:#ff9a3c;color:#fff;border:4px solid #000;padding:12px 14px;font:700 .6rem "Press Start 2P",monospace;box-shadow:inset 0 -5px 0 rgba(0,0,0,.28)';b.onclick=()=>{ip.prompt();ip.userChoice.finally(()=>b.remove())};document.body.appendChild(b)});
 addEventListener('appinstalled',()=>toast('✅ Jogo instalado!'));
 if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
-addEventListener('pagehide',()=>{save();if(A)hd().then(headers=>fetch(SB_URL+'/rest/v1/player_presence?user_id=eq.'+A.uid,{method:'DELETE',headers})).catch(()=>{})});document.addEventListener('visibilitychange',()=>{if(document.hidden){save();cloud();push()}});
+addEventListener('pagehide',save);document.addEventListener('visibilitychange',()=>{if(document.hidden){save();cloud();push()}});
 })();
 </script>
 </body>
