@@ -914,7 +914,11 @@ async function frFetch(path,opts={}){
  const h=Object.assign({},await hd(),opts.headers||{});
  const r=await fetch(SB_URL+'/rest/v1/'+path,Object.assign({},opts,{headers:h}));
  if(!r.ok)await friendErr(r);
- return r.status===204?null:await r.json();
+ // O Supabase pode responder 201/204 sem corpo quando Prefer: return=minimal.
+ // Ler como texto evita o erro 'Unexpected end of JSON input'.
+ const body=await r.text();
+ if(!body || !body.trim())return null;
+ try{return JSON.parse(body)}catch(e){throw new Error('Resposta inválida do servidor de amizades.')}
 }
 function frOnline(id){const p=friendPresence[id];return !!p&&Date.now()-new Date(p.last_seen).getTime()<90000}
 function frPlayerCard(p,kind){
