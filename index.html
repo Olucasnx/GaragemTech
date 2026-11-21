@@ -71,15 +71,15 @@ button:focus-visible,input:focus-visible{outline:3px solid var(--gold);outline-o
 .ms>.bt,.ms>.mp{grid-column:2;grid-row:1/3}
 .mp{font:clamp(.42rem,2.4vw,.5rem) 'Press Start 2P',monospace;color:var(--muted);min-width:0;width:70px;text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ms.ok .mt{color:var(--green)}
-.tabs{position:fixed;z-index:18;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 7px);transform:translateX(-50%);width:min(1000px,calc(100% - 12px));display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:3px;padding:5px;background:var(--bg2);border:4px solid var(--bd);box-shadow:0 5px 0 rgba(0,0,0,.45),inset 0 3px 0 var(--hi);clip-path:polygon(0 4px,4px 4px,4px 0,calc(100% - 4px) 0,calc(100% - 4px) 4px,100% 4px,100% calc(100% - 4px),calc(100% - 4px) calc(100% - 4px),calc(100% - 4px) 100%,4px 100%,4px calc(100% - 4px),0 calc(100% - 4px))}
-.tab{min-width:0;min-height:53px;padding:5px 1px 3px;background:var(--tab);border:2px solid var(--bd);color:var(--muted);font-size:1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;box-shadow:inset 0 -3px 0 rgba(0,0,0,.22);transition:transform .12s steps(2),background .12s steps(2),color .12s steps(2)}
-.tab .px{width:21px;height:21px;image-rendering:pixelated}
-.tab span{font:clamp(.30rem,1.35vw,.44rem)/1.25 'Press Start 2P',monospace;white-space:nowrap;letter-spacing:-.65px}
-.tab.on{background:var(--orange);color:#fff;border-color:#000;box-shadow:inset 0 -4px 0 rgba(0,0,0,.28),inset 0 2px 0 rgba(255,255,255,.28);transform:translateY(-4px)}
-.tab:active{transform:translateY(1px)}
-@media(min-width:700px){.tabs{bottom:12px}.tab{min-height:60px}.tab .px{width:24px;height:24px}.tab span{font-size:.48rem}}
-@media(max-width:360px){.tabs{gap:2px;padding:4px}.tab{min-height:49px}.tab .px{width:18px;height:18px}.tab span{font-size:.32rem;letter-spacing:-.7px}}
-@media(max-width:699px){.tabs{left:0;bottom:0;transform:none;width:100%;padding:7px 8px max(7px,env(safe-area-inset-bottom,0px));border-bottom:0;gap:4px}.tab{min-height:62px;padding:6px 2px 5px;gap:4px}.tab .px{width:22px;height:22px}.tab span{font:clamp(.29rem,1.35vw,.43rem)/1.25 'Press Start 2P',monospace;letter-spacing:-.7px}.wrap{padding-bottom:150px}}
+.tabs{position:fixed;z-index:18;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);transform:translateX(-50%);width:min(560px,calc(100% - 24px));display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:5px;padding:7px;background:rgba(26,29,56,.96);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.14);border-radius:18px;box-shadow:0 10px 35px rgba(0,0,0,.45)}
+.tab{position:relative;min-width:0;min-height:58px;padding:7px 2px 5px;background:transparent;border:1px solid transparent;border-radius:12px;color:var(--muted);font-size:1rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:background .16s ease,color .16s ease,transform .16s ease}
+.tab .px{width:23px;height:23px;image-rendering:pixelated}.tab span{font:clamp(.38rem,1.65vw,.48rem)/1.25 'Press Start 2P',monospace;white-space:nowrap;letter-spacing:-.5px}
+.tab.on{background:rgba(255,154,60,.16);border-color:rgba(255,154,60,.35);color:var(--orange)}.tab.on:before{content:"";position:absolute;top:-7px;width:22px;height:3px;border-radius:4px;background:var(--orange)}.tab:active{transform:scale(.96)}
+.tab.menu-tab{background:rgba(255,255,255,.055)}.tab.menu-tab.on{background:rgba(255,154,60,.16)}
+.nav-panel{width:min(520px,100%);max-height:min(82vh,760px);overflow-y:auto;padding:18px;border-radius:18px;text-align:left;animation:in .2s}.nav-head{display:flex;align-items:center;justify-content:space-between;gap:12px}.nav-head small{font:.42rem 'Press Start 2P',monospace;color:var(--muted)}.nav-head h2{margin:7px 0 0;font:.75rem/1.5 'Press Start 2P',monospace;color:var(--gold)}.nav-close{width:38px;height:38px;border-radius:10px;background:var(--tab);border:1px solid var(--hi);font-size:1.15rem}.nav-sub{color:var(--muted);margin:8px 0 16px}.nav-group{margin-top:15px}.nav-group>b{display:block;font:.43rem 'Press Start 2P',monospace;color:var(--muted);margin-bottom:8px}.nav-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.nav-item{min-width:0;min-height:76px;padding:10px 5px;background:var(--tab);border:1px solid var(--hi);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--ink)}.nav-item .px{width:25px;height:25px}.nav-item span{font:.38rem/1.4 'Press Start 2P',monospace;text-align:center}.nav-item:active{transform:scale(.97)}
+@media(min-width:700px){.tabs{bottom:16px}.tab{min-height:62px}.tab .px{width:25px;height:25px}.tab span{font-size:.48rem}}
+@media(max-width:699px){.tabs{left:50%;bottom:max(8px,env(safe-area-inset-bottom,0px));width:calc(100% - 20px);padding:6px;gap:3px}.tab{min-height:58px}.tab .px{width:22px;height:22px}.tab span{font:clamp(.36rem,1.65vw,.46rem)/1.25 'Press Start 2P',monospace}.wrap{padding-bottom:112px}}
+@media(max-width:360px){.tabs{width:calc(100% - 12px);gap:1px;padding:4px}.tab{min-height:54px}.tab .px{width:19px;height:19px}.tab span{font-size:.34rem}}
 .qty{display:flex;gap:6px;margin-bottom:10px}
 .qty button{flex:1;padding:8px 2px;background:var(--tab);border:3px solid var(--bd);font:.6rem 'Press Start 2P',monospace;color:var(--muted)}
 .qty button.on{background:var(--green);color:#06241a}
@@ -313,6 +313,26 @@ button.cl:active{background:rgba(255,255,255,.1)}
 .vsv.on{opacity:1;box-shadow:0 0 14px var(--c)}
 .sb{position:absolute;transform:translate(-50%,-100%);background:#fff;color:#1b1530;border:2px solid #000;font:1rem/1.05 VT323,monospace;padding:3px 6px;width:max-content;max-width:62%;pointer-events:none;z-index:3;text-align:center}
 .sb:after{content:'';position:absolute;left:50%;bottom:-6px;width:6px;height:6px;background:#fff;border:solid #000;border-width:0 2px 2px 0;transform:translateX(-50%) rotate(45deg)}
+
+/* ===== NAVEGACAO PIXEL ART ===== */
+.tabs{background:var(--tab);border:4px solid var(--bd);border-radius:0;padding:6px;gap:4px;box-shadow:0 5px 0 var(--bd),inset 3px 3px 0 var(--hi),inset -3px -3px 0 var(--lo);backdrop-filter:none;-webkit-backdrop-filter:none}
+.tab{border:3px solid transparent;border-radius:0;min-height:60px;color:var(--muted);text-shadow:1px 1px 0 var(--bd);transition:transform .08s steps(2),background .08s steps(2),color .08s steps(2)}
+.tab .px{image-rendering:pixelated;filter:drop-shadow(1px 1px 0 var(--bd))}
+.tab span{letter-spacing:0;text-shadow:1px 1px 0 var(--bd)}
+.tab.on{background:var(--orange);color:#fff;border:3px solid var(--bd);box-shadow:inset 3px 3px 0 rgba(255,255,255,.35),inset -3px -4px 0 rgba(0,0,0,.28),0 3px 0 var(--bd)}
+.tab.on:before{display:none}
+.tab:active{transform:translateY(3px) scale(.98)}
+.tab.menu-tab{background:var(--card);border:3px solid var(--bd);box-shadow:inset 2px 2px 0 var(--hi),inset -2px -2px 0 var(--lo)}
+.tab.menu-tab.on{background:var(--orange);color:#fff}
+.nav-panel{border-radius:0;box-shadow:8px 8px 0 rgba(0,0,0,.55),inset 4px 4px 0 var(--hi),inset -4px -4px 0 var(--lo)}
+.nav-close{border-radius:0;border:3px solid var(--bd);box-shadow:inset 2px 2px 0 var(--hi),inset -2px -2px 0 var(--lo),0 3px 0 var(--bd)}
+.nav-grid{gap:9px}
+.nav-item{border:3px solid var(--bd);border-radius:0;background:var(--tab);box-shadow:inset 3px 3px 0 var(--hi),inset -3px -3px 0 var(--lo),0 3px 0 var(--bd);text-shadow:1px 1px 0 var(--bd);transition:transform .08s steps(2),background .08s steps(2)}
+.nav-item .px{image-rendering:pixelated;filter:drop-shadow(1px 1px 0 var(--bd))}
+.nav-item:active{transform:translateY(3px);box-shadow:inset 2px 2px 0 var(--lo)}
+@media(max-width:699px){.tabs{border-width:3px;padding:5px;gap:3px}.tab{min-height:57px;padding:5px 1px 4px}.tab.on{box-shadow:inset 2px 2px 0 rgba(255,255,255,.35),inset -2px -3px 0 rgba(0,0,0,.28),0 2px 0 var(--bd)}}
+@media(max-width:360px){.tabs{gap:1px;padding:4px}.tab{min-height:53px}}
+
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#14162a"><link rel="apple-touch-icon" href="icon-192.png">
 </head>
@@ -343,11 +363,13 @@ button.cl:active{background:rgba(255,255,255,.1)}
       <div class="qty" id="qty"><button data-q="1" class="on">x1</button><button data-q="10">x10</button><button data-q="50">x50</button><button data-q="100">x100</button><button data-q="0">MÁX</button></div>
       <div id="apps"></div>
       <div id="emps" hidden><div id="el"></div></div>
-      <div id="eqs" hidden></div><div id="achs" hidden></div><div id="rk" hidden></div><div id="ipo" hidden></div><div id="shop" hidden></div><div id="world" hidden></div><div id="admin" hidden></div><div id="friends" hidden></div>
+      <div id="eqs" hidden></div><div id="achs" hidden></div><div id="rk" hidden></div><div id="ipo" hidden></div><div id="shop" hidden></div><div id="world" hidden></div><div id="depts" hidden></div><div id="research" hidden></div><div id="company" hidden></div><div id="admin" hidden></div><div id="friends" hidden></div>
     </section>
   </div>
   <div class="foot">Tudo aqui é fictício. O jogo salva sozinho neste aparelho.</div>
 </div>
+
+<div class="ov" id="navMenu" hidden><div class="nav-panel pxc" role="dialog" aria-modal="true" aria-labelledby="navTitle"><div class="nav-head"><div><small>GARAGEM TECH</small><h2 id="navTitle">Central da empresa</h2></div><button class="nav-close" id="navClose" aria-label="Fechar menu">✕</button></div><p class="nav-sub">Acesse todas as áreas do seu negócio.</p><div class="nav-group"><b>GESTÃO</b><div class="nav-grid" id="navManagement"></div></div><div class="nav-group"><b>PROGRESSO</b><div class="nav-grid" id="navProgress"></div></div><div class="nav-group"><b>EXPANSÃO</b><div class="nav-grid" id="navExpansion"></div></div></div></div>
 
 <div class="ov" id="cfg" hidden><div class="mc pxc">
   <h2>⚙️ CONFIGURAÇÕES</h2>
@@ -395,22 +417,49 @@ const EM=[['🧑‍🎓','Estagiário',20,.5],['👨‍💻','Dev Júnior',150,3
 const EQ=[['⌨️','Teclado Mecânico','Código por clique x2',150,'c',2],['🖱️','Mouse Gamer','Código por clique x2',1e3,'c',2],['☕','Máquina de Café','Equipe +50% código/s',2500,'e',1.5],['🖥️','Monitor Extra','Código por clique x2',8e3,'c',2],['💺','Cadeira Ergonômica','Apps +25% dinheiro',2.5e4,'a',1.25],['⚡','Servidor Dedicado','Apps +50% dinheiro',1.5e5,'a',1.5],['🎓','Cursos de IA','Equipe x2 código/s',1.5e6,'e',2],['☁️','Nuvem Global','Apps x2 dinheiro',2e7,'a',2],['🔮','Computador Quântico','Tudo x2',5e8,'x',2]];
 const AC=[['👆','Primeiro Código','Programe 1 vez',s=>s.cl>=1],['⌨️','Dedos Rápidos','100 cliques',s=>s.cl>=100],['🔥','Mão de Ferro','1.000 cliques',s=>s.cl>=1000],['📱','App no Ar','Lance 1 app',s=>sum(s.a)>=1],['🧩','Portfólio','Lance os 8 tipos de app',s=>s.a.every(x=>x>0)],['💵','Primeiros 1K','Ganhe 1K de dinheiro',s=>s.tot>=1e3],['💰','Milionário','Ganhe 1M de dinheiro',s=>s.tot>=1e6],['🏆','Bilionário','Ganhe 1B de dinheiro',s=>s.tot>=1e9],['👥','Time Formado','Contrate 10 pessoas',s=>sum(s.e)>=10],['🏢','Time Gigante','Contrate 100 pessoas',s=>sum(s.e)>=100],['🛠️','Bem Equipado','Compre 5 equipamentos',s=>sum(s.q)>=5],['🌟','Estrela Cadente','Pegue 1 estrela turbo',s=>s.st>=1],['🏙️','Chegou lá','Chegue à fase Empresa',s=>stg()>=4],
 ['🐛','Caçador de Bugs','Esmague 25 bugs',s=>s.bg>=25],['📋','Funcionário do Mês','Complete 10 missões',s=>s.md>=10],['📈','Abriu Capital','Faça seu 1º IPO',s=>s.ipo>=1],['💥','Combo Mestre','Chegue a combo 50',s=>s.mx>=50],['📅','Fiel ao Jogo','Entre 3 dias seguidos',s=>s.ds>=3],['🎯','Sorte de Dev','Dê 25 cliques críticos',s=>s.cr>=25],['🔬','Amigo do Dr. Lucas','Converse com o Dr. Lucas',s=>s.lu>=1],['🛡️','Salvador do Mundo','Derrote o Mr. Malware',s=>s.bd>=1],['👑','Chegou ao Topo','Chegue à fase Império Digital',s=>stg()>=8]];
-const def=()=>({m:0,c:0,tot:0,cl:0,a:AP.map(()=>0),e:EM.map(()=>0),q:EQ.map(()=>0),t:[],st:0,n:'Jogador'+(1000+rnd(9000)),snd:1,dk:1,mus:0,ts:Date.now(),v:0,life:0,sh:0,ipo:0,bg:0,md:0,mx:0,cr:0,ds:0,dd:'',hkt:0,ms:[],un:0,mxl:0,lu:0,mg:[0,0,0,0,0],bd:0,dm:0,own:[],bt:{m:0,c:0,x:0,nb:0},pf:{sk:1,hr:1,hs:0,sh:0,pa:0,ou:0,ac:0,bk:0},cn:'Garagem Tech',ci:{em:0,cl:0},world:{countries:['br']}});
+const def=()=>({m:0,c:0,tot:0,cl:0,a:AP.map(()=>0),e:EM.map(()=>0),q:EQ.map(()=>0),t:[],st:0,n:'Jogador'+(1000+rnd(9000)),snd:1,dk:1,mus:0,ts:Date.now(),v:0,life:0,sh:0,ipo:0,bg:0,md:0,mx:0,cr:0,ds:0,dd:'',hkt:0,ms:[],un:0,mxl:0,lu:0,mg:[0,0,0,0,0],bd:0,dm:0,own:[],bt:{m:0,c:0,x:0,nb:0},pf:{sk:1,hr:1,hs:0,sh:0,pa:0,ou:0,ac:0,bk:0},cn:'Garagem Tech',ci:{em:0,cl:0},world:{countries:['br']},dp:{dev:0,mkt:0,res:0,fin:0,sec:0,ai:0},research:[],role:'magnata',ipoLog:[],collect:[]});
 let s=def(),reset=0,tab='apps',qt=1,lastSt=0,tt,ac,fx=[],bugs=[],star=null,combo=0,lastClk=0,kf=0,msSig='',crew=[],crewSig='',ev=null,evT=0,flash=0,coinA=0,bitA=0,ipoSig='',P=[];
 try{const r=JSON.parse(localStorage.getItem(K));if(r)s=Object.assign(def(),r)}catch(e){}
 delete s.gd; // Remove dados antigos de guilda dos saves existentes
 s.world=s.world&&Array.isArray(s.world.countries)?s.world:{countries:['br']};if(!s.world.countries.includes('br'))s.world.countries.unshift('br');
+s.dp=Object.assign({dev:0,mkt:0,res:0,fin:0,sec:0,ai:0},s.dp||{}); // Migração segura da progressão
+s.research=Array.isArray(s.research)?[...new Set(s.research.filter(x=>typeof x==='string'))]:[]; // Migração da árvore tecnológica
+s.role=['magnata','engenheiro','visionario','empreendedor'].includes(s.role)?s.role:'magnata';s.ipoLog=Array.isArray(s.ipoLog)?s.ipoLog:[];s.collect=Array.isArray(s.collect)?s.collect:[];
 if(!s.v){s.v=2;s.dk=1}
 let rankSyncTimer=null;const save=()=>{if(reset)return;s.ts=Date.now();try{localStorage.setItem(K,JSON.stringify(s))}catch(e){};if(rankSyncTimer)clearTimeout(rankSyncTimer);rankSyncTimer=setTimeout(()=>{if(A){cloud();push()}},5000)};
 /* ===== CÁLCULOS ===== */
 const has=id=>(s.own||[]).includes(id),mil=n=>{let m=1;[10,25,50,100].forEach(t=>{if(n>=t)m*=1.35});return m},nxm=n=>[10,25,50,100].find(t=>n<t)||0;
 const cost=(b,n)=>Math.ceil(b*Math.pow(1.23,n)),bonus=()=>(1+s.t.length*.015)*(1+s.sh*.05)*(1+(s.bd?.25:0))*(has('u3')?1.25:1)*(has('x2')?1.1:1)*(1+Math.max(0,s.world.countries.length-1)*.04);
 const fm=p=>{const n=Date.now();let r=1;for(const f of fx)if(f.u>n)r*=f[p];return r};
+const DEPTS=[{id:'dev',ic:'💻',name:'Desenvolvimento',desc:'A equipe programa com mais eficiência.',unlock:0,base:2500,rate:.025,kind:'c',cap:30},{id:'mkt',ic:'📣',name:'Marketing',desc:'Seus aplicativos atraem mais usuários.',unlock:1,base:12000,rate:.025,kind:'m',cap:30},{id:'res',ic:'🔬',name:'Pesquisa',desc:'Pesquisa melhora toda a produção.',unlock:2,base:80000,rate:.015,kind:'all',cap:30},{id:'fin',ic:'💰',name:'Financeiro',desc:'Melhora a eficiência da empresa.',unlock:3,base:350000,rate:.012,kind:'all',cap:25},{id:'sec',ic:'🛡️',name:'Segurança',desc:'Fortalece a infraestrutura da empresa.',unlock:4,base:1800000,rate:.012,kind:'all',cap:25},{id:'ai',ic:'🤖',name:'Inteligência Artificial',desc:'Automatiza processos e amplia a produção.',unlock:5,base:12000000,rate:.02,kind:'all',cap:25}];
+const deptMult=k=>DEPTS.reduce((v,d)=>{const n=s.dp[d.id]||0;return v*(d.kind===k||d.kind==='all'?1+n*d.rate:1)},1);
+const deptCost=d=>Math.ceil(d.base*Math.pow(1.62,s.dp[d.id]||0));
+const RESEARCH=[
+{id:'auto1',cat:'AUTOMAÇÃO',ic:'⚙️',name:'Scripts inteligentes',desc:'+8% de código por segundo.',cost:18000,unlock:1,pre:[],kind:'c',rate:.08},
+{id:'auto2',cat:'AUTOMAÇÃO',ic:'🤖',name:'Esteiras automatizadas',desc:'+12% de código por segundo.',cost:180000,unlock:2,pre:['auto1'],kind:'c',rate:.12},
+{id:'auto3',cat:'AUTOMAÇÃO',ic:'🏭',name:'Operação autônoma',desc:'+18% de código por segundo.',cost:8500000,unlock:4,pre:['auto2'],kind:'c',rate:.18},
+{id:'ia1',cat:'INTELIGÊNCIA ARTIFICIAL',ic:'🧠',name:'Modelos preditivos',desc:'+8% em toda a produção.',cost:45000,unlock:1,pre:[],kind:'all',rate:.08},
+{id:'ia2',cat:'INTELIGÊNCIA ARTIFICIAL',ic:'✨',name:'IA generativa',desc:'+15% em toda a produção.',cost:1200000,unlock:3,pre:['ia1'],kind:'all',rate:.15},
+{id:'ia3',cat:'INTELIGÊNCIA ARTIFICIAL',ic:'🌌',name:'Superinteligência',desc:'+22% em toda a produção.',cost:65000000,unlock:5,pre:['ia2'],kind:'all',rate:.22},
+{id:'mkt1',cat:'MARKETING DIGITAL',ic:'📊',name:'Análise de público',desc:'+10% no dinheiro gerado pelos apps.',cost:30000,unlock:1,pre:[],kind:'m',rate:.10},
+{id:'mkt2',cat:'MARKETING DIGITAL',ic:'🌐',name:'Campanhas globais',desc:'+18% no dinheiro gerado pelos apps.',cost:2500000,unlock:3,pre:['mkt1'],kind:'m',rate:.18},
+{id:'eng1',cat:'ENGENHARIA',ic:'💻',name:'Código otimizado',desc:'+10% no código por clique.',cost:65000,unlock:2,pre:[],kind:'click',rate:.10},
+{id:'eng2',cat:'ENGENHARIA',ic:'🚀',name:'Arquitetura escalável',desc:'+20% no código por clique.',cost:4200000,unlock:4,pre:['eng1'],kind:'click',rate:.20},
+{id:'sec1',cat:'CIBERSEGURANÇA',ic:'🛡️',name:'Criptografia avançada',desc:'+10% em toda a produção.',cost:1800000,unlock:3,pre:['ia1'],kind:'all',rate:.10},
+{id:'quant1',cat:'TECNOLOGIA QUÂNTICA',ic:'🔮',name:'Computação quântica',desc:'+30% em toda a produção.',cost:1800000000,unlock:6,pre:['auto3','ia3','eng2'],kind:'all',rate:.30}
+];
+const researched=id=>s.research.includes(id);
+const researchMult=k=>RESEARCH.reduce((v,r)=>v*(researched(r.id)&&(r.kind===k||r.kind==='all')?1+r.rate:1),1);
+
 const mult=k=>EQ.reduce((m,q,i)=>s.q[i]&&(q[4]==k||q[4]=='x')?m*q[5]:m,1);
-const cpsB=()=>EM.reduce((x,e,i)=>x+e[3]*s.e[i]*mil(s.e[i]),0)*mult('e')*bonus()*(has('u1')?1.1:1)*(has('x1')?1.6:1);
+const roleCode=()=>s.role==='engenheiro'?1.2:1;
+const roleMoney=()=>s.role==='magnata'?1.2:1;
+const roleResearch=()=>s.role==='visionario'?.85:1;
+const roleIpo=()=>s.role==='empreendedor'?1.15:1;
+const cpsB=()=>EM.reduce((x,e,i)=>x+e[3]*s.e[i]*mil(s.e[i]),0)*roleCode()*mult('e')*bonus()*deptMult('c')*researchMult('c')*(has('u1')?1.1:1)*(has('x1')?1.6:1);
 const cps=()=>cpsB()*fm('c');
-const mps=()=>AP.reduce((x,a,i)=>x+a[4]*s.a[i]*mil(s.a[i]),0)*mult('a')*bonus()*fm('m')*(has('u2')?1.1:1);
-const cv=()=>(1+cpsB()*.05)*mult('c')*bonus()*fm('c')*(has('x3')?1.15:1);
+const mps=()=>AP.reduce((x,a,i)=>x+a[4]*s.a[i]*mil(s.a[i]),0)*roleMoney()*mult('a')*bonus()*deptMult('m')*researchMult('m')*fm('m')*(has('u2')?1.1:1);
+const cv=()=>(1+cpsB()*.05)*mult('c')*bonus()*researchMult('click')*fm('c')*(has('x3')?1.15:1);
 const stg=()=>{let k=0;ST.forEach((x,i)=>{if(s.tot>=x[3])k=i});return k};
 const lvl=()=>Math.floor(Math.log2(1+s.tot/50))+1;
 const sc=()=>Math.floor((s.life||0)+s.tot);
@@ -452,9 +501,9 @@ const ebt=i=>{const q=qx('e',i);return '+'+(q[0]||1)+'<small>💰 '+fmt(q[1])+'<
 function buy(k,i){if(!can(k,i))return;if(k=='a'){const q=qx('a',i);s.c-=q[1];s.a[i]+=q[0]}else if(k=='e'){const q=qx('e',i);s.m-=q[1];s.e[i]+=q[0]}else{s.m-=EQ[i][3];s.q[i]=1}sfx(520);setTimeout(()=>sfx(700,.08),70);burst(80+rnd(40),62,['#ffd23f','#3ee0a0','#fff'],10,45);mp('buy',1);save();draw();head()}
 const row=(k,i,ic,nm,ds,st,bt,cls)=>'<div class="it pxc '+(cls||'')+'"><div class="ic">'+ico(ic)+'</div><div class="in"><b>'+nm+'</b><small>'+ds+'</small><span class="st">'+st+'</span></div><button class="bt" data-k="'+k+'" data-i="'+i+'" '+(can(k,i)?'':'disabled')+'>'+bt+'</button></div>';
 const IPO_MAX=50,ipoDia=()=>{if(s.tot<5e9)return 0;const v=1000+9000*Math.log10(s.tot/5e9)/4;return Math.min(10000,Math.max(1000,Math.round(v/50)*50))},ipoGain=()=>s.tot>=5e9?Math.max(1,Math.floor(Math.pow(s.tot/5e9,.35))):0;
-function ipoDraw(){const gn=ipoGain(),mx=s.ipo>=IPO_MAX,dg=ipoDia();$('ipo').innerHTML='<div class="it pxc"><div class="ic">'+ico('📈')+'</div><div class="in"><b>Ações: '+s.sh+'</b><small>Cada ação dá +2% em toda a produção, para sempre. Bônus atual: +'+s.sh*2+'%</small><span class="st">IPOs realizados: '+s.ipo+' / '+IPO_MAX+'</span></div></div><div class="it pxc"><div class="in"><b>Abrir capital (IPO)</b><small>Reinicia dinheiro, código, apps, equipe e equipamentos. Mantém troféus, ações e ranking. Cada IPO também rende de 💎 1.000 a 💎 10.000, conforme o dinheiro ganho na rodada. Limite de '+IPO_MAX+' IPOs. Disponível a partir de '+fmt(5e9)+' 💰 ganhos na rodada.</small><span class="st">Ganhos: '+fmt(s.tot)+' 💰 → você receberia 📈 '+gn+' e 💎 '+fmt(dg)+'</span></div><button class="bt" id="ipoB" '+(mx||gn<1?'disabled':'')+'>'+(mx?'MÁXIMO<small>'+IPO_MAX+' IPOs</small>':'IPO<small>+'+gn+' 📈</small>')+'</button></div>'}
-function doIpo(){const g0=ipoGain();if(g0<1)return;if(s.ipo>=IPO_MAX){toast('Limite de '+IPO_MAX+' IPOs atingido');return}ask('ABRIR CAPITAL? 📈','Você ganha <b>'+g0+' ações</b> e <b>💎 '+fmt(ipoDia())+'</b>. Sua empresa será reiniciada (troféus e ações ficam).','FAZER IPO',ipoRun)}
-function ipoRun(){const gn=ipoGain();if(gn<1||s.ipo>=IPO_MAX)return;const dg=ipoDia();s.life+=s.tot;s.sh+=gn;s.ipo++;s.dm+=dg;s.m=0;s.c=0;s.tot=0;s.a=AP.map(()=>0);s.e=EM.map(()=>0);s.q=EQ.map(()=>0);s.ms=[];fillM();msSig='';fx=[];applyBt();bugs=[];star=null;ev=null;drawEv();lastSt=0;crewSig='';save();cloud();push();modal('IPO CONCLUÍDO! 📈','Você ganhou '+gn+' ações e 💎 '+fmt(dg)+'. Bônus total de produção: +'+s.sh*2+'%.');sfx(988,.3);burst(100,40,['#ffd23f','#fff','#c77dff'],40,90);draw();head()}
+function ipoDraw(){const gn=Math.floor(ipoGain()*roleIpo()),mx=s.ipo>=IPO_MAX,dg=ipoDia();$('ipo').innerHTML='<div class="it pxc"><div class="ic">'+ico('📈')+'</div><div class="in"><b>Ações: '+s.sh+'</b><small>Cada ação dá +2% em toda a produção, para sempre. Bônus atual: +'+s.sh*2+'%</small><span class="st">IPOs realizados: '+s.ipo+' / '+IPO_MAX+' · histórico salvo: '+s.ipoLog.length+'</span></div></div><div class="it pxc"><div class="in"><b>Abrir capital (IPO)</b><small>Reinicia dinheiro, código, apps, equipe e equipamentos. Mantém troféus, ações e ranking. Cada IPO também rende de 💎 1.000 a 💎 10.000, conforme o dinheiro ganho na rodada. Limite de '+IPO_MAX+' IPOs. Disponível a partir de '+fmt(5e9)+' 💰 ganhos na rodada.</small><span class="st">Ganhos: '+fmt(s.tot)+' 💰 → você receberia 📈 '+gn+' e 💎 '+fmt(dg)+'</span></div><button class="bt" id="ipoB" '+(mx||gn<1?'disabled':'')+'>'+(mx?'MÁXIMO<small>'+IPO_MAX+' IPOs</small>':'IPO<small>+'+gn+' 📈</small>')+'</button></div>'}
+function doIpo(){const g0=Math.floor(ipoGain()*roleIpo());if(g0<1)return;if(s.ipo>=IPO_MAX){toast('Limite de '+IPO_MAX+' IPOs atingido');return}ask('ABRIR CAPITAL? 📈','Você ganha <b>'+g0+' ações</b> e <b>💎 '+fmt(ipoDia())+'</b>. Sua empresa será reiniciada (troféus e ações ficam).','FAZER IPO',ipoRun)}
+function ipoRun(){const gn=Math.floor(ipoGain()*roleIpo());if(gn<1||s.ipo>=IPO_MAX)return;const dg=ipoDia();s.ipoLog.push({n:s.ipo+1,date:new Date().toISOString(),earned:s.tot,shares:gn,diamonds:dg,role:s.role});s.life+=s.tot;s.sh+=gn;s.ipo++;s.dm+=dg;s.m=0;s.c=0;s.tot=0;s.a=AP.map(()=>0);s.e=EM.map(()=>0);s.q=EQ.map(()=>0);s.ms=[];fillM();msSig='';fx=[];applyBt();bugs=[];star=null;ev=null;drawEv();lastSt=0;crewSig='';save();cloud();push();modal('IPO CONCLUÍDO! 📈','Você ganhou '+gn+' ações e 💎 '+fmt(dg)+'. Bônus total de produção: +'+s.sh*2+'%.');sfx(988,.3);burst(100,40,['#ffd23f','#fff','#c77dff'],40,90);draw();head()}
 /* ===== EXPANSÃO INTERNACIONAL ===== */
 const WORLD=[
 {id:'br',name:'Brasil',x:29,y:66,cost:0,requires:null,desc:'Seu mercado de origem.',bonus:'Mercado inicial'},
@@ -495,6 +544,62 @@ function worldDraw(){
  $('world').innerHTML='<div class="world-head"><div><b>EXPANSÃO INTERNACIONAL</b><small>Toque diretamente em um país no mapa.</small></div><div style="text-align:right"><b style="color:var(--green)">💰 '+fmt(s.m)+'</b><small>Saldo disponível</small></div></div><div class="world-map" role="group" aria-label="Mapa mundial interativo"><svg class="world-regions" viewBox="0 0 1000 505" preserveAspectRatio="xMidYMid meet" aria-label="Países selecionáveis">'+WORLD_BASE_LAND+regions+'</svg></div><div class="world-legend"><span><i></i> CONQUISTADO</span><span><i class="wa"></i> DISPONÍVEL</span><span><i class="wl"></i> BLOQUEADO</span><span><i class="ws"></i> SELECIONADO</span></div><div class="world-detail"><div class="world-symbol">🌐</div><div class="world-info"><b>'+c.name+'</b><small>'+(isOwned?'Mercado conquistado!':c.desc)+'</small><small>'+(isOwned?'Bônus já aplicado':c.bonus)+'</small><small>'+reqText+'</small></div></div>'+(isOwned?'<div class="world-action" style="text-align:center;background:#174c48">✓ PAÍS CONQUISTADO</div>':'<button class="world-action" data-wbuy="'+c.id+'" '+(canBuy?'':'disabled')+'>'+(hasReq?'DESBLOQUEAR · 💰 '+fmt(c.cost):'🔒 CONQUISTE '+prereq.name.toUpperCase())+'</button><div class="nx" style="margin-top:8px">'+(!hasReq?'Este mercado será liberado após conquistar '+prereq.name+'.':canBuy?'Invista para conquistar este mercado.':'Dinheiro insuficiente para expandir.')+'</div>')+'<div class="world-stats"><div>PAÍSES CONQUISTADOS<b>'+owned.length+' / '+WORLD.length+'</b></div><div>BÔNUS INTERNACIONAL<b>+'+Math.max(0,owned.length-1)*4+'% produção</b></div></div><div class="world-progress" aria-label="Progresso da expansão"><i style="width:'+pct+'%"></i></div><div class="nx" style="margin-top:5px">'+pct+'% do mapa conquistado</div><div class="foot" style="margin-top:8px">Cada novo país aumenta permanentemente sua produção em 4%. Suas conquistas internacionais continuam após o IPO.</div>';
 }
 function worldBuy(id){const c=WORLD.find(x=>x.id===id);if(!c||s.world.countries.includes(id)||s.m<c.cost||(c.requires&&!s.world.countries.includes(c.requires)))return;s.m-=c.cost;s.world.countries.push(id);worldPick=id;save();head();worldDraw();toast('🌎 '+c.name+' conquistado! +4% em toda a produção.');sfx(880,.2);burst(100,42,['#4cc9f0','#3ee0a0','#ffd23f'],24,65)}
+function deptsDraw(){
+ const stage=stg();
+ $('depts').innerHTML='<div class="foot" style="margin:0 0 12px;color:var(--blue)">🏢 DEPARTAMENTOS DA EMPRESA<br>Invista dinheiro para evoluir setores e aumentar sua produção. Os níveis são permanentes e continuam após o IPO.</div>'+DEPTS.map(d=>{const lv=s.dp[d.id]||0,locked=stage<d.unlock,max=d.cap<=lv,cost=deptCost(d),pct=Math.min(100,lv/d.cap*100),effect=(lv*d.rate*100).toFixed(1).replace('.',',');return '<div class="it pxc '+(locked?'lock':'')+'"><div class="ic">'+ico(locked?'🔒':d.ic)+'</div><div class="in"><b>'+d.name+'</b><small>'+(locked?'Desbloqueia na fase '+ST[d.unlock][0]:d.desc)+'</small><span class="st">Nível '+lv+'/'+d.cap+' · Bônus atual +'+effect+'%</span><div class="pg sm" style="margin-top:6px"><i style="width:'+pct+'%"></i></div></div><button class="bt" data-dept="'+d.id+'" '+(locked||max||s.m<cost?'disabled':'')+'>'+(max?'MÁXIMO':locked?'BLOQUEADO':'EVOLUIR')+'<small>'+(locked?'':max?'Nível máximo':'💰 '+fmt(cost))+'</small></button></div>'}).join('')+'<div class="foot">Todos os departamentos aumentam a produção. Desenvolvimento fortalece o código; Marketing fortalece o dinheiro dos apps; os demais ampliam os dois.</div>';
+}
+function deptBuy(id){const d=DEPTS.find(x=>x.id===id);if(!d||stg()<d.unlock||(s.dp[id]||0)>=d.cap)return;const c=deptCost(d);if(s.m<c)return;s.m-=c;s.dp[id]=(s.dp[id]||0)+1;save();head();deptsDraw();sfx(760,.12);toast('🏢 '+d.name+' evoluiu para o nível '+s.dp[id]+'!')}
+function researchDraw(){
+ const groups=[...new Set(RESEARCH.map(r=>r.cat))];
+ $('research').innerHTML='<div class="foot" style="margin:0 0 12px;color:var(--blue)">🔬 ÁRVORE DE PESQUISAS<br>Invista dinheiro para desenvolver novas tecnologias. Pesquisas concluídas são permanentes e continuam após o IPO.</div><div class="world-stats"><div>PESQUISAS CONCLUÍDAS<b>'+s.research.length+' / '+RESEARCH.length+'</b></div><div>TECNOLOGIAS ATIVAS<b>'+s.research.length+' desbloqueadas</b></div></div>'+groups.map(cat=>'<h3 style="font:.55rem monospace;color:var(--blue);margin:16px 0 10px">'+cat+'</h3>'+RESEARCH.filter(r=>r.cat===cat).map(r=>{const done=researched(r.id),stage=stg()>=r.unlock,pre=r.pre.every(researched),locked=!stage||!pre,cost=Math.max(1,Math.floor(r.cost*roleResearch()));let reason=done?'Tecnologia permanente da empresa':!stage?'Desbloqueia na fase '+ST[r.unlock][0]:!pre?'Pesquisas necessárias: '+r.pre.filter(x=>!researched(x)).map(x=>RESEARCH.find(y=>y.id===x).name).join(', '):r.desc;return '<div class="it pxc '+(done?'done':locked?'lock':'')+'"><div class="ic">'+ico(done?'✅':locked?'🔒':r.ic)+'</div><div class="in"><b>'+r.name+'</b><small>'+reason+'</small><span class="st">'+(done?'PESQUISA CONCLUÍDA':r.desc)+'</span></div><button class="bt" data-research="'+r.id+'" data-research-cost="'+cost+'" data-research-unlock="'+r.unlock+'" data-research-pre="'+r.pre.join(',')+'" '+(done||locked||s.m<cost?'disabled':'')+'>'+(done?'CONCLUÍDA':locked?'BLOQUEADA':'PESQUISAR')+'<small>'+(done?'✓':locked?'': '💰 '+fmt(cost))+'</small></button></div>'}).join('')).join('')+'<div class="foot">As pesquisas não são consumíveis: cada tecnologia é desbloqueada uma única vez e permanece na sua empresa após abrir capital.</div>';
+}
+function researchBuy(id){const r=RESEARCH.find(x=>x.id===id);if(!r||researched(id)||stg()<r.unlock||!r.pre.every(researched)||s.m<Math.max(1,Math.floor(r.cost*roleResearch())))return;s.m-=Math.max(1,Math.floor(r.cost*roleResearch()));s.research.push(id);save();head();researchDraw();sfx(920,.18);toast('🔬 Tecnologia desbloqueada: '+r.name+'!')}
+
+
+/* ===== PERFIS, HISTÓRICO DE IPO, COLEÇÕES E FIM DE JOGO ===== */
+const ROLES=[
+ {id:'magnata',ic:'💰',name:'Magnata',desc:'+20% na geração de dinheiro'},
+ {id:'engenheiro',ic:'💻',name:'Engenheiro',desc:'+20% na produção de código'},
+ {id:'visionario',ic:'🔬',name:'Visionário',desc:'Pesquisas custam 15% menos'},
+ {id:'empreendedor',ic:'📈',name:'Empreendedor',desc:'+15% de ações recebidas em cada IPO'}
+];
+const IPO_MILESTONES=[5,10,25,50];
+const COLLECTIONS=[
+ {id:'ipo5',ic:'🥉',name:'Clube dos 5',desc:'Realize 5 IPOs',ok:()=>s.ipo>=5,reward:1000},
+ {id:'ipo10',ic:'🥈',name:'Investidor experiente',desc:'Realize 10 IPOs',ok:()=>s.ipo>=10,reward:2500},
+ {id:'ipo25',ic:'🥇',name:'Magnata do mercado',desc:'Realize 25 IPOs',ok:()=>s.ipo>=25,reward:5000},
+ {id:'ipo50',ic:'👑',name:'Lenda da bolsa',desc:'Realize 50 IPOs',ok:()=>s.ipo>=50,reward:10000},
+ {id:'research',ic:'🧠',name:'Mente do futuro',desc:'Complete todas as pesquisas',ok:()=>s.research.length>=RESEARCH.length,reward:7500},
+ {id:'trophies',ic:'🏆',name:'Sala da fama',desc:'Conquiste todos os troféus',ok:()=>s.t.length>=AC.length,reward:7500}
+];
+function companyDraw(){
+ const role=ROLES.find(r=>r.id===s.role)||ROLES[0];
+ const earned=s.ipoLog.reduce((a,x)=>a+(+x.earned||0),0);
+ const achieved=COLLECTIONS.filter(x=>x.ok());
+ const milestones=IPO_MILESTONES.map(n=>'<div class="it pxc '+(s.ipo>=n?'ex':'lock')+'"><div class="ic">'+(s.ipo>=n?['🥉','🥈','🥇','👑'][IPO_MILESTONES.indexOf(n)]:'🔒')+'</div><div class="in"><b>'+n+' IPOs</b><small>'+(s.ipo>=n?'Marco conquistado!':'Faltam '+(n-s.ipo)+' IPOs')+'</small><div class="pg sm"><i style="width:'+Math.min(100,s.ipo/n*100)+'%"></i></div></div></div>').join('');
+ const items=COLLECTIONS.map(x=>{const got=s.collect.includes(x.id),ok=x.ok();return '<div class="it pxc '+(got?'done':ok?'ex':'lock')+'"><div class="ic">'+(got?x.ic:'🔒')+'</div><div class="in"><b>'+x.name+'</b><small>'+x.desc+'</small><span class="st">'+(got?'RECOMPENSA RESGATADA':ok?'Disponível · '+fmt(x.reward)+' 💎':'Objetivo em andamento')+'</span></div><button class="bt" data-collect="'+x.id+'" '+(!ok||got?'disabled':'')+'>'+(got?'OBTIDO':ok?'RESGATAR':'BLOQUEADO')+'</button></div>'}).join('');
+ const logs=s.ipoLog.slice().reverse().map(x=>'<div class="row"><span><b>#'+x.n+' · '+new Date(x.date).toLocaleDateString('pt-BR')+'</b><br><small>'+fmt(x.earned)+' 💰 ganhos · '+(ROLES.find(r=>r.id===x.role)?.name||x.role)+'</small></span><b>+'+x.shares+' 📈</b></div>').join('')||'<p class="foot">Nenhum IPO registrado ainda.</p>';
+ $('company').innerHTML=
+ '<div class="it pxc"><div class="in"><b>🏛️ CENTRAL DA EMPRESA</b><small>Seu progresso permanente, especializações e coleção de recompensas.</small></div></div>'+
+ '<h3 style="font:.55rem monospace;color:var(--gold);margin:16px 0 8px">ESPECIALIZAÇÃO ATIVA</h3>'+
+ '<div class="it pxc"><div class="ic">'+role.ic+'</div><div class="in"><b>'+role.name+'</b><small>'+role.desc+'</small></div></div>'+
+ ROLES.map(r=>'<div class="it pxc '+(s.role===r.id?'ex':'')+'"><div class="ic">'+r.ic+'</div><div class="in"><b>'+r.name+'</b><small>'+r.desc+'</small></div><button class="bt sm" data-role="'+r.id+'" '+(s.role===r.id?'disabled':'')+'>'+(s.role===r.id?'ATIVO':'ESCOLHER')+'</button></div>').join('')+
+ '<h3 style="font:.55rem monospace;color:var(--gold);margin:18px 0 8px">ESTATÍSTICAS DA EMPRESA</h3>'+
+ '<div class="world-stats"><div>IPO REALIZADOS<b>'+s.ipo+' / 50</b></div><div>AÇÕES ACUMULADAS<b>'+fmt(s.sh)+' 📈</b></div><div>DINHEIRO EM TODAS AS RODADAS<b>'+fmt(earned+(s.life||0)+s.tot)+' 💰</b></div><div>PESQUISAS<b>'+s.research.length+' / '+RESEARCH.length+'</b></div><div>TROFÉUS<b>'+s.t.length+' / '+AC.length+'</b></div><div>COLEÇÕES RESGATADAS<b>'+s.collect.length+' / '+COLLECTIONS.length+'</b></div></div>'+
+ '<h3 style="font:.55rem monospace;color:var(--gold);margin:18px 0 8px">MARCOS DE IPO</h3>'+milestones+
+ '<h3 style="font:.55rem monospace;color:var(--gold);margin:18px 0 8px">COLEÇÕES E RECOMPENSAS</h3>'+items+
+ '<h3 style="font:.55rem monospace;color:var(--gold);margin:18px 0 8px">HISTÓRICO DE IPOs</h3>'+logs+
+ '<h3 style="font:.55rem monospace;color:var(--gold);margin:18px 0 8px">OBJETIVOS DE FIM DE JOGO</h3>'+
+ '<div class="it pxc"><div class="in"><b>🔬 Completar todas as pesquisas</b><small>'+s.research.length+' de '+RESEARCH.length+' concluídas</small><div class="pg sm"><i style="width:'+Math.min(100,s.research.length/RESEARCH.length*100)+'%"></i></div></div></div>'+
+ '<div class="it pxc"><div class="in"><b>📈 Alcançar 50 IPOs</b><small>'+s.ipo+' de 50 realizados</small><div class="pg sm"><i style="width:'+Math.min(100,s.ipo/50*100)+'%"></i></div></div></div>'+
+ '<div class="it pxc"><div class="in"><b>🏆 Conquistar todos os marcos da empresa</b><small>'+IPO_MILESTONES.filter(n=>s.ipo>=n).length+' de '+IPO_MILESTONES.length+' marcos de IPO · '+s.t.length+'/'+AC.length+' troféus</small><div class="pg sm"><i style="width:'+Math.min(100,(IPO_MILESTONES.filter(n=>s.ipo>=n).length+ (s.t.length>=AC.length?1:0))/5*100)+'%"></i></div></div></div>'+
+ '<div class="foot">'+(s.research.length===RESEARCH.length&&s.ipo>=50&&IPO_MILESTONES.every(n=>s.ipo>=n)&&s.t.length>=AC.length?'🎉 FIM DE JOGO COMPLETADO! Você construiu um império tecnológico!':'Continue evoluindo: o verdadeiro desafio é completar tudo.')+'</div>';
+}
+$('company').addEventListener('click',e=>{
+ const r=e.target.closest('[data-role]');if(r){s.role=r.dataset.role;save();head();companyDraw();draw();toast('Especialização alterada: '+(ROLES.find(x=>x.id===s.role)?.name||s.role));return}
+ const c=e.target.closest('[data-collect]');if(c){const item=COLLECTIONS.find(x=>x.id===c.dataset.collect);if(!item||!item.ok()||s.collect.includes(item.id))return;s.collect.push(item.id);s.dm+=item.reward;save();companyDraw();head();toast('🎁 Recompensa recebida: +'+fmt(item.reward)+' diamantes!')}
+});
+
 function draw(){
 if(tab=='apps')$('apps').innerHTML=AP.map((a,i)=>{const lk=i&&!s.a[i-1],n=s.a[i],nx=nxm(n);return row('a',i,lk?'🔒':a[0],a[1],lk?'Lance o app anterior':a[2],'Nv.'+n+' · +'+fmt(a[4]*mil(n)*mult('a')*bonus())+' 💰/s cada · '+(nx?'x2 no Nv.'+nx:'bônus máx.'),abt(i),lk?'lock':'')}).join('');
 else if(tab=='emps')$('el').innerHTML=EM.map((e,i)=>{const n=s.e[i],nx=nxm(n);return row('e',i,e[0],e[1],'+'+fmt(e[3]*mil(n)*mult('e')*bonus())+' 💻/s cada','Você tem '+n+' · '+(nx?'x2 com '+nx:'bônus máx.'),ebt(i))}).join('');
@@ -503,6 +608,9 @@ else if(tab=='achs')$('achs').innerHTML='<div class="foot" style="margin:0 0 10p
 else if(tab=='shop')shopDraw();
 else if(tab=='ipo'){ipoSig=ipoGain()+'|'+s.sh;ipoDraw()}
 else if(tab=='world')worldDraw();
+else if(tab=='depts')deptsDraw();
+else if(tab=='research')researchDraw();
+else if(tab=='company')companyDraw();
 else if(tab=='admin')adminDraw();
 else if(tab=='friends')friendsDraw();
 else rankDraw()}
@@ -1116,12 +1224,19 @@ $('hk').onclick=()=>{const n=Date.now();if(s.hkt>n)return;s.hkt=n+120000;addFx({
 addEventListener('keydown',e=>{if(e.code=='Space'&&!e.repeat&&document.activeElement.tagName!='BUTTON'&&!/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName)&&!document.querySelector('.ov:not([hidden])')){e.preventDefault();$('clk').click()}});
 /* ===== ABAS ===== */
 const qv=()=>{$('qty').style.display=(tab=='apps'||tab=='emps')?'':'none'};
-const TB0=[['apps','🧩','Apps'],['emps','👥','Equipe'],['eqs','🖥️','Equip.'],['achs','🏆','Troféus'],['rk','🏅','Rank'],['shop','🛍️','Loja'],['ipo','📈','IPO'],['world','🌐','Mundo']];let TB=TB0,isAdm=false;
-function buildTabs(){TB=isAdm?TB0.concat([['admin','🛡️','Admin']]):TB0;const tb=$('tabs');tb.style.gridTemplateColumns='repeat('+TB.length+',minmax(0,1fr))';
-tb.innerHTML=TB.map(t=>'<button type="button" class="tab'+(t[0]==tab?' on':'')+'" data-t="'+t[0]+'" title="'+t[2]+'" aria-label="Abrir '+t[2]+'" aria-pressed="'+(t[0]==tab)+'">'+ico(t[1])+'<span>'+t[2]+'</span></button>').join('');
-tb.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.t;tb.querySelectorAll('.tab').forEach(x=>{const active=x==b;x.classList.toggle('on',active);x.setAttribute('aria-pressed',String(active))});TB.forEach(t=>$(t[0]).hidden=t[0]!=tab);$('friends').hidden=true;qv();draw();if(tab=='rk'){push();pull()}});
+const TB0=[['apps','🧩','Apps'],['emps','👥','Equipe'],['eqs','🖥️','Equipamentos'],['achs','🏆','Troféus'],['rk','🏅','Ranking'],['shop','🛍️','Loja'],['ipo','📈','IPO'],['world','🌐','Mundo'],['depts','🏢','Setores'],['research','🔬','Pesquisa'],['company','🏛️','Empresa']];let TB=TB0,isAdm=false;
+const NAV_GROUPS={navManagement:['apps','emps','eqs','depts','research','company'],navProgress:['achs','rk','ipo'],navExpansion:['shop','world']};
+function navItem(t){return '<button type="button" class="nav-item" data-nav="'+t[0]+'">'+ico(t[1])+'<span>'+t[2]+'</span></button>'}
+function openNavMenu(){$('navMenu').hidden=false;document.body.style.overflow='hidden'}
+function closeNavMenu(){$('navMenu').hidden=true;document.body.style.overflow=''}
+function activateTab(id){if(!TB.some(t=>t[0]===id))return;tab=id;TB.forEach(t=>$(t[0]).hidden=t[0]!=tab);$('friends').hidden=true;qv();draw();if(tab=='rk'){push();pull()}buildTabs();closeNavMenu()}
+function buildTabs(){TB=isAdm?TB0.concat([['admin','🛡️','Admin']]):TB0;const primary=[['apps','🧩','Início'],['emps','👥','Equipe'],['achs','🏆','Troféus'],['rk','🏅','Ranking']];const tb=$('tabs');
+tb.innerHTML=primary.map(t=>'<button type="button" class="tab'+(t[0]==tab?' on':'')+'" data-t="'+t[0]+'" title="'+t[2]+'" aria-label="Abrir '+t[2]+'" aria-pressed="'+(t[0]==tab)+'">'+ico(t[1])+'<span>'+t[2]+'</span></button>').join('')+'<button type="button" class="tab menu-tab" id="navMenuBtn" aria-label="Abrir todas as áreas">'+ico('☰')+'<span>Mais</span></button>';
+tb.querySelectorAll('[data-t]').forEach(b=>b.onclick=()=>activateTab(b.dataset.t));$('navMenuBtn').onclick=openNavMenu;
+Object.entries(NAV_GROUPS).forEach(([id,keys])=>$(id).innerHTML=keys.map(k=>navItem(TB0.find(t=>t[0]===k))).join(''));if(isAdm)$('navExpansion').insertAdjacentHTML('beforeend',navItem(['admin','🛡️','Admin']));
 TB.forEach(t=>$(t[0]).hidden=t[0]!=tab);$('friends').hidden=true;qv()}
 buildTabs();
+$('navMenu').addEventListener('click',e=>{if(e.target===$('navMenu'))closeNavMenu();const b=e.target.closest('[data-nav]');if(b)activateTab(b.dataset.nav)});$('navClose').onclick=closeNavMenu;document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('navMenu').hidden)closeNavMenu()});
 $('frTop').addEventListener('click',()=>{tab='friends';TB.forEach(t=>$(t[0]).hidden=true);$('friends').hidden=false;document.querySelectorAll('#tabs .tab').forEach(b=>{b.classList.remove('on');b.setAttribute('aria-pressed','false')});qv();draw();frLoad();frHeartbeat()});
 $('logo').insertAdjacentHTML('afterbegin',ico('🚀'));$('rl1').innerHTML=ico('💰')+' DINHEIRO';$('rl2').innerHTML=ico('💻')+' CÓDIGO';
 document.querySelectorAll('#qty button').forEach(b=>b.onclick=()=>{qt=+b.dataset.q;document.querySelectorAll('#qty button').forEach(x=>x.classList.toggle('on',x==b));draw()});
@@ -1130,6 +1245,8 @@ $('mis').addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(b)
 $('evt').addEventListener('click',e=>{const b=e.target.closest('[data-o]');if(!b||!ev)return;const r=ev.o[+b.dataset.o][2]();zEv(ev.t,+b.dataset.o);ev=null;drawEv();toast(r);sfx(660,.12);save()});
 $('ipo').addEventListener('click',e=>{if(e.target.closest('#ipoB'))doIpo()});
 $('world').addEventListener('click',e=>{const p=e.target.closest('[data-wpick]');if(p){worldPick=p.dataset.wpick;worldDraw();return}const b=e.target.closest('[data-wbuy]');if(b)worldBuy(b.dataset.wbuy)});
+$('depts').addEventListener('click',e=>{const b=e.target.closest('[data-dept]');if(b&&!b.disabled)deptBuy(b.dataset.dept)});
+$('research').addEventListener('click',e=>{const b=e.target.closest('[data-research]');if(b&&!b.disabled)researchBuy(b.dataset.research)});
 $('world').addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.world-hit')){e.preventDefault();worldPick=e.target.dataset.wpick;worldDraw()}});
 /* ===== NUVEM / CONTA ===== */
 const SB_URL='https://mdepiewjceqanxwpwdbj.supabase.co',SB_KEY='sb_publishable_SfwOA2A2BbSroEeFVaRJsA_RaxXs2Q-';
@@ -1366,6 +1483,7 @@ if(off>60&&(sum(s.a)||sum(s.e))){const gv=mps()*off,c=cps()*off;s.m+=gv;s.tot+=g
 {const today=dkey(new Date());if(s.dd!==today){s.ds=s.dd===dkey(new Date(Date.now()-864e5))?s.ds+1:1;s.dd=today;if(s.tot>=100){const m=Math.max(100,mps()*60)*Math.min(s.ds,7);gain(m);const dq=s.ds>=7?1:0;s.dm+=dq;modal('PRESENTE DIÁRIO 🎁','Dia '+s.ds+' seguido! Você ganhou 💰 '+fmt(m)+(dq?' e 💎 '+dq:'')+'.<br>Volte amanhã para ganhar ainda mais (até 7 dias).')}}}
 setInterval(()=>{document.querySelectorAll('.bt[data-k]').forEach(b=>{b.disabled=!can(b.dataset.k,+b.dataset.i);if(b.dataset.k=='e')setH(b,ebt(+b.dataset.i));else if(b.dataset.k=='a')setH(b,abt(+b.dataset.i))});
 AC.forEach((a,i)=>{if(!s.t.includes(i)&&a[3](s)){s.t.push(i);s.dm+=1;toast('🏆 Troféu: '+a[1]+' · +1 💎');sfx(700,.2);if(tab=='achs')draw()}});msUpd();
+if(tab==='research')$('research').querySelectorAll('[data-research]').forEach(b=>{const pre=(b.dataset.researchPre||'').split(',').filter(Boolean),locked=stg()<Number(b.dataset.researchUnlock)||pre.some(id=>!researched(id));b.disabled=locked||researched(b.dataset.research)||s.m<Number(b.dataset.researchCost)});
 if(tab=='shop'&&shopSig!=s.dm+'|'+s.own.length)shopDraw();
 if(tab=='ipo'){const k=ipoGain()+'|'+s.sh;if(k!=ipoSig){ipoSig=k;ipoDraw()}}
 if(ev){const l=evT-Date.now();if(l<=0){zEv(ev.t,-1);ev=null;drawEv();toast('A oportunidade passou...')}else{const b=$('evb');if(b)b.style.width=l/250+'%'}}},500);
