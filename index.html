@@ -426,7 +426,7 @@ let s=def(),reset=0,tab='apps',qt=1,lastSt=0,tt,ac,fx=[],bugs=[],star=null,combo
 try{const r=JSON.parse(localStorage.getItem(K));if(r)s=Object.assign(def(),r)}catch(e){try{const r=JSON.parse(localStorage.getItem(K+'_bak'));if(r){s=Object.assign(def(),r);setTimeout(()=>toast('♻️ Save corrompido: backup automático restaurado'),800)}}catch(e2){}}
 function fixSave(){const n=k=>{const v=+s[k];s[k]=isFinite(v)&&v>0?v:0};
 ['m','c','tot','life','cl','sh','ipo','bg','md','mx','cr','ds','dm','st','mxl','bd','hkt','ts','pt'].forEach(n);
-s.ipo=Math.min(Math.floor(s.ipo),50);s.bd=Math.min(Math.floor(s.bd),2);if(s.ts>Date.now())s.ts=Date.now();
+s.ipo=Math.min(Math.floor(s.ipo),50);s.bd=Math.min(Math.floor(s.bd),3);if(s.ts>Date.now())s.ts=Date.now();
 [['a',AP],['e',EM],['q',EQ],['mg',[0,0,0,0,0]]].forEach(([k,L])=>{const a=Array.isArray(s[k])?s[k]:[];s[k]=L.map((_,i)=>{const v=+a[i];return isFinite(v)&&v>0?Math.floor(v):0})});
 s.t=Array.isArray(s.t)?[...new Set(s.t.map(Number).filter(i=>Number.isInteger(i)&&i>=0&&i<AC.length))]:[];
 s.n=String(s.n||'Jogador').slice(0,14);s.cn=String(s.cn||'Garagem Tech').slice(0,18);
@@ -1530,14 +1530,14 @@ el.hidden=false;el.style.display='block';
 if(!bossFight.built){bossFight.built=1;const d=BOSS_DEFS[bossFight.i];el.innerHTML='<div class="boss-wrap"><div class="boss-h">'+ico(d.ic)+'<b class="pf">'+d.nm+'</b></div><div class="boss-hp"><i></i></div><div class="boss-phase pf"></div><div class="boss-arena"></div><button class="bt" data-bx="1" style="margin-top:10px;width:100%;max-width:none;background:var(--tab);color:var(--ink)">FUGIR</button></div>';el._sig=null;nextBossPhase()}}
 function startBoss(i){const c=canFightBoss(i);if(!c.ok){toast(c.why);return}bossClear();bossFight={i,hp:BOSS_DEFS[i].hp,max:BOSS_DEFS[i].hp,ph:0,tm:[],lock:0,built:0};if(i===1){view=2;me.f=-2;me.x=me.tx=58;me.y=me.ty=105;me.mk=0} sfx(200,.3,.05,'sawtooth');drawBoss()}
 function nextBossPhase(){const f=bossFight;if(!f)return;const d=BOSS_DEFS[f.i];if(f.ph>=d.ph.length||f.hp<=0){winBoss();return}
-const N={seq:'SEQUÊNCIA',timing:'TIMING',whack:'CAÇA-BUGS',mem:'MEMÓRIA'};$('bossArea').querySelector('.boss-phase').textContent='FASE '+(f.ph+1)+'/'+d.ph.length+' · '+N[d.ph[f.ph]];renderMiniGame()}
+const N={seq:'SEQUÊNCIA',timing:'TIMING',whack:'CAÇA-BUGS',mem:'MEMÓRIA',ref:'REFLEXO',odd:'INTRUSO'};$('bossArea').querySelector('.boss-phase').textContent='FASE '+(f.ph+1)+'/'+d.ph.length+' · '+N[d.ph[f.ph]];renderMiniGame()}
 function phaseEnd(ok){const f=bossFight;if(!f||f.lock)return;f.lock=1;bossClear();if(!ok){failBoss();return}const d=BOSS_DEFS[f.i],last=f.ph>=d.ph.length-1;damageBoss(last?f.hp:d.dmg[f.ph]);f.ph++;bT(f,setTimeout(nextBossPhase,700))}
 function damageBoss(n){const f=bossFight;if(!f)return;f.hp=Math.max(0,f.hp-n);const b=$('bossArea').querySelector('.boss-hp i');if(b)b.style.width=f.hp/f.max*100+'%';burst(100,50,['#ff4d6d','#fff','#ffd23f'],18,70);sfx(660,.15,.05);toast('💥 -'+n+' HP no boss!')}
 function failBoss(){const f=bossFight;if(!f)return;const l=Math.min(s.m,Math.max(100,mps()*30));s.m-=l;shake();sfx(120,.4,.06,'sawtooth');const a=$('bossArea').querySelector('.boss-arena');a.innerHTML='<div class="mg-res">💥 '+BOSS_DEFS[f.i].nm+' atacou!<br>-'+fmt(l)+' 💰</div><button class="bt" data-br="1" style="width:100%;max-width:none">TENTAR DE NOVO</button>';save()}
 function winBoss(){const f=bossFight;if(!f)return;const d=BOSS_DEFS[f.i];bossClear();const r=d.onWin();bossFight=null;const el=$('bossArea');el._sig=null;burst(100,50,['#ffd23f','#fff','#3ee0a0','#4cc9f0'],50,100);flash=.9;sfx(988,.4);
 if(typeof msUpd=='function')msUpd();if(typeof checkAch=='function')checkAch();save();try{cloud();push()}catch(e){}
 if(d.cap)d.cap();else modal('🏆 BOSS DERROTADO!',d.nm+' foi derrotado!<br>'+r);drawBoss();head()}
-function renderMiniGame(){const f=bossFight;if(!f)return;f.lock=0;const a=$('bossArea').querySelector('.boss-arena'),t=BOSS_DEFS[f.i].ph[f.ph];({seq:mgSeq,timing:mgTiming,whack:mgWhack,mem:mgMem})[t](a,f)}
+function renderMiniGame(){const f=bossFight;if(!f)return;f.lock=0;const a=$('bossArea').querySelector('.boss-arena'),t=BOSS_DEFS[f.i].ph[f.ph];({seq:mgSeq,timing:mgTiming,whack:mgWhack,mem:mgMem,ref:mgRef,odd:mgOdd})[t](a,f)}
 function mgSeq(a,f){const A=['⬆️','⬇️','⬅️','➡️'],q=[0,0,0,0].map(()=>rnd(4));let k=0,on=0;a.innerHTML='<div class="mg-seq"><div class="sq">Memorize!</div><div class="pad">'+A.map((x,i)=>'<button data-i="'+i+'" disabled>'+x+'</button>').join('')+'</div></div>';const sq=a.querySelector('.sq'),pad=a.querySelector('.pad');sq.textContent=q.map(i=>A[i]).join(' ');
 bT(f,setTimeout(()=>{sq.textContent='❓ ❓ ❓ ❓';pad.querySelectorAll('button').forEach(b=>b.disabled=0);on=1},1800));
 pad.onclick=e=>{const b=e.target.closest('button');if(!b||!on)return;const i=+b.dataset.i;if(i!=q[k]){on=0;phaseEnd(0);return}sfx(440+k*110,.08);k++;sq.textContent=q.slice(0,k).map(x=>A[x]).join(' ')+' ❓'.repeat(4-k);if(k>=4){on=0;phaseEnd(1)}}}
@@ -1588,7 +1588,7 @@ const nw=aff?[...n].filter(k=>!aff.has(k)):[];aff=n;
 if(nw.length&&Date.now()-affT>3e4&&s.tot>=100){affT=Date.now();toast('🛒 Disponível: '+nm[nw[0]]+(nw.length>1?' (+'+(nw.length-1)+')':''))}},2500);
 /* ===== LOJA DO DIA, TROFÉUS SECRETOS E MASCOTES ===== */
 var PETD=[['Gatinho Dev','🐱','Comum',.02,'#ffb86b'],['Pinguim Linux','🐧','Comum',.02,'#4a5a7a'],['Raposa Cloud','🦊','Raro',.04,'#ff7a3c'],['Coruja Sênior','🦉','Raro',.04,'#b08968'],['Dragão Binário','🐉','Épico',.07,'#3ee0a0'],['Fênix Quântica','🔥','Lendário',.12,'#ff4d6d']];
-function petB(){const e=s.pet&&s.pet.eq;return PETD&&e>=0&&PETD[e]?1+PETD[e][3]:1}
+function petB(){const e=s.pet&&s.pet.eq;return(PETD&&e>=0&&PETD[e]?1+PETD[e][3]:1)*((s.bd||0)>=3?1.2:1)}
 const pe=()=>{if(!s.pet||!Array.isArray(s.pet.own))s.pet={own:[],eq:-1};s.pet.own=[...new Set(s.pet.own.map(Number).filter(i=>Number.isInteger(i)&&i>=0&&i<PETD.length))];if(!s.pet.own.includes(s.pet.eq))s.pet.eq=-1;if(!Array.isArray(s.sec))s.sec=[]};pe();
 const _dp=drawPet;drawPet=function(T){_dp.apply(this,arguments);drawMascot(T)};
 function drawMascot(T){const k=s.pet&&s.pet.eq,P=PETD[k];if(!P)return;const dir=me.dr>0?1:-1,x=Math.round(pet.x)-dir*(has('x2')?10:12),y=Math.round(me.y)-2+Math.round(Math.sin(T/260)*1.2),c=P[4];
@@ -1639,6 +1639,45 @@ if(b.id==='rfCopy'){const l=$('rfLink').value;(navigator.clipboard?navigator.cli
 else if(b.id==='rfUse')refUse($('rfIn').value)});
 setInterval(()=>{if(A&&!s.rf&&!refErr){const c=localStorage.getItem('gt_ref');if(c)refUse(c)}},6000);
 setTimeout(refClaim,8000);setInterval(refClaim,6e4);
+/* ===== CHEFÃO SKYNET-X + MINIGAMES NOVOS ===== */
+BOSS_DEFS.push({id:'skynet',ic:'🤖',lv:75,nm:'SKYNET-X',hp:200,ph:['ref','odd','mem','seq','timing','whack'],dmg:[20,25,30,35,40,50],req:2,
+onWin(){const m=Math.max(5e5,mps()*800),c=Math.max(2e5,cps()*500);gain(m);s.c+=c;s.dm+=30;s.bd=3;return 'Recompensa: +'+fmt(m)+' 💰 +'+fmt(c)+' 💻 +30 💎 e +20% de produção para sempre'}});
+function mgRef(a,f){let n=0,go=0,t1;a.innerHTML='<div class="mg-timing"><div class="sq pf" id="rfs" style="font-size:.5rem;color:var(--gold)">Toque só quando ficar VERDE! (0/3)</div><button class="bt" id="rfb" style="width:100%;max-width:none;padding:30px 0"></button></div>';
+const b=a.querySelector('#rfb'),st=a.querySelector('#rfs');
+const arm=()=>{go=0;b.style.background='var(--red)';b.style.color='#fff';b.textContent='ESPERE...';bT(f,setTimeout(()=>{go=1;b.style.background='var(--green)';b.style.color='#06241a';b.textContent='AGORA!';t1=bT(f,setTimeout(()=>{if(go&&!f.lock)phaseEnd(0)},Math.max(450,750-f.ph*60)))},1000+rnd(1800)))};
+b.onclick=()=>{if(f.lock)return;if(!go){phaseEnd(0);return}clearTimeout(t1);go=0;n++;sfx(600+n*100,.08);st.textContent='Toque só quando ficar VERDE! ('+n+'/3)';if(n>=3)phaseEnd(1);else arm()};arm()}
+function mgOdd(a,f){const P=[['🐛','🐜'],['🔴','🟠'],['💾','💿'],['🔒','🔑'],['📡','📶']];let r=0,left=12+Math.max(0,3-f.ph);
+a.innerHTML='<div class="mg-whack"><div class="st"></div><div class="g" style="grid-template-columns:repeat(4,1fr);max-width:300px"></div></div>';const st=a.querySelector('.st'),g2=a.querySelector('.g');
+const round=()=>{const p=P[rnd(P.length)],o=rnd(16),sw=rnd(2);g2.innerHTML=Array.from({length:16},(_,i)=>'<button class="c" data-i="'+i+'" style="height:46px;font-size:1.3rem">'+(i==o?p[1-sw]:p[sw])+'</button>').join('');
+g2.onclick=e=>{const b=e.target.closest('button');if(!b||f.lock)return;if(+b.dataset.i==o){sfx(520+r*90,.06);if(++r>=4)phaseEnd(1);else round()}else{left-=3;sfx(160,.1)}}};
+const upd=()=>{st.textContent='Ache o intruso! '+r+'/4 · ⏱️ '+Math.max(0,Math.ceil(left))+'s'};
+bT(f,setInterval(()=>{if(f.lock)return;left-=.25;upd();if(left<=0)phaseEnd(0)},250));round();upd()}
+let skAsked=0;
+setInterval(()=>{if(skAsked||bossFight||document.hidden||reset||document.querySelector('.ov:not([hidden])'))return;if(!canFightBoss(2).ok)return;skAsked=1;const first=!s.sk;s.sk=1;save();
+sfx(220,.3,.05,'sawtooth');setTimeout(()=>sfx(330,.3,.05,'sawtooth'),200);
+ask('🤖 SKYNET-X APARECEU!',(first?'Você alcançou o <b>nível 75</b>! ':'')+'A inteligência artificial SKYNET-X invadiu seus servidores. Derrote-a em 6 minigames seguidos para ganhar <b>+20% de produção para sempre</b>.<br><br>Se não for agora, ela volta a desafiar você na próxima vez que abrir o jogo.','ENFRENTAR',()=>startBoss(2))},4000);
+/* ===== VISITAR A EMPRESA DO AMIGO ===== */
+let vpT=0,vpErr=0;
+async function vpPush(){if(!A||reset||document.hidden||vpErr||Date.now()-vpT<45e3)return;vpT=Date.now();pe();
+try{await frFetch('visit_profile?on_conflict=user_id',{method:'POST',headers:{Prefer:'resolution=merge-duplicates,return=minimal'},body:JSON.stringify({user_id:A.uid,data:{cn:s.cn,ci:s.ci,st:stg(),e:s.e,pf:s.pf,pet:s.pet.eq,ip:s.ipo,w:s.world.countries.length,t:s.t.length,lv:lvl()}})})}catch(e){vpErr=1}}
+setTimeout(vpPush,5000);setInterval(vpPush,6e4);
+async function visitOpen(id){if(!A)return;let d;try{const r=await frFetch('visit_profile?select=data&user_id=eq.'+encodeURIComponent(id));d=r&&r[0]&&r[0].data}catch(e){}
+if(!d||typeof d!=='object'){toast('Esse amigo ainda não tem empresa para visitar');return}
+const c=(v,m)=>Math.max(0,Math.min(m,Math.floor(+v)||0)),k=c(d.st,ST.length-1),fl=nFlOf(k),a=['sk','hr','hs','sh','pa','ou','ac','bk'].map((q,i)=>c(d.pf&&d.pf[q],AVMAX[i])),pt=c(d.pet,99),pn=PETD[pt]&&d.pet!=null&&d.pet>=0?PETD[pt]:null,cn=String(d.cn||'Empresa').slice(0,18),eq=sum((Array.isArray(d.e)?d.e:[]).slice(0,8).map(x=>c(x,1e6)));
+modal('🏢 '+esc(cn),'<canvas id="vcv" width="96" height="72" style="width:100%;image-rendering:pixelated;border:4px solid var(--bd);display:block;margin-bottom:8px"></canvas><canvas id="vem" class="gemb" style="width:44px;margin:0 auto 6px;display:block"></canvas>'
++[['Fase',ST[k][2]+' '+ST[k][0]],['Nível',c(d.lv,999)],['IPOs',c(d.ip,50)+'/50'],['Países',c(d.w,WORLD.length)+'/'+WORLD.length],['Troféus',c(d.t,AC.length)+'/'+AC.length],['Equipe',eq],['Mascote',pn?pn[1]+' '+pn[0]:'—']].map(r=>'<div class="row"><span>'+r[0]+'</span><b>'+r[1]+'</b></div>').join(''));
+const cv=$('vcv'),cx=cv.getContext('2d');emb($('vem'),Math.min(GPT.length-1,c(d.ci&&d.ci.em,99)),GCL[Math.min(GCL.length-1,c(d.ci&&d.ci.cl,99))],4);
+const paint=()=>{const T=Date.now(),o=g,sv=[pet.x,me.y,me.dr,s.pet.eq];g=cx;R(0,0,96,72,'#4aa8ff');R(0,0,96,26,'#7cc4ff');R(0,60,96,12,'#3c4468');R(0,58,96,3,'#b9b4c4');
+const b=BRK[k],h=Math.min(50,12+fl*7),bx=12;R(bx,58-h,46,h,b[0]);for(let r=0;r<h;r+=4)R(bx,58-h+r,46,1,b[1]);
+for(let f2=0;f2<fl;f2++)for(let q=0;q<3;q++)R(bx+6+q*13,58-h+4+f2*7,8,4,(f2+q+(T/700|0))%5?'#ffe27a':'#2a3450');
+R(bx-1,58-h-2,48,3,STN[k][0]);R(bx+11,58-h-6,24,4,'#ffd23f');
+person(80,59,PSK[a[0]],PSH[a[3]],PPA[a[4]],(T/300|0)%2,PHR[a[1]],a[2],-1,a[5],a[6],a[7]);
+if(pn){pet.x=76;me.y=59;me.dr=-1;s.pet.eq=pt;drawMascot(T)}
+g=o;pet.x=sv[0];me.y=sv[1];me.dr=sv[2];s.pet.eq=sv[3]};
+paint();const iv=setInterval(()=>{if(!cv.isConnected)return clearInterval(iv);paint()},250)}
+const nFlOf=k=>[1,1,2,3,4,4,5,6,7][k];
+const _fpc=frPlayerCard;frPlayerCard=function(p,kind){let h=_fpc.apply(this,arguments);if(kind==='friend')h=h.replace('AMIGO</span>','AMIGO</span><button data-visit="'+esc(p.user_id)+'">🏢 VISITAR</button>');return h};
+$('friends').addEventListener('click',e=>{const b=e.target.closest('[data-visit]');if(b)visitOpen(b.dataset.visit)});
 })();
 </script>
 </body>
