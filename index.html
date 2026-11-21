@@ -300,6 +300,7 @@ input:checked+.sl{background:var(--green)}input:checked+.sl:before{transform:tra
 .cl.hit{background:rgba(62,224,160,.24);box-shadow:inset 3px 0 0 var(--green)}
 button.cl:active{background:rgba(255,255,255,.1)}
 .err{color:var(--red);font-size:1.2rem;padding:4px 8px;background:#1b1020}
+.tip{color:var(--gold);font-size:1.2rem;line-height:1.1;padding:4px 8px 6px;background:#14162a}
 .vo{display:block;width:100%;margin-top:6px;padding:8px;background:var(--tab);border:3px solid var(--bd);font:1.15rem VT323,monospace;white-space:pre;overflow-x:auto;text-align:left;color:var(--ink)}
 .vo.bad{background:var(--red);color:#fff}
 .vf{padding:10px;margin-bottom:8px;background:var(--tab);border:3px solid var(--bd);text-align:left}
@@ -768,14 +769,14 @@ else if(p=='out'){if(near){elv.busy=0;elv.ph='';elv.cw=.7}}}
 const vis={on:0,cd:25,ph:'',idx:0,x:0,fl:0,dr:1,k:'bug',N:0,home:0,hx:0,tg:0,back:0,from:0,t:0,ov:null};
 const vesc=t=>t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const PZ=[
-{n:'carrinho.js',c:['function total(itens) {','  let soma = 0;','  for (let i = 0; i <= itens.length; i++) {','    soma += itens[i].preco;','  }','  return soma;','}'],b:2,e:'TypeError: itens[i] is undefined',o:['  for (let i = 0; i < itens.length; i++) {','  for (let i = 1; i <= itens.length; i++) {','  for (let i = 0; i <= itens.length + 1; i++) {']},
-{n:'login.py',c:['def entrar(user, senha):','    if user.senha = senha:','        return True','    return False'],b:1,e:'SyntaxError: invalid syntax',o:['    if user.senha == senha:','    if user.senha === senha:','    if user.senha := senha:']},
-{n:'fila.js',c:['let fila = [1, 2, 3];','while (fila.length > 0) {','  processa(fila[0]);','}'],b:2,e:'Loop infinito: CPU em 100%',o:['  processa(fila.shift());','  processa(fila.length);','  processa(fila[1]);']},
-{n:'preco.js',c:['const preco = 100;','const desconto = 0.2;','const final = preco - desconto;','mostrar(final);'],b:2,e:'Esperado 80,00 mas recebeu 99,80',o:['const final = preco * (1 - desconto);','const final = preco * desconto;','const final = preco / (1 - desconto);']},
-{n:'usuarios.sql',c:['SELECT nome, email','FROM usuarios','WHERE ativo = 1','ORDER nome;'],b:3,e:"Syntax error near 'nome'",o:['ORDER BY nome;','ORDER nome ASC BY;','SORT BY nome;']},
-{n:'lista.js',c:['const nomes = ["Ana", "Leo", "Bia"];','for (const n of nomes) {','  console.log(nome);','}'],b:2,e:'ReferenceError: nome is not defined'},
-{n:'dobro.js',c:['function dobro(x) {','  x * 2;','}','console.log(dobro(4));'],b:1,e:'Resultado: undefined'},
-{n:'idade.js',c:['let idade = "18";','if (idade > 17) { liberar(); }','idade = idade + 1;','mostrar(idade);'],b:2,e:'idade virou "181" em vez de 19'}
+{n:'carrinho.js',c:['function total(itens) {','  let soma = 0;','  for (let i = 0; i <= itens.length; i++) {','    soma += itens[i].preco;','  }','  return soma;','}'],b:2,e:'O programa tenta ler um item que não existe',d:'O laço repete uma vez a mais do que deveria. A correção troca "<=" por "<".',o:['  for (let i = 0; i < itens.length; i++) {','  for (let i = 0; i <= itens.length + 1; i++) {']},
+{n:'login.py',c:['def entrar(user, senha):','    if user.senha = senha:','        return True','    return False'],b:1,e:'O programa não consegue comparar as senhas',d:'Para comparar dois valores se usa dois sinais de igual (==). Um só serve para guardar valor.',o:['    if user.senha == senha:','    if user.senha := senha:']},
+{n:'fila.js',c:['let fila = [1, 2, 3];','while (fila.length > 0) {','  processa(fila[0]);','}'],b:2,e:'O programa repete para sempre e trava',d:'Ele nunca tira o item da fila. Escolha a linha com "shift", que remove o item.',o:['  processa(fila.shift());','  processa(fila.length);']},
+{n:'preco.js',c:['const preco = 100;','const desconto = 0.2;','const final = preco - desconto;','mostrar(final);'],b:2,e:'O desconto de 20% não está funcionando',d:'Para tirar 20%, o certo é multiplicar por (1 - desconto). Só subtrair 0,2 quase não muda o preço.',o:['const final = preco * (1 - desconto);','const final = preco * desconto;']},
+{n:'usuarios.sql',c:['SELECT nome, email','FROM usuarios','WHERE ativo = 1','ORDER nome;'],b:3,e:'O banco de dados não entendeu o pedido',d:'Para ordenar uma lista, o certo é escrever "ORDER BY" (ordenar por).',o:['ORDER BY nome;','SORT BY nome;']},
+{n:'lista.js',c:['const nomes = ["Ana", "Leo", "Bia"];','for (const n of nomes) {','  console.log(nome);','}'],b:2,e:'O programa usa uma palavra que ele não conhece',d:'Na linha de cima cada item se chama "n". Procure a linha que usa outro nome.'},
+{n:'dobro.js',c:['function dobro(x) {','  x * 2;','}','console.log(dobro(4));'],b:1,e:'A conta é feita, mas o resultado se perde',d:'Falta a palavra "return" (devolver). Procure a linha que faz a conta sem devolver nada.'},
+{n:'idade.js',c:['let idade = "18";','if (idade > 17) { liberar(); }','idade = idade + 1;','mostrar(idade);'],b:2,e:'18 + 1 deu "181" em vez de 19',d:'O número está entre aspas, então vira texto e é colado. Toque na linha que faz a soma.'}
 ];
 const OF=[
 ()=>{const g=Math.floor(mps()*240+300);return{ic:'🤝',t:'Patrocínio de marca',g:'+'+fmt(g)+' 💰 agora',c:'Código -15% por 60s',a:()=>{gain(g);addFx({k:'ofa',nm:'Patrocínio',ic:'🤝',m:1,c:.85,u:Date.now()+6e4})}}},
@@ -806,12 +807,12 @@ function vOv(h){const o=document.createElement('div');o.className='ov';o.innerHT
 function vHead(sub){const e=EM[(crew[vis.idx]||{i:0}).i];return'<div class="vh"><span class="vi">'+ico(e[0])+'</span><div><b>'+e[1]+'</b><small>'+sub+'</small></div></div>'}
 function vEnd(t,m,ok){const o=vis.ov;if(!o)return;o.firstChild.innerHTML='<h2>'+t+'</h2><p>'+m+'</p><button class="ok">CONTINUAR</button>';o.querySelector('.ok').onclick=visDone;sfx(ok?880:180,.2,.05,ok?'square':'sawtooth');save()}
 function visUI(){sfx(740,.1,.03);vis.k=='bug'?visBug():visOffer()}
-function visBug(){const P=PZ[rnd(PZ.length)],fix=!!P.o,tot=18;let left=tot,fin=0;
+function visBug(){const P=PZ[rnd(PZ.length)],fix=!!P.o,tot=30;let left=tot,fin=0,w=0;
 const rc=(h)=>P.c.map((l,i)=>{const t=fix?'div':'button';return'<'+t+' class="cl'+(i==P.b?(h?' hit':fix?' er':''):'')+'" data-l="'+i+'"><b>'+(i+1)+'</b>'+vesc(i==P.b&&h&&fix?P.o[0]:l)+'</'+t+'>'}).join('');
-const o=vOv(vHead(fix?'Tem um erro no código! Corrija.':'Tem um erro! Toque na linha errada.')+'<div class="ide"><div class="itb"><i></i><i></i><i></i><span>'+P.n+'</span></div><div id="vcd">'+rc(0)+'</div><div class="err">⚠ '+vesc(P.e)+'</div></div><div class="pg"><i id="vtm" style="width:100%"></i></div><div id="vop">'+(fix?P.o.slice().sort(()=>Math.random()-.5).map(t=>'<button class="vo">'+vesc(t)+'</button>').join(''):'')+'</div><button class="ok" id="vsk" style="background:var(--tab);color:var(--ink)">AGORA NÃO</button>');
+const o=vOv(vHead(fix?'Tem um erro! Leia a dica e escolha a linha certa.':'Tem um erro! Leia a dica e toque na linha errada.')+'<div class="ide"><div class="itb"><i></i><i></i><i></i><span>'+P.n+'</span></div><div id="vcd">'+rc(0)+'</div><div class="err">⚠ '+vesc(P.e)+'</div><div class="tip">💡 '+vesc(P.d)+'</div></div><div class="pg"><i id="vtm" style="width:100%"></i></div><div id="vop">'+(fix?P.o.slice().sort(()=>Math.random()-.5).map(t=>'<button class="vo">'+vesc(t)+'</button>').join(''):'')+'</div><button class="ok" id="vsk" style="background:var(--tab);color:var(--ink)">AGORA NÃO</button>');
 const win=()=>{if(fin)return;fin=1;clearInterval(iv);$('vcd').innerHTML=rc(1);const g=Math.floor(Math.max(250,mps()*45));gain(g);addFx({k:'dev',nm:'Código limpo',ic:'🛠️',m:1.2,c:1.2,u:Date.now()+45e3});setTimeout(()=>vEnd('✅ BUG CORRIGIDO','+'+fmt(g)+' 💰 e produção +20% por 45s.',1),800)};
 const lose=m=>{if(fin)return;fin=1;clearInterval(iv);addFx({k:'devbug',nm:'Bug em produção',ic:'🐛',m:.75,c:.75,u:Date.now()+2e4});vEnd('❌ BUG EM PRODUÇÃO',m+' Produção -25% por 20s.',0)};
-const hit=()=>{left-=4;shake();sfx(180,.12,.04,'sawtooth')};
+const hit=()=>{left-=2;w++;shake();sfx(180,.12,.04,'sawtooth');if(!fix&&w>=2){const q=o.querySelector('[data-l="'+P.b+'"]');if(q)q.classList.add('hit')}};
 const iv=setInterval(()=>{if(!o.isConnected){clearInterval(iv);return}left-=.1;$('vtm').style.width=Math.max(0,left/tot*100)+'%';if(left<=0)lose('Acabou o tempo.')},100);
 o.onclick=e=>{if(fin)return;const b=e.target.closest('button');if(!b)return;if(b.id=='vsk')return lose('Você deixou o bug passar.');
 if(b.classList.contains('vo')){if(b.textContent==P.o[0])win();else{b.classList.add('bad');b.disabled=true;hit()}}
