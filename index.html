@@ -786,23 +786,20 @@ const OF=[
 ];
 const vwalk=(tx,dt)=>{const d=tx-vis.x;if(Math.abs(d)<=1)return 1;vis.x+=Math.sign(d)*Math.min(Math.abs(d),34*dt);vis.dr=d>0?1:-1;return 0};
 function cabGo(t,dt){elv.dt=0;if(elv.dr>.05)return 0;const a=Math.abs(t-elv.lv),b=Math.abs(elv.lv-vis.from),sp=Math.min(2.8,.7+Math.min(a,b)*3.2)*dt;if(a<=sp){elv.lv=t;return 1}elv.lv+=Math.sign(t-elv.lv)*sp;return 0}
-function visStart(){const N=nFl(),L=[];crew.forEach((c,i)=>{const sl=i/N|0;if(sl<=4&&!(has('x1')&&sl==4&&i%N==N-1))L.push(i)});if(!L.length)return;const idx=L[rnd(L.length)],home=idx%N,hx=20+(idx/N|0)*21;Object.assign(vis,{on:1,idx,N,home,hx,x:hx,fl:home,dr:1,k:rnd(100)<55?'bug':'offer',tg:me.f,back:0,from:elv.lv,ph:home==me.f?'out':'call'})}
+function visStart(){const N=nFl(),L=[];crew.forEach((c,i)=>{const sl=i/N|0;if(sl<=4&&!(has('x1')&&sl==4&&i%N==N-1))L.push(i)});if(!L.length)return;const idx=L[rnd(L.length)],home=idx%N,hx=20+(idx/N|0)*21;Object.assign(vis,{on:1,idx,N,home,hx,x:hx,fl:home,dr:1,k:rnd(100)<55?'bug':'offer',tg:me.f,back:0,from:me.f,ph:home==me.f?'out':'in'});elv.lv=me.f}
 function visUpd(dt){
 if(!vis.on){let bf=0;try{bf=bossFight}catch(e){}
 if(document.hidden||view||me.f<0||elv.busy||bf||!crew.length||document.querySelector('.ov:not([hidden])'))return;
 if((vis.cd-=dt)<=0)visStart();return}
-const p=vis.ph;
+const p=vis.ph,here=vis.fl==me.f;
 if(p!='ui'&&(view||me.f<0||nFl()!=vis.N||elv.busy)){vis.on=0;elv.dt=0;vis.cd=30;return}
-if(p=='call'){if(cabGo(vis.fl,dt)){sfx(1046,.18,.035,'sine');vis.ph='in'}}
-else if(p=='in'){elv.dt=1;if(vwalk(DX,dt)&&elv.dr>.95){elv.dt=0;sfx(520,.08,.03);vis.ph='close'}}
-else if(p=='close'){if(elv.dr<=.01){vis.from=elv.lv;vis.ph='ride';sfx(330,.15)}}
-else if(p=='ride'){if(cabGo(vis.tg,dt)){vis.fl=vis.tg;elv.dt=1;sfx(660,.15);setTimeout(()=>sfx(1046,.2,.035,'sine'),130);vis.ph='open'}}
-else if(p=='open'){if(elv.dr>=.99)vis.ph=vis.back?'home':'out'}
-else if(p=='out'||p=='home'){if(vis.x<DX-14)elv.dt=0;if(vwalk(p=='out'?(me.x>60?me.x-14:me.x+14):vis.hx,dt)){if(p=='out'){vis.dr=me.x>vis.x?1:-1;vis.ph='talk';vis.t=.8}else{vis.ph='recall';vis.from=elv.lv;elv.dt=0}}}
-else if(p=='talk'){if((vis.t-=dt)<=0){vis.ph='ui';visUI()}}
-else if(p=='recall'){if(cabGo(me.f,dt)){vis.on=0;vis.cd=60+rnd(50)}}}
-function visDone(){if(vis.ov){vis.ov.remove();vis.ov=null}if(!vis.on)return;vis.back=1;vis.tg=vis.home;vis.from=elv.lv;vis.ph=vis.home==me.f?'home':'in'}
-function visDraw(T){if(!vis.on||vis.ph=='ride'||vis.ph=='recall')return;const c=crew[vis.idx];if(!c)return;const y=fy(vis.fl)-3,mv=vis.ph!='talk'&&vis.ph!='ui',fr=mv?((T/130)|0)%2:0;
+if(p=='in'){if(here)elv.dt=1;if(vwalk(DX,dt)&&(!here||elv.dr>.95)){if(here){elv.dt=0;sfx(520,.08,.03)}vis.ph='wait';vis.t=1+.5*Math.abs(vis.home-me.f)}}
+else if(p=='wait'){if((vis.t-=dt)<=0){vis.x=DX;if(vis.back){vis.fl=vis.home;vis.ph='home'}else{vis.fl=me.f;elv.dt=1;sfx(660,.15);setTimeout(()=>sfx(1046,.2,.035,'sine'),130);vis.ph='open'}}}
+else if(p=='open'){if(elv.dr>=.99)vis.ph='out'}
+else if(p=='out'||p=='home'){if(vis.x<DX-14)elv.dt=0;if(vwalk(p=='out'?(me.x>60?me.x-14:me.x+14):vis.hx,dt)){if(p=='out'){vis.dr=me.x>vis.x?1:-1;vis.ph='talk';vis.t=.8}else{vis.on=0;vis.cd=60+rnd(50)}}}
+else if(p=='talk'){if((vis.t-=dt)<=0){vis.ph='ui';visUI()}}}
+function visDone(){if(vis.ov){vis.ov.remove();vis.ov=null}if(!vis.on)return;vis.back=1;vis.tg=vis.home;vis.from=elv.lv;vis.fl=me.f;vis.ph=vis.home==me.f?'home':'in'}
+function visDraw(T){if(!vis.on||vis.ph=='wait')return;const c=crew[vis.idx];if(!c)return;const y=fy(vis.fl)-3,mv=vis.ph!='talk'&&vis.ph!='ui',fr=mv?((T/130)|0)%2:0;
 R(vis.x-3,y,7,1,'rgba(0,0,0,.3)');person(vis.x,y,c.sk,SHIRT[c.i],'#2b2f4a',fr,HAIR[c.i%4],c.hs,vis.dr,c.ou,c.ac,0);
 if(!vis.back){const b=((T/300)|0)%2,bg=vis.k=='bug',by=y-32-b;R(vis.x-4,by,9,9,'#000');R(vis.x-3,by+1,7,7,bg?'#ff4d6d':'#ffd23f');if(bg){R(vis.x,by+2,1,4,'#fff');R(vis.x,by+7,1,1,'#fff')}else{R(vis.x-1,by+2,3,1,'#7a5200');R(vis.x-1,by+4,3,1,'#7a5200');R(vis.x-1,by+6,3,1,'#7a5200');R(vis.x,by+1,1,7,'#7a5200')}}}
 function vOv(h){const o=document.createElement('div');o.className='ov';o.innerHTML='<div class="mc pxc vc">'+h+'</div>';document.body.appendChild(o);vis.ov=o;return o}
@@ -1010,7 +1007,7 @@ bugs.forEach(b=>bugSp(b,T));if(star)starSp(star.x,star.y,T);
 P.forEach(p=>{g.globalAlpha=Math.max(0,p.l/p.m);if(p.k){R(p.x,p.y,3,3,'#ffd23f');R(p.x+1,p.y,1,1,'#fff6b0')}else R(p.x,p.y,p.s,p.h||p.s,p.c)});g.globalAlpha=1;
 if(flash>0){g.globalAlpha=Math.min(1,flash);R(0,0,W,H,'#fff');g.globalAlpha=1;flash=Math.max(0,flash-dt*3)}}
 function upd(dt){const T=Date.now();kf=Math.max(0,kf-dt);
-{const VIS=4,Nf=nFl(),vf=view?0:(elv.busy||vis.on?elv.lv:Math.max(me.f,0)),ct=Nf>VIS?Math.min(Math.max(vf-(VIS-2),0),Nf-VIS):0;camF+=(ct-camF)*Math.min(1,dt*4)}
+{const VIS=4,Nf=nFl(),vf=view?0:(elv.busy?elv.lv:Math.max(me.f,0)),ct=Nf>VIS?Math.min(Math.max(vf-(VIS-2),0),Nf-VIS):0;camF+=(ct-camF)*Math.min(1,dt*4)}
 if(view)bugs.forEach(b=>b.e+=dt*1e3);
 elevUpd(dt);visUpd(dt);
 pet.x+=(petT()-pet.x)*Math.min(1,dt*3.5);
