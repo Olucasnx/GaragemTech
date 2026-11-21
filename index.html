@@ -307,6 +307,12 @@ button.cl:active{background:rgba(255,255,255,.1)}
 .vf b{display:block;font:.58rem/1.6 'Press Start 2P',monospace;margin-bottom:4px}
 .vf span{display:block;font-size:1.2rem;line-height:1.1}.vf .g{color:var(--green)}.vf .c{color:var(--orange);margin-bottom:8px}
 .vf .eo{margin:0}.vf .eo .bt{width:100%;max-width:none}.vf .eo .bt:nth-child(2){background:var(--red);color:#fff}
+.vch{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px}.vch .vo{width:auto;margin:0;padding:8px 12px}
+.vpad{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.vsv{height:64px;background:var(--c);opacity:.3;border:3px solid var(--bd);font:.5rem 'Press Start 2P',monospace;color:#000}
+.vsv.on{opacity:1;box-shadow:0 0 14px var(--c)}
+.sb{position:absolute;transform:translate(-50%,-100%);background:#fff;color:#1b1530;border:2px solid #000;font:1rem/1.05 VT323,monospace;padding:3px 6px;width:max-content;max-width:62%;pointer-events:none;z-index:3;text-align:center}
+.sb:after{content:'';position:absolute;left:50%;bottom:-6px;width:6px;height:6px;background:#fff;border:solid #000;border-width:0 2px 2px 0;transform:translateX(-50%) rotate(45deg)}
 </style>
 <link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#14162a"><link rel="apple-touch-icon" href="icon-192.png">
 </head>
@@ -778,6 +784,17 @@ const PZ=[
 {n:'dobro.js',c:['function dobro(x) {','  x * 2;','}','console.log(dobro(4));'],b:1,e:'A conta é feita, mas o resultado se perde',d:'Falta a palavra "return" (devolver). Procure a linha que faz a conta sem devolver nada.'},
 {n:'idade.js',c:['let idade = "18";','if (idade > 17) { liberar(); }','idade = idade + 1;','mostrar(idade);'],b:2,e:'18 + 1 deu "181" em vez de 19',d:'O número está entre aspas, então vira texto e é colado. Toque na linha que faz a soma.'}
 ];
+PZ.push(
+{n:'maior.js',l:1,c:['function maior(a, b) {','  if (a < b) {','    return a;','  }','  return b;','}'],b:1,e:'A função devolve o menor número, não o maior',d:'O sinal está invertido. Para pegar o maior, use ">" (maior que).',o:['  if (a > b) {','  if (a == b) {','  if (a <= b) {']},
+{n:'soma.py',l:1,c:['total = 0','for n in range(1, 5):','    total = n','print(total)'],b:2,e:'Deveria somar 1+2+3+4, mas mostra só 4',d:'O "+=" soma ao que já existe. O "=" apaga e troca.',o:['    total += n','    total -= n','    total = total']},
+{n:'busca.js',l:2,c:['function achar(lista, x) {','  for (let i = 0; i < lista.length; i++) {','    if (lista[i] == x) {','      return false;','    }','  }','  return -1;','}'],b:3,e:'Achou o item, mas diz que não achou',d:'Ao achar, a função deve devolver a posição "i" onde o item está.',o:['      return i;','      return x;','      return lista;']},
+{n:'tempo.js',l:2,c:['let seg = 90;','let min = seg / 60;','mostrar(min + " min");'],b:1,e:'Mostra 1.5 min em vez de 1 min',d:'"Math.floor" arredonda para baixo e tira as casas decimais.',o:['let min = Math.floor(seg / 60);','let min = seg % 60;','let min = seg * 60;']}
+);
+const CM=[
+{g:'Baixar as novidades e ligar o site',d:'Primeiro baixa (git pull), depois liga (npm start). O "&&" quer dizer "e depois".',s:['git','pull','&&','npm','start'],x:['rm','stop','-f']},
+{g:'Instalar as peças e testar o app',d:'Primeiro instala (npm install), depois testa (npm test).',s:['npm','install','&&','npm','test'],x:['delete','-f','build']},
+{g:'Entrar na pasta e ver os arquivos',d:'Entra na pasta (cd site) e depois lista os arquivos (ls).',s:['cd','site','&&','ls'],x:['rm','-rf','..']}
+];
 const OF=[
 ()=>{const g=Math.floor(mps()*240+300);return{ic:'🤝',t:'Patrocínio de marca',g:'+'+fmt(g)+' 💰 agora',c:'Código -15% por 60s',a:()=>{gain(g);addFx({k:'ofa',nm:'Patrocínio',ic:'🤝',m:1,c:.85,u:Date.now()+6e4})}}},
 ()=>{const g=Math.floor(mps()*120+150),l=Math.floor(s.c*.2);return{ic:'💼',t:'Projeto freelance',g:'+'+fmt(g)+' 💰 agora',c:'-'+fmt(l)+' 💻 de código',a:()=>{gain(g);s.c-=l}}},
@@ -785,47 +802,96 @@ const OF=[
 ()=>{const p=Math.floor(s.m*.12);return{ic:'☁️',t:'Consultoria em nuvem',g:'Dinheiro x1.5 por 90s',c:fmt(p)+' 💰',a:()=>{if(s.m<p)return!1;s.m-=p;addFx({k:'ofc',nm:'Nuvem',ic:'☁️',m:1.5,c:1,u:Date.now()+9e4})}}},
 ()=>{const p=Math.floor(s.m*.05),g=Math.floor(cps()*150+60);return{ic:'🎓',t:'Treinamento da equipe',g:'+'+fmt(g)+' 💻 de código',c:fmt(p)+' 💰',a:()=>{if(s.m<p)return!1;s.m-=p;s.c+=g}}}
 ];
-const vwalk=(tx,dt)=>{const d=tx-vis.x;if(Math.abs(d)<=1)return 1;vis.x+=Math.sign(d)*Math.min(Math.abs(d),34*dt);vis.dr=d>0?1:-1;return 0};
+const vwalk=(tx,dt)=>wk(vis,tx,dt,24);
 function cabGo(t,dt){elv.dt=0;if(elv.dr>.05)return 0;const a=Math.abs(t-elv.lv),b=Math.abs(elv.lv-vis.from),sp=Math.min(2.8,.7+Math.min(a,b)*3.2)*dt;if(a<=sp){elv.lv=t;return 1}elv.lv+=Math.sign(t-elv.lv)*sp;return 0}
-function visStart(){const N=nFl(),L=[];crew.forEach((c,i)=>{const sl=i/N|0;if(sl<=4&&!(has('x1')&&sl==4&&i%N==N-1))L.push(i)});if(!L.length)return;const idx=L[rnd(L.length)],home=idx%N,hx=20+(idx/N|0)*21;Object.assign(vis,{on:1,idx,N,home,hx,x:hx,fl:home,dr:1,k:rnd(100)<55?'bug':'offer',tg:me.f,back:0,from:elv.lv,ph:home==me.f?'out':'call'})}
+function visStart(){const N=nFl(),L=[];crew.forEach((c,i)=>{const sl=i/N|0;if(sl<=4&&!(has('x1')&&sl==4&&i%N==N-1))L.push(i)});if(!L.length)return;const kk=rnd(100)<55?'bug':'offer',idx=L[rnd(L.length)],home=idx%N,hx=20+(idx/N|0)*21;Object.assign(vis,{on:1,idx,N,home,hx,x:hx,fl:home,dr:1,k:kk,say:(kk=='bug'?SB1:SB2)[rnd(3)],tg:me.f,back:0,from:elv.lv,s:0,nx:home==me.f?'out':'call',ph:'stand'})}
 function visUpd(dt){
 if(!vis.on){let bf=0;try{bf=bossFight}catch(e){}
-if(document.hidden||view||me.f<0||elv.busy||bf||!crew.length||document.querySelector('.ov:not([hidden])'))return;
+if(document.hidden||view||me.f<0||elv.busy||bf||amb.on||!crew.length||document.querySelector('.ov:not([hidden])'))return;
 if((vis.cd-=dt)<=0)visStart();return}
 const p=vis.ph;
 if(p!='ui'&&(view||me.f<0||nFl()!=vis.N||elv.busy)){vis.on=0;elv.dt=0;vis.cd=30;return}
-if(p=='call'){if(cabGo(vis.fl,dt)){sfx(1046,.18,.035,'sine');vis.ph='in'}}
+if(p=='stand'){vis.s=Math.min(1,vis.s+dt/.8);if(vis.s>=1)vis.ph=vis.nx}
+else if(p=='sit'){vis.s-=dt/.8;if(vis.s<=0){vis.ph='recall';vis.from=elv.lv;elv.dt=0}}
+else if(p=='call'){if(cabGo(vis.fl,dt)){sfx(1046,.18,.035,'sine');vis.ph='in'}}
 else if(p=='in'){elv.dt=1;if(vwalk(DX,dt)&&elv.dr>.95){elv.dt=0;sfx(520,.08,.03);vis.ph='close'}}
 else if(p=='close'){if(elv.dr<=.01){vis.from=elv.lv;vis.ph='ride';sfx(330,.15)}}
 else if(p=='ride'){if(cabGo(vis.tg,dt)){vis.fl=vis.tg;elv.dt=1;sfx(660,.15);setTimeout(()=>sfx(1046,.2,.035,'sine'),130);vis.ph='open'}}
 else if(p=='open'){if(elv.dr>=.99)vis.ph=vis.back?'home':'out'}
-else if(p=='out'||p=='home'){if(vis.x<DX-14)elv.dt=0;if(vwalk(p=='out'?(me.x>60?me.x-14:me.x+14):vis.hx,dt)){if(p=='out'){vis.dr=me.x>vis.x?1:-1;vis.ph='talk';vis.t=.8}else{vis.ph='recall';vis.from=elv.lv;elv.dt=0}}}
+else if(p=='out'||p=='home'){if(vis.x<DX-14)elv.dt=0;if(vwalk(p=='out'?(me.x>60?me.x-14:me.x+14):vis.hx,dt)){if(p=='out'){vis.dr=me.x>vis.x?1:-1;vis.ph='talk';vis.t=1.1}else{vis.ph='sit';vis.s=1;elv.dt=0}}}
 else if(p=='talk'){if((vis.t-=dt)<=0){vis.ph='ui';visUI()}}
 else if(p=='recall'){if(cabGo(me.f,dt)){vis.on=0;vis.cd=60+rnd(50)}}}
 function visDone(){if(vis.ov){vis.ov.remove();vis.ov=null}if(!vis.on)return;vis.back=1;vis.tg=vis.home;vis.from=elv.lv;vis.fl=me.f;vis.ph=vis.home==me.f?'home':'in'}
-function visDraw(T){if(!vis.on||vis.ph=='ride'||vis.ph=='recall')return;const c=crew[vis.idx];if(!c)return;const y=fy(vis.fl)-3,mv=vis.ph!='talk'&&vis.ph!='ui',fr=mv?((T/130)|0)%2:0;
-R(vis.x-3,y,7,1,'rgba(0,0,0,.3)');person(vis.x,y,c.sk,SHIRT[c.i],'#2b2f4a',fr,HAIR[c.i%4],c.hs,vis.dr,c.ou,c.ac,0);
+function visDraw(T){const sy=vis.on&&(vis.ph=='out'||vis.ph=='talk');if(!sy)sbSet(2);if(!vis.on||vis.ph=='ride'||vis.ph=='recall')return;const c=crew[vis.idx];if(!c)return;const y=fy(vis.fl)-3,mv=vis.ph!='talk'&&vis.ph!='ui',fr=mv?((T/210)|0)%2:0;
+const sit=vis.ph=='stand'||vis.ph=='sit',s=vis.s;if(!sit)R(vis.x-3,y,7,1,'rgba(0,0,0,.3)');person(sit?vis.x-2*(1-s):vis.x,sit?y-5+5*s:y,c.sk,SHIRT[c.i],'#2b2f4a',sit?0:fr,HAIR[c.i%4],c.hs,sit?1:vis.dr,c.ou,c.ac,0);if(sy)sbSet(2,Math.min(122,Math.max(38,vis.x)),y-38,vis.say);
 if(!vis.back){const b=((T/300)|0)%2,bg=vis.k=='bug',by=y-32-b;R(vis.x-4,by,9,9,'#000');R(vis.x-3,by+1,7,7,bg?'#ff4d6d':'#ffd23f');if(bg){R(vis.x,by+2,1,4,'#fff');R(vis.x,by+7,1,1,'#fff')}else{R(vis.x-1,by+2,3,1,'#7a5200');R(vis.x-1,by+4,3,1,'#7a5200');R(vis.x-1,by+6,3,1,'#7a5200');R(vis.x,by+1,1,7,'#7a5200')}}}
 function vOv(h){const o=document.createElement('div');o.className='ov';o.innerHTML='<div class="mc pxc vc">'+h+'</div>';document.body.appendChild(o);vis.ov=o;return o}
 function vHead(sub){const e=EM[(crew[vis.idx]||{i:0}).i];return'<div class="vh"><span class="vi">'+ico(e[0])+'</span><div><b>'+e[1]+'</b><small>'+sub+'</small></div></div>'}
 function vEnd(t,m,ok){const o=vis.ov;if(!o)return;o.firstChild.innerHTML='<h2>'+t+'</h2><p>'+m+'</p><button class="ok">CONTINUAR</button>';o.querySelector('.ok').onclick=visDone;sfx(ok?880:180,.2,.05,ok?'square':'sawtooth');save()}
 function visUI(){sfx(740,.1,.03);vis.k=='bug'?visBug():visOffer()}
-function visBug(){const P=PZ[rnd(PZ.length)],fix=!!P.o,tot=30;let left=tot,fin=0,w=0;
-const rc=(h)=>P.c.map((l,i)=>{const t=fix?'div':'button';return'<'+t+' class="cl'+(i==P.b?(h?' hit':fix?' er':''):'')+'" data-l="'+i+'"><b>'+(i+1)+'</b>'+vesc(i==P.b&&h&&fix?P.o[0]:l)+'</'+t+'>'}).join('');
-const o=vOv(vHead(fix?'Tem um erro! Leia a dica e escolha a linha certa.':'Tem um erro! Leia a dica e toque na linha errada.')+'<div class="ide"><div class="itb"><i></i><i></i><i></i><span>'+P.n+'</span></div><div id="vcd">'+rc(0)+'</div><div class="err">⚠ '+vesc(P.e)+'</div><div class="tip">💡 '+vesc(P.d)+'</div></div><div class="pg"><i id="vtm" style="width:100%"></i></div><div id="vop">'+(fix?P.o.slice().sort(()=>Math.random()-.5).map(t=>'<button class="vo">'+vesc(t)+'</button>').join(''):'')+'</div><button class="ok" id="vsk" style="background:var(--tab);color:var(--ink)">AGORA NÃO</button>');
-const win=()=>{if(fin)return;fin=1;clearInterval(iv);$('vcd').innerHTML=rc(1);const g=Math.floor(Math.max(250,mps()*45));gain(g);addFx({k:'dev',nm:'Código limpo',ic:'🛠️',m:1.2,c:1.2,u:Date.now()+45e3});setTimeout(()=>vEnd('✅ BUG CORRIGIDO','+'+fmt(g)+' 💰 e produção +20% por 45s.',1),800)};
-const lose=m=>{if(fin)return;fin=1;clearInterval(iv);addFx({k:'devbug',nm:'Bug em produção',ic:'🐛',m:.75,c:.75,u:Date.now()+2e4});vEnd('❌ BUG EM PRODUÇÃO',m+' Produção -25% por 20s.',0)};
-const hit=()=>{left-=2;w++;shake();sfx(180,.12,.04,'sawtooth');if(!fix&&w>=2){const q=o.querySelector('[data-l="'+P.b+'"]');if(q)q.classList.add('hit')}};
-const iv=setInterval(()=>{if(!o.isConnected){clearInterval(iv);return}left-=.1;$('vtm').style.width=Math.max(0,left/tot*100)+'%';if(left<=0)lose('Acabou o tempo.')},100);
-o.onclick=e=>{if(fin)return;const b=e.target.closest('button');if(!b)return;if(b.id=='vsk')return lose('Você deixou o bug passar.');
-if(b.classList.contains('vo')){if(b.textContent==P.o[0])win();else{b.classList.add('bad');b.disabled=true;hit()}}
-else if(b.classList.contains('cl')){if(+b.dataset.l==P.b)win();else{b.classList.add('er');hit()}}}}
+const vTier=()=>{const i=(crew[vis.idx]||{i:0}).i;return i<2?0:i<5?1:2};
+function vGm(sub,body,tot){const T=vTier(),G={fin:0,left:tot};
+G.o=vOv(vHead(sub+'  '+'★'.repeat(T+1))+body+'<div class="pg"><i id="vtm" style="width:100%"></i></div><button class="ok" id="vsk" style="background:var(--tab);color:var(--ink)">AGORA NÃO</button>');
+G.iv=setInterval(()=>{if(!G.o.isConnected){clearInterval(G.iv);return}G.left-=.1;$('vtm').style.width=Math.max(0,G.left/tot*100)+'%';if(G.left<=0)G.lose('Acabou o tempo.')},100);
+G.hit=()=>{G.left-=2;shake();sfx(180,.12,.04,'sawtooth')};
+G.win=cb=>{if(G.fin)return;G.fin=1;clearInterval(G.iv);cb&&cb();const g=Math.floor(Math.max(250,mps()*45)*[1,1.6,2.5][T]);gain(g);addFx({k:'dev',nm:'Código limpo',ic:'🛠️',m:1.2,c:1.2,u:Date.now()+45e3});setTimeout(()=>vEnd('✅ BUG CORRIGIDO','+'+fmt(g)+' 💰 e produção +20% por 45s.',1),800)};
+G.lose=m=>{if(G.fin)return;G.fin=1;clearInterval(G.iv);addFx({k:'devbug',nm:'Bug em produção',ic:'🐛',m:.75,c:.75,u:Date.now()+2e4});vEnd('❌ BUG EM PRODUÇÃO',m+' Produção -25% por 20s.',0)};
+return G}
+function visBug(){const T=vTier(),r=rnd(100);r<22?visCmd(T):r<44?visSimon(T):visCode(T)}
+function visCode(T){let pl=PZ.filter(q=>(q.l||0)==T);if(!pl.length)pl=PZ;const P=pl[rnd(pl.length)],fix=!!P.o;
+const rc=h=>P.c.map((l,i)=>{const t=fix?'div':'button';return'<'+t+' class="cl'+(i==P.b?(h?' hit':fix?' er':''):'')+'" data-l="'+i+'"><b>'+(i+1)+'</b>'+vesc(i==P.b&&h&&fix?P.o[0]:l)+'</'+t+'>'}).join('');
+const G=vGm(fix?'Tem um erro! Leia a dica e escolha a linha certa.':'Tem um erro! Leia a dica e toque na linha errada.','<div class="ide"><div class="itb"><i></i><i></i><i></i><span>'+P.n+'</span></div><div id="vcd">'+rc(0)+'</div><div class="err">⚠ '+vesc(P.e)+'</div><div class="tip">💡 '+vesc(P.d)+'</div></div><div id="vop">'+(fix?P.o.slice().sort(()=>Math.random()-.5).map(t=>'<button class="vo">'+vesc(t)+'</button>').join(''):'')+'</div>',[30,24,18][T]);
+let w=0;const ht=()=>{G.hit();w++;if(!fix&&w>=2){const q=G.o.querySelector('[data-l="'+P.b+'"]');if(q)q.classList.add('hit')}},wn=()=>G.win(()=>{$('vcd').innerHTML=rc(1)});
+G.o.onclick=e=>{if(G.fin)return;const b=e.target.closest('button');if(!b)return;if(b.id=='vsk')return G.lose('Você deixou o bug passar.');
+if(b.classList.contains('vo')){if(b.textContent==P.o[0])wn();else{b.classList.add('bad');b.disabled=true;ht()}}else if(b.classList.contains('cl')){if(+b.dataset.l==P.b)wn();else{b.classList.add('er');ht()}}}}
+function visCmd(T){const Q=CM[rnd(CM.length)];let k=0;const ch=Q.s.concat(Q.x.slice(0,T+1)).sort(()=>Math.random()-.5);
+const G=vGm('Monte o comando no terminal, na ordem certa.','<div class="ide"><div class="itb"><i></i><i></i><i></i><span>terminal</span></div><div class="cl" id="vtl">$ </div><div class="err" style="color:var(--green)">🎯 '+vesc(Q.g)+'</div><div class="tip">💡 '+vesc(Q.d)+'</div></div><div class="vch">'+ch.map(t=>'<button class="vo">'+vesc(t)+'</button>').join('')+'</div>',[30,24,20][T]);
+G.o.onclick=e=>{if(G.fin)return;const b=e.target.closest('button');if(!b)return;if(b.id=='vsk')return G.lose('Você deixou o bug passar.');if(!b.classList.contains('vo')||b.disabled)return;
+if(b.textContent==Q.s[k]){b.disabled=true;b.style.opacity=.35;k++;$('vtl').textContent='$ '+Q.s.slice(0,k).join(' ');sfx(500+k*70,.06,.03);if(k==Q.s.length)G.win()}else{b.classList.add('bad');setTimeout(()=>b.classList.remove('bad'),400);G.hit()}}}
+function visSimon(T){const n=3+T,sq=Array.from({length:n},()=>rnd(4)),C=['#ff4d6d','#ffd23f','#3ee0a0','#4cc9f0'],NM=['Vermelho','Amarelo','Verde','Azul'];let k=0,lock=1;
+const G=vGm('Reinicie os servidores na mesma ordem em que acenderem.','<div class="tip" id="vst">👀 Observe a ordem...</div><div class="vpad">'+C.map((c,i)=>'<button class="vsv" data-s="'+i+'" style="--c:'+c+'">'+NM[i]+'</button>').join('')+'</div><button class="vo" id="vrp" style="text-align:center">🔁 VER DE NOVO</button>',[30,28,26][T]);
+const ok=()=>!G.fin&&G.o.isConnected,fl=(i,on)=>{const b=G.o.querySelector('[data-s="'+i+'"]');if(b)b.classList.toggle('on',on)};
+const show=()=>{lock=1;k=0;$('vst').textContent='👀 Observe a ordem...';sq.forEach((s,j)=>{setTimeout(()=>{if(ok()){fl(s,1);sfx(400+s*120,.25,.04,'sine')}},600+j*800);setTimeout(()=>fl(s,0),1050+j*800)});setTimeout(()=>{if(ok()){lock=0;$('vst').textContent='👆 Sua vez! Toque na mesma ordem.'}},700+n*800)};show();
+G.o.onclick=e=>{if(G.fin)return;const b=e.target.closest('button');if(!b)return;if(b.id=='vsk')return G.lose('Você deixou o bug passar.');if(lock)return;if(b.id=='vrp')return show();
+if(b.dataset.s==null)return;const s=+b.dataset.s;if(s==sq[k]){fl(s,1);sfx(400+s*120,.2,.04,'sine');setTimeout(()=>fl(s,0),250);if(++k==n)G.win()}else{G.hit();k=0;$('vst').textContent='❌ Ordem errada! Toque em VER DE NOVO.'}}}
 function visOffer(){const L=OF.map(f=>f()).sort(()=>Math.random()-.5).slice(0,2);let n=L.length,ac=0;
 const o=vOv(vHead('Recebi '+n+' ofertas para você')+L.map((f,i)=>'<div class="vf" data-i="'+i+'"><b>'+f.ic+' '+f.t+'</b><span class="g">Você ganha: '+f.g+'</span><span class="c">Em troca: '+f.c+'</span><div class="eo"><button class="bt" data-a="1">ACEITAR</button><button class="bt" data-a="0">RECUSAR</button></div></div>').join(''));
 o.onclick=e=>{const b=e.target.closest('button[data-a]');if(!b)return;const d=b.closest('.vf'),f=L[+d.dataset.i];
 if(b.dataset.a=='1'){if(f.a()===!1){toast('💰 Dinheiro insuficiente');return}ac++;sfx(880,.12,.04)}else sfx(300,.08,.03);
 d.querySelector('.eo').outerHTML='<span class="'+(b.dataset.a=='1'?'g':'c')+'">'+(b.dataset.a=='1'?'✔ Oferta aceita':'✖ Oferta recusada')+'</span>';
 if(--n==0)setTimeout(()=>vEnd('📨 OFERTAS RESPONDIDAS',ac?ac+' oferta(s) aceita(s).':'Você recusou todas.',1),500)}}
+/* ===== VIDA NO ESCRITÓRIO ===== */
+const amb={on:0,cd:10,p:[],k:'',ph:'',t:0,n:0,N:0,say:[]};
+const AMBC=['Preciso de café ☕','Sem café não compila','Só mais um cafezinho...','Café é combustível!','Café ou deploy?'];
+const AMBT=[['Funciona na minha máquina','Mas não na produção 😅'],['Quem apagou o deploy?','Não fui eu!'],['Você testou?','Testei... em produção'],['Reunião de novo?','Podia ser um e-mail'],['Ctrl+Z resolve tudo?','Menos a segunda-feira'],['Commitei na main...','Chama o chefe 😱'],['Esse código é seu?','Eu... não lembro 😬']];
+const SB1=['Chefe, deu ruim no código!','Tem bug na produção! 🐛','Funcionava na minha máquina...'],SB2=['Chegaram ofertas, chefe!','Olha o que me mandaram 👀','Tenho propostas pra você!'];
+const SB=[0,1,2].map(()=>{const d=document.createElement('div');d.className='sb';d.hidden=true;$('cw').appendChild(d);return d});
+function sbSet(n,x,y,t){const d=SB[n];if(t==null){d.hidden=true;return}if(d.textContent!==t)d.textContent=t;d.hidden=false;d.style.left=(x/W*100).toFixed(1)+'%';d.style.top=(y/H*100).toFixed(1)+'%'}
+function wk(o,tx,dt,sp){sp=sp||20;const d=tx-o.x;if(Math.abs(d)<=.6){o.mv=0;o.v=0;return 1}o.v=Math.min(sp,(o.v||0)+50*dt);const v=Math.min(o.v,Math.max(5,Math.abs(d)*3.5));o.x+=Math.sign(d)*Math.min(Math.abs(d),v*dt);o.dr=d>0?1:-1;o.mv=1;return 0}
+function ambStart(){const N=nFl(),L=[];crew.forEach((c,i)=>{const sl=i/N|0;if(sl<=4&&!(has('x1')&&sl==4&&i%N==N-1))L.push(i)});if(!L.length)return;
+const mk=i=>({i,fl:i%N,hx:20+(i/N|0)*21,x:20+(i/N|0)*21,dr:1,mv:0});let pr=null;
+if(rnd(100)<40){const sh=[];L.forEach(a=>L.forEach(b=>{if(a<b&&a%N==b%N)sh.push([a,b])}));if(sh.length)pr=sh[rnd(sh.length)]}
+if(pr){const[A,B]=pr.map(mk),m=(A.x+B.x)/2;A.tx=m-5;B.tx=m+5;Object.assign(amb,{k:'t',say:AMBT[rnd(AMBT.length)],p:[A,B]})}
+else{const A=mk(L[rnd(L.length)]);A.tx=105;Object.assign(amb,{k:'c',say:[AMBC[rnd(AMBC.length)]],p:[A]})}
+Object.assign(amb,{on:1,ph:'stand',s:0,N,n:crew.length})}
+function ambUpd(dt){
+if(!amb.on){if(document.hidden||view||vis.on||!crew.length)return;if((amb.cd-=dt)<=0)ambStart();return}
+if(view||vis.on||nFl()!=amb.N||crew.length!=amb.n){amb.on=0;amb.cd=8;return}
+if(amb.ph=='stand'){amb.s=Math.min(1,amb.s+dt/.8);if(amb.s>=1)amb.ph='go';return}
+if(amb.ph=='sit'){amb.s-=dt/.8;if(amb.s<=0){amb.on=0;amb.cd=10+rnd(15)}return}
+if(amb.ph=='stay'){if((amb.t-=dt)<=0)amb.ph='back';return}
+const go=amb.ph=='go';let all=1;amb.p.forEach(q=>{if(!wk(q,go?q.tx:q.hx,dt))all=0});
+if(all){if(go){amb.ph='stay';amb.t=amb.k=='t'?7:7.5}else{amb.ph='sit';amb.s=1}}}
+function cofDraw(T){const N=nFl(),a=amb.on&&amb.k=='c'&&amb.ph=='stay'&&amb.t>4.5?amb.p[0]:null;
+for(let f=0;f<N;f++){const y=Math.round(fy(f)),u=a&&a.fl==f;
+R(111,y-13,9,13,'#3a3f5e');R(111,y-13,9,2,'#2b2f4a');R(112,y-10,3,2,u&&((T/200|0)%2)?'#ff9a3c':'#3ee0a0');R(116,y-10,2,1,'#c9ced9');R(116,y-8,2,1,'#c9ced9');R(113,y-7,3,1,'#14162a');R(112,y-2,6,1,'#14162a');R(111,y-1,9,1,'#2b2f4a');
+if(u){const fl=Math.min(3,Math.floor(7.5-amb.t));R(113,y-5,3,3,'#e8e8e8');R(113,y-3-fl,3,fl,'#6b4423');R(114,y-6,1,2,'#6b4423')}}}
+function ambDraw(T){if(!view)cofDraw(T);if(!amb.on){sbSet(0);sbSet(1);return}
+const st=amb.ph=='stay',sit=amb.ph=='stand'||amb.ph=='sit',as=amb.s;amb.p.forEach((q,k)=>{const c=crew[q.i];if(!c)return;const y=fy(q.fl)-3,fr=!st&&q.mv?((T/210)|0)%2:0,dr=st?(amb.k=='t'&&k?-1:1):q.dr;
+if(!sit)R(q.x-3,y,7,1,'rgba(0,0,0,.3)');person(sit?q.x-2*(1-as):q.x,sit?y-5+5*as:y,c.sk,SHIRT[c.i],'#2b2f4a',sit?0:fr,HAIR[c.i%4],c.hs,sit?1:dr,c.ou,c.ac,0);
+if(amb.k=='c'&&((st&&amb.t<=4.5)||amb.ph=='back')){const up=st&&amb.t<3.8&&((T/900|0)%2),cy=up?y-14:y-9,cx=q.x+(dr>0?3:-5);R(cx,cy,3,3,'#fff');R(cx,cy,3,1,'#6b4423');R(cx+1,cy-3-((T/300|0)%2),1,2,'#cfd6ff')}
+const sp=st?(amb.k=='t'?(amb.t>3.5?0:1):0):-1;sbSet(k,Math.min(122,Math.max(38,q.x)),y-26,sp==k?(amb.k=='c'&&amb.t>4.5?'☕ Preparando o café...':amb.say[amb.k=='t'?k:0]):null)});
+if(amb.p.length<2)sbSet(1)}
 function elkPos(){const y=Math.min(122,Math.round(fy(view?0:Math.max(-.6,elv.lv))-14));if(y!==elkY){elkY=y;elk.style.top=(y/H*100).toFixed(2)+'%'}}
 function drawMe(T){if(has('x3')){g.globalAlpha=.18;R(me.x-6,me.y-17,13,17,'#ffd23f');g.globalAlpha=1;for(let q=0;q<4;q++){const a=T/300+q*1.57;R(me.x+Math.cos(a)*8,me.y-8+Math.sin(a)*7,1,1,q%2?'#fff6b0':'#ffd23f')}}if(T<me.mk&&((T/120)|0)%2){R(me.tx-2,me.ty+1,5,1,'#ffd23f');R(me.tx-1,me.ty+2,3,1,'#ffd23f')}
 const mv=me.d>0,fr=mv?((T/130)|0)%2:(kf>0?((T/70)|0)%2:0);R(me.x-3,me.y,7,1,'rgba(0,0,0,.3)');
@@ -995,7 +1061,7 @@ for(let f=0;f<N;f++)room(f,ni,T,k);
 R(5,gy0-3,116,3,dn(STN[k][1],ni));R(5,gy0-3,116,1,dn(STN[k][0],ni));
 R(100,gy0+2,3,6,'#e03030');R(99,gy0+2,5,1,'#ff6a5a');R(100,gy0+1,3,1,'#b02020');R(46,gy0+2,5,6,dn('#59607a',ni,.6));R(45,gy0+2,7,1,dn('#7a82a0',ni,.6));
 crew.forEach((c,idx)=>{const sl=idx/N|0;if(sl>4||(has('x1')&&sl==4&&idx%N==N-1))return;const x=20+sl*21,y=fy(idx%N),fr=((T/280+c.sd)|0)%2;
-if(!(vis.on&&vis.idx===idx&&vis.ph!='recall'))person(x-2,y-8,c.sk,SHIRT[c.i],'#2b2f4a',fr,HAIR[c.i%4],c.hs,1,c.ou,c.ac,0);desk(x,y,T,idx,0)});
+if(!(vis.on&&vis.idx===idx&&vis.ph!='recall')&&!(amb.on&&amb.p.some(q=>q.i===idx)))person(x-2,y-8,c.sk,SHIRT[c.i],'#2b2f4a',fr,HAIR[c.i%4],c.hs,1,c.ou,c.ac,0);desk(x,y,T,idx,0)});
 drawLegend(T,N);roof(k,bt,T,ni);elev(T,ni);
 if(!view&&lvl()>=50&&(s.bd||0)===1&&(!bossFight||bossFight.i===1)){
  const bf=nFl()-1,by=fy(bf);
@@ -1006,14 +1072,14 @@ if(!view&&lvl()>=50&&(s.bd||0)===1&&(!bossFight||bossFight.i===1)){
   R(83,by-31,22,5,'rgba(0,0,0,.72)');g.fillStyle='#ffd23f';g.font='4px monospace';g.fillText('BOSS',85,by-27);
  }
 }
-visDraw(T);pers(T);elevDoors();zDraw(T);
+visDraw(T);ambDraw(T);pers(T);elevDoors();zDraw(T);
 bugs.forEach(b=>bugSp(b,T));if(star)starSp(star.x,star.y,T);
 P.forEach(p=>{g.globalAlpha=Math.max(0,p.l/p.m);if(p.k){R(p.x,p.y,3,3,'#ffd23f');R(p.x+1,p.y,1,1,'#fff6b0')}else R(p.x,p.y,p.s,p.h||p.s,p.c)});g.globalAlpha=1;
 if(flash>0){g.globalAlpha=Math.min(1,flash);R(0,0,W,H,'#fff');g.globalAlpha=1;flash=Math.max(0,flash-dt*3)}}
 function upd(dt){const T=Date.now();kf=Math.max(0,kf-dt);
 {const VIS=4,Nf=nFl(),vf=view?0:(elv.busy?elv.lv:Math.max(me.f,0)),ct=Nf>VIS?Math.min(Math.max(vf-(VIS-2),0),Nf-VIS):0;camF+=(ct-camF)*Math.min(1,dt*4)}
 if(view)bugs.forEach(b=>b.e+=dt*1e3);
-elevUpd(dt);visUpd(dt);
+elevUpd(dt);visUpd(dt);ambUpd(dt);
 pet.x+=(petT()-pet.x)*Math.min(1,dt*3.5);
 const mdx=me.tx-me.x,mdy=me.ty-me.y,md=Math.hypot(mdx,mdy);
 if(md>.8){const st=Math.min(md,(elv.busy?64:42)*dt);me.x+=mdx/md*st;me.y+=mdy/md*st;if(Math.abs(mdx)>.5)me.dr=mdx>0?1:-1;me.d=md;me.dust=(me.dust||0)+dt;if(me.dust>.12){me.dust=0;P.push({x:me.x-me.dr*2,y:me.y,vx:-me.dr*4,vy:-6,g:0,l:.3,m:.3,s:1,c:'#cfd3e6'})}}else me.d=0;
