@@ -443,7 +443,7 @@ if(!s.v){s.v=2;s.dk=1}
 let bakT=0,rankSyncTimer=null;const save=()=>{if(reset)return;if(![s.m,s.c,s.tot].every(Number.isFinite))return;s.ts=Date.now();try{const pv=localStorage.getItem(K);if(pv&&pv[0]=='{'&&Date.now()-bakT>6e4){localStorage.setItem(K+'_bak',pv);bakT=Date.now()}localStorage.setItem(K,JSON.stringify(s))}catch(e){};if(rankSyncTimer)clearTimeout(rankSyncTimer);rankSyncTimer=setTimeout(()=>{if(A){cloud();push()}},5000)};
 /* ===== CÁLCULOS ===== */
 const has=id=>(s.own||[]).includes(id),mil=n=>{let m=1;[10,25,50,100].forEach(t=>{if(n>=t)m*=1.35});return m},nxm=n=>[10,25,50,100].find(t=>n<t)||0;
-const cost=(b,n)=>Math.ceil(b*Math.pow(1.23,n)),bonus=()=>(1+s.t.length*.015)*(1+s.sh*.05)*(1+(s.bd?.25:0))*(has('u3')?1.25:1)*(has('x2')?1.1:1)*(1+Math.max(0,s.world.countries.length-1)*.04);
+const cost=(b,n)=>Math.ceil(b*Math.pow(1.23,n)),bonus=()=>(1+s.t.length*.015)*(1+s.sh*.05)*(1+(s.bd?.25:0))*(has('u3')?1.25:1)*(has('x2')?1.1:1)*(1+Math.max(0,s.world.countries.length-1)*.04)*petB();
 const fm=p=>{const n=Date.now();let r=1;for(const f of fx)if(f.u>n)r*=f[p];return r};
 const DEPTS=[{id:'dev',ic:'💻',name:'Desenvolvimento',desc:'A equipe programa com mais eficiência.',unlock:0,base:2500,rate:.025,kind:'c',cap:30},{id:'mkt',ic:'📣',name:'Marketing',desc:'Seus aplicativos atraem mais usuários.',unlock:1,base:12000,rate:.025,kind:'m',cap:30},{id:'res',ic:'🔬',name:'Pesquisa',desc:'Pesquisa melhora toda a produção.',unlock:2,base:80000,rate:.015,kind:'all',cap:30},{id:'fin',ic:'💰',name:'Financeiro',desc:'Melhora a eficiência da empresa.',unlock:3,base:350000,rate:.012,kind:'all',cap:25},{id:'sec',ic:'🛡️',name:'Segurança',desc:'Fortalece a infraestrutura da empresa.',unlock:4,base:1800000,rate:.012,kind:'all',cap:25},{id:'ai',ic:'🤖',name:'Inteligência Artificial',desc:'Automatiza processos e amplia a produção.',unlock:5,base:12000000,rate:.02,kind:'all',cap:25}];
 const deptMult=k=>DEPTS.reduce((v,d)=>{const n=s.dp[d.id]||0;return v*(d.kind===k||d.kind==='all'?1+n*d.rate:1)},1);
@@ -1586,6 +1586,59 @@ RESEARCH.forEach(r=>{if(!researched(r.id)&&stg()>=r.unlock&&r.pre.every(research
 WORLD.forEach(c=>{if(!s.world.countries.includes(c.id)&&(!c.requires||s.world.countries.includes(c.requires))&&s.m>=c.cost){n.add('w'+c.id);nm['w'+c.id]='🌐 '+c.name}});
 const nw=aff?[...n].filter(k=>!aff.has(k)):[];aff=n;
 if(nw.length&&Date.now()-affT>3e4&&s.tot>=100){affT=Date.now();toast('🛒 Disponível: '+nm[nw[0]]+(nw.length>1?' (+'+(nw.length-1)+')':''))}},2500);
+/* ===== LOJA DO DIA, TROFÉUS SECRETOS E MASCOTES ===== */
+var PETD=[['Gatinho Dev','🐱','Comum',.02,'#ffb86b'],['Pinguim Linux','🐧','Comum',.02,'#4a5a7a'],['Raposa Cloud','🦊','Raro',.04,'#ff7a3c'],['Coruja Sênior','🦉','Raro',.04,'#b08968'],['Dragão Binário','🐉','Épico',.07,'#3ee0a0'],['Fênix Quântica','🔥','Lendário',.12,'#ff4d6d']];
+function petB(){const e=s.pet&&s.pet.eq;return PETD&&e>=0&&PETD[e]?1+PETD[e][3]:1}
+const pe=()=>{if(!s.pet||!Array.isArray(s.pet.own))s.pet={own:[],eq:-1};s.pet.own=[...new Set(s.pet.own.map(Number).filter(i=>Number.isInteger(i)&&i>=0&&i<PETD.length))];if(!s.pet.own.includes(s.pet.eq))s.pet.eq=-1;if(!Array.isArray(s.sec))s.sec=[]};pe();
+const _dp=drawPet;drawPet=function(T){_dp.apply(this,arguments);drawMascot(T)};
+function drawMascot(T){const k=s.pet&&s.pet.eq,P=PETD[k];if(!P)return;const dir=me.dr>0?1:-1,x=Math.round(pet.x)-dir*(has('x2')?10:12),y=Math.round(me.y)-2+Math.round(Math.sin(T/260)*1.2),c=P[4];
+R(x-3,me.y,7,1,'rgba(0,0,0,.25)');R(x-3,y-6,7,5,c);R(x-2,y-7,5,1,c);
+if(k==0||k==2){R(x-3,y-8,1,2,c);R(x+3,y-8,1,2,c)}
+if(k==1){R(x-1,y-4,3,3,'#fff');R(x-3,y-6,7,1,'#1b1530')}
+if(k==3)R(x-3,y-6,7,1,'#6b4a35');
+if(k==4){R(x-3,y-9,1,2,'#ffd23f');R(x+3,y-9,1,2,'#ffd23f');R(x-5,y-5,2,2,'#2bb584')}
+if(k==5){R(x-1,y-10,1,3,'#ffd23f');R(x+1,y-9,1,2,'#ff9a3c');R(x-5,y-5,2,2,'#ffd23f');R(x+4,y-5,2,2,'#ffd23f')}
+if(k==2)R(x-dir*4,y-3,2,2,'#fff');
+R(x-2,y-5,1,1,'#1b1530');R(x+1,y-5,1,1,'#1b1530')}
+function hatch(){pe();if(s.dm<30){toast('💎 Precisa de 30 diamantes');return}s.dm-=30;const r=Math.random()*100,pool=r<60?[0,1]:r<90?[2,3]:r<99?[4]:[5],id=pool[rnd(pool.length)];let m;
+if(s.pet.own.includes(id)){s.dm+=10;m='Repetido! Devolvemos 💎 10'}else{s.pet.own.push(id);if(s.pet.eq<0)s.pet.eq=id;m='Novo mascote: '+PETD[id][1]+' '+PETD[id][0]+'!'}
+save();cloud();head();shopDraw();toast(m);sfx(880,.15);burst(100,40,['#ffd23f','#fff','#4cc9f0'],24,70)}
+function petHtml(){pe();return '<div class="foot" style="margin:14px 0 6px;color:var(--blue)">🐾 MASCOTES · o equipado te segue e dá bônus de produção</div><div class="it pxc"><div class="ic">'+ico('🥚')+'</div><div class="in"><b>Ovo misterioso</b><small>Comum 60% · Raro 30% · Épico 9% · Lendário 1%</small></div><button class="bt" data-egg="1" '+(s.dm<30?'disabled':'')+'>💎 30</button></div>'+PETD.map((p,i)=>{const o=s.pet.own.includes(i);return '<div class="it pxc '+(o?'':'lock')+'"><div class="ic">'+ico(o?p[1]:'🔒')+'</div><div class="in"><b>'+(o?p[0]:'???')+'</b><small>'+p[2]+' · +'+Math.round(p[3]*100)+'% de produção</small></div><button class="bt sm" data-pet="'+i+'" '+(o?'':'disabled')+'>'+(s.pet.eq===i?'TIRAR':'USAR')+'</button></div>'}).join('')}
+const dealRoll=()=>{const k=dkey(new Date());if(!s.dl||s.dl.k!==k||!Array.isArray(s.dl.b))s.dl={k,b:[]}};
+function dealsFor(){let h=0;for(const c of dkey(new Date()))h=(h*31+c.charCodeAt(0))>>>0;const L=SHOP.slice(),o=[];for(let i=0;i<3;i++){h=(h*1664525+1013904223)>>>0;o.push([L.splice(h%L.length,1)[0],[.3,.4,.5][i]])}return o}
+function dealsHtml(){dealRoll();return '<div class="foot" style="margin:10px 0 6px;color:var(--gold)">🔥 OFERTAS DO DIA · renovam à meia-noite</div>'+dealsFor().map(([it,d])=>{const cl='oak'.includes(it[1]),bought=s.dl.b.includes(it[0]),own=it[1]!='b'&&has(it[0]),p=Math.max(1,Math.round(it[5]*(1-d)));
+return '<div class="it pxc ex"><div class="ic">'+ico(it[2])+'</div><div class="in"><b>'+it[3]+' <span style="color:var(--green)">-'+Math.round(d*100)+'%</span></b><small>'+it[4]+'</small><span class="st"><s>💎 '+fmt(it[5])+'</s> → 💎 '+fmt(p)+'</span></div><button class="bt" data-deal="'+it[0]+'" data-d="'+d+'" '+(bought||own||s.dm<p?'disabled':'')+'>'+(bought?'COMPRADO':own?'JÁ TEM':'💎 '+fmt(p))+'</button></div>'}).join('')}
+function dealBuy(id,d){const it=SHOP.find(q=>q[0]==id);if(!it)return;dealRoll();if(s.dl.b.includes(id)||!dealsFor().some(x=>x[0][0]==id&&x[1]==d)||(it[1]!='b'&&has(id)))return;
+const o=it[5],p=Math.max(1,Math.round(o*(1-d)));if(s.dm<p)return;it[5]=p;const b4=s.dm;try{shopBuy(id)}finally{it[5]=o}if(s.dm<b4){s.dl.b.push(id);save();shopDraw()}}
+const _sd=shopDraw;shopDraw=function(){_sd.apply(this,arguments);const e=$('shop');e.insertAdjacentHTML('afterbegin',dealsHtml());e.insertAdjacentHTML('beforeend',petHtml())};
+$('shop').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;
+if(b.dataset.deal)dealBuy(b.dataset.deal,+b.dataset.d);else if(b.dataset.egg)hatch();
+else if(b.dataset.pet!=null){const i=+b.dataset.pet;pe();if(s.pet.own.includes(i)){s.pet.eq=s.pet.eq===i?-1:i;save();head();shopDraw();sfx(500,.06)}}});
+const SECT=[['🦉','Coruja da Madrugada','Jogue entre 3h e 5h da manhã',()=>{const h=new Date().getHours();return h>=3&&h<5}],['⏳','Sem Vida Social','Acumule 10 horas de jogo',()=>(s.pt||0)>=36e3],['🧭','Cidadão do Mundo','Conquiste 10 países',()=>s.world.countries.length>=10],['🪲','Exterminador','Esmague 500 bugs',()=>s.bg>=500],['🖥️','Setup Completo','Compre todos os equipamentos',()=>s.q.every(Boolean)],['🐾','Domador','Tenha 4 mascotes',()=>s.pet.own.length>=4]];
+function secDraw(){pe();$('achs').insertAdjacentHTML('beforeend','<div class="foot" style="margin:14px 0 6px;color:var(--gold)">🕵️ TROFÉUS SECRETOS · '+s.sec.length+'/'+SECT.length+'</div>'+SECT.map((t,i)=>{const o=s.sec.includes(i);return '<div class="it pxc '+(o?'ach on':'lock')+'"><div class="ic">'+ico(o?t[0]:'❓')+'</div><div class="in"><b>'+(o?t[1]:'???')+'</b><small>'+(o?t[2]:'Troféu secreto: descubra jogando')+'</small></div></div>'}).join(''))}
+const _d3=draw;draw=function(){const r=_d3.apply(this,arguments);if(tab=='achs')secDraw();return r};
+setInterval(()=>{if(document.hidden||reset)return;pe();SECT.forEach((t,i)=>{if(!s.sec.includes(i)&&t[3]()){s.sec.push(i);s.dm+=2;toast('🕵️ Troféu secreto: '+t[1]+' · +2 💎');sfx(700,.2);save();if(tab=='achs')draw()}})},3000);
+/* ===== CONVITE COM RECOMPENSA ===== */
+let REF=null,refBusy=0,refErr=0;
+try{const u=new URL(location.href),c=u.searchParams.get('ref');if(c&&/^[A-Za-z0-9]{4,12}$/.test(c)){localStorage.setItem('gt_ref',c.toUpperCase());u.searchParams.delete('ref');history.replaceState(null,'',u.pathname+u.search+u.hash)}}catch(e){}
+async function refUse(code){code=String(code||'').trim().toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,8);if(!A||!code||s.rf)return;
+try{const r=await rpc('use_referral',{p_code:code}),M={invalid:'Código de convite inválido',self:'Você não pode usar o próprio código',used:'Você já usou um convite',old:'Convites valem só para contas novas (até 7 dias)',full:'Esse convite atingiu o limite'};
+if(r==='ok'){s.rf=1;s.dm+=10;save();cloud();head();toast('🎁 Convite aceito! +10 💎');if(tab==='friends')friendsDraw()}else{if(r==='used')s.rf=1;toast(M[r]||'Não foi possível usar o convite')}
+localStorage.removeItem('gt_ref')}catch(e){refErr=1}}
+async function refClaim(){if(!A||refErr||document.hidden)return;try{const n=await rpc('claim_referral_rewards');if(n>0){REF=null;s.dm+=10*n;save();cloud();head();toast('🎁 '+n+' amigo(s) entrou(ram) pelo seu convite! +'+10*n+' 💎')}}catch(e){refErr=1}}
+async function refLoad(){if(REF||refBusy)return;refBusy=1;try{REF=await rpc('my_referral')}catch(e){REF={err:1}}refBusy=0;if(tab==='friends')friendsDraw()}
+function refBox(){const el=$('friends');if(!el)return;let h;
+if(refErr||(REF&&REF.err))h='<p>Convites indisponíveis no momento.</p>';
+else if(!REF){h='<p>Carregando…</p>';refLoad()}
+else{const L=location.origin+location.pathname+'?ref='+REF.code;h='<p>Cada amigo que entrar com o seu link rende <b>💎 10</b> para você e para ele (até 20 convites).</p><div class="friend-search"><input id="rfLink" readonly value="'+esc(L)+'"><button id="rfCopy">COPIAR</button></div><div class="fr-empty">Amigos que entraram: <b>'+(+REF.count||0)+'</b> · Seu código: <b>'+esc(REF.code)+'</b></div>'}
+if(!s.rf)h+='<div class="friend-search"><input id="rfIn" maxlength="8" placeholder="Tem um código? Digite aqui"><button id="rfUse">USAR</button></div>';
+el.insertAdjacentHTML('afterbegin','<div class="friend-box pxc"><h3>🎁 CONVIDE AMIGOS</h3>'+h+'</div>')}
+const _fd=friendsDraw;friendsDraw=function(){_fd.apply(this,arguments);if(A)refBox()};
+$('friends').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;
+if(b.id==='rfCopy'){const l=$('rfLink').value;(navigator.clipboard?navigator.clipboard.writeText(l):Promise.reject()).then(()=>toast('🔗 Link copiado!')).catch(()=>{$('rfLink').select();toast('Selecione e copie o link')})}
+else if(b.id==='rfUse')refUse($('rfIn').value)});
+setInterval(()=>{if(A&&!s.rf&&!refErr){const c=localStorage.getItem('gt_ref');if(c)refUse(c)}},6000);
+setTimeout(refClaim,8000);setInterval(refClaim,6e4);
 })();
 </script>
 </body>
