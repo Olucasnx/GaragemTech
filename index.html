@@ -641,10 +641,10 @@ $('cv').textContent='+'+fmt(cv())+' código por clique';
 const L=fx.filter(f=>f.u>T);fx=L;const n2=v=>+v.toFixed(2);
 setH($('fxs'),L.map(f=>'<span class="chip '+(f.m<1||f.c<1?'bad':'')+'">'+f.ic+' '+f.nm+' '+(f.m==f.c?'x'+n2(f.m):'💰x'+n2(f.m)+' 💻x'+n2(f.c))+' '+Math.ceil((f.u-T)/1000)+'s</span>').join(''));
 const hr=Math.ceil((s.hkt-T)/1000),hb=$('hk');hb.disabled=hr>0;setH(hb,ico('☕')+'<span>'+(hr>0?hr+'s':'HACK')+'</span>');
-const NF=nFl();if(!elv.busy&&me.f>NF-1)me.f=Math.max(0,NF-1);const bz=!!elv.busy,uu=$('elu'),dd=$('eld'),lk=(me.f==0&&!unl())||(me.f==-1&&(s.bd||0)<1)||(me.f==-2&&lvl()<75);
-const go=bz&&elv.ph=='go',fl=go?(elv.lv<-.9?-2:elv.lv<-.3?-1:Math.round(elv.lv)):me.f;
+const NF=nFl();if(!elv.busy&&me.f>NF-1)me.f=Math.max(0,NF-1);const bz=!!elv.busy,uu=$('elu'),dd=$('eld'),lk=(me.f==0&&!unl())||(me.f==-1&&(s.bd||0)<1)||(me.f==-2&&(lvl()<75||(s.bd||0)<2));
+const go=bz&&elv.ph=='go',fl=go?(elv.lv<-1.5?-3:elv.lv<-.9?-2:elv.lv<-.3?-1:Math.round(elv.lv)):me.f;
 setH($('elt'),(go?'<i>'+(elv.dir>0?'▲':'▼')+'</i>':'')+(fl<0?'S'+(-fl):fl==0?'T':fl+1));$('elt').classList.toggle('mv',go);
-uu.disabled=bz||me.f>=NF-1;dd.disabled=bz||me.f<-2;
+uu.disabled=bz||me.f>=NF-1;dd.disabled=bz||me.f<=-3;
 uu.hidden=bz;dd.hidden=bz;
 uu.classList.toggle('on',bz&&elv.dir>0);dd.classList.toggle('on',bz&&elv.dir<0);dd.classList.toggle('lk',lk&&!bz)}
 /* ===== CENA PIXEL ART ===== */
@@ -736,7 +736,7 @@ for(let f=0;f<L;f++){R(x+w,fy(f)-9,2,3,Math.abs(elv.lv-f)<.15?'#3ee0a0':'#46506e
 const cy=Math.round(fy(Math.max(-1.2,elv.lv)))-CH;
 R(x+10,top,1,cy-top,'#8a8fa8');cabBack(x+2,cy);
 R(x+2,top-3,16,3,'#5a5f7a');blink(x+8,top-5,T);g.restore()}
-let view=0,bhit=0,camF=0;const elv={lv:0,to:0,busy:0,ph:'',dr:0,dt:0,cw:0,dir:1,from:0},unl=()=>Math.max(s.mxl||0,lvl())>=25,RX=i=>38+i*14,flN=f=>f===-2?'SUBTERRÂNEO 2':f===-1?'SUBTERRÂNEO 1':f==0?'TÉRREO':'ANDAR '+(f+1);
+let view=0,bhit=0,camF=0;const elv={lv:0,to:0,busy:0,ph:'',dr:0,dt:0,cw:0,dir:1,from:0},unl=()=>Math.max(s.mxl||0,lvl())>=25,RX=i=>38+i*14,flN=f=>f===-3?'SUBTERRÂNEO 3':f===-2?'SUBTERRÂNEO 2':f===-1?'SUBTERRÂNEO 1':f==0?'TÉRREO':'ANDAR '+(f+1);
 const DIG=['010110010010111','111001111100111','111001111001111','101101111001001','111100111001111'];
 const elvHit=(x,y)=>x>=119&&y>=(view?GY-64:fy(Math.max(nFl(),2))-8)&&y<=fy(0)+4;
 function faces(ctx,k){const o=g;g=ctx;ctx.setTransform(1,0,0,1,0,0);ctx.clearRect(0,0,24,24);ctx.setTransform(2,0,0,2,0,0);
@@ -871,12 +871,15 @@ function mgDone(i){if(s.mg[i])return;s.mg[i]=1;if(sum(s.mg)%5===0)s.dm+=1;bhit=D
 function bossDown(){dialog([['M','NÃOOO! Meu plano... destruído por uma simples empresa de garagem?!'],['L','Conseguimos! Os dados do mundo estão salvos, graças a você!'],['L','Como recompensa, instalei um servidor quântico na sua empresa: +25% de produção para sempre!']],()=>{s.bd=1;s.dm+=5;gain(Math.max(1000,mps()*900));burst(80,50,['#ffd23f','#fff','#3ee0a0','#4cc9f0'],50,100);flash=.9;sfx(988,.4);save();cloud();push()})}
 function subClick(x,y){y-=GY-92;if(y>64&&x<32){talkLucas();return 1}
 for(let i=0;i<5;i++)if(x>=RX(i)-2&&x<=RX(i)+13&&y>=56&&y<=93){me.tx=RX(i)+5;me.ty=fy(0)-3;if(!s.lu)talkLucas();else if(s.mg[i])toast('✅ Servidor '+(i+1)+' já restaurado');else playMG(i);return 1}return 0}
-function ride(t){if(elv.busy)return;if(vis.on){toast('🛗 Elevador em uso por um dev');sfx(200,.15,.04,'sawtooth');return}const N=nFl();if(t>N-1||t<-2||t==me.f)return;
+function ride(t){if(elv.busy)return;if(vis.on){toast('🛗 Elevador em uso por um dev');sfx(200,.15,.04,'sawtooth');return}const N=nFl();if(t>N-1||t<-3||t==me.f)return;
 if(t==-2&&(s.bd||0)<1){toast('🔒 Derrote o Mr. Malware para liberar o Subterrâneo 2');return}
+if(t==-3&&lvl()<75){toast('🔒 O Subterrâneo 3 abre no Nível 75! Seu nível: '+lvl());sfx(200,.2,.05,'sawtooth');return}
+if(t==-3&&(s.bd||0)<2){toast('🔒 Derrote o Dr. Lucas para liberar o Subterrâneo 3');return}
 if(t==-1&&!unl()){toast('🔒 O Subterrâneo abre no Nível 25! Seu nível: '+lvl());sfx(200,.2,.05,'sawtooth');return}
 elv.busy=1;elv.to=t;elv.ph='in';elv.dir=t>me.f?1:-1;me.tx=DX;me.ty=fy(Math.max(me.f,0))-3;me.mk=0;sfx(330,.15)}
 function arrive(){const t=elv.to;me.f=t;if(t==-1){view=1;flash=.9;elv.lv=-.6;if(!s.lu)setTimeout(talkLucas,800)}
 else if(t==-2){view=2;flash=.9;elv.lv=-1.2}
+else if(t==-3){view=3;flash=.9;elv.lv=-1.8}
 else {view=0;elv.lv=t;}me.x=me.tx=pet.x=DX;me.y=me.ty=fy(Math.max(t,0))-3;me.d=0;me.dr=-1;elv.ph='open';elv.dt=1;sfx(660,.15);setTimeout(()=>sfx(1046,.2,.035,'sine'),130)}
 const CH=26,DX=130,elk=$('elk');let elkY=-1;
 const hid=()=>elv.busy&&(elv.ph=='go'||((elv.ph=='close'||elv.ph=='open')&&elv.dr<.2)),pers=T=>{if(!hid()){drawPet(T);drawMe(T)}},petT=()=>!elv.busy?me.x-me.dr*10:(elv.ph=='in'||elv.ph=='close')?DX:Math.min(me.x-me.dr*10,DX);
@@ -891,7 +894,7 @@ function elevUpd(dt){const d=elv.dt-elv.dr;elv.dr+=Math.sign(d)*Math.min(Math.ab
 if(!elv.busy){if(vis.on)return;if(elv.dt>0&&(elv.cw-=dt)<=0)elv.dt=0;elv.lv=Math.max(0,Math.min(me.f,nFl()-1));return}
 const near=Math.hypot(me.tx-me.x,me.ty-me.y)<=.8,p=elv.ph;
 if(p=='in'){const w=me.x>DX-30?1:0;if(w&&!elv.dt)sfx(1046,.18,.035,'sine');elv.dt=w;if(near&&elv.dr>.95){elv.ph='close';elv.dt=0;me.dr=-1;sfx(520,.08,.03)}}
-else if(p=='close'){if(elv.dr<=.01){elv.dr=0;elv.ph='go';if(me.f<0){if(elv.to>=0){view=0;flash=.5}elv.lv=me.f===-2?-1.2:-.6}else elv.lv=me.f;elv.from=elv.lv;sfx(330,.15)}}
+else if(p=='close'){if(elv.dr<=.01){elv.dr=0;elv.ph='go';if(me.f<0){if(elv.to>=0){view=0;flash=.5}elv.lv=me.f===-3?-1.8:me.f===-2?-1.2:-.6}else elv.lv=me.f;elv.from=elv.lv;sfx(330,.15)}}
 else if(p=='go'){const tg=elv.to<0?elv.to*.6:elv.to,df=tg-elv.lv,a=Math.abs(df),b=Math.abs(elv.lv-elv.from),sp=Math.min(2.8,.7+Math.min(a,b)*3.2)*dt;if(a<=sp){elv.lv=tg;arrive()}else{elv.lv+=Math.sign(df)*sp;me.tx=me.x=DX;me.ty=me.y=fy(elv.lv)-3}}
 else if(p=='open'){if(elv.dr>=.99){elv.dr=1;elv.ph='out';me.tx=108;me.ty=me.y}}
 else if(p=='out'){if(near){elv.busy=0;elv.ph='';elv.cw=.7}}}
@@ -1051,7 +1054,7 @@ function drawDeepSub(T,dt){
  if(flash>0){g.globalAlpha=Math.min(1,flash);R(0,0,W,H,'#fff');g.globalAlpha=1;flash=Math.max(0,flash-dt*3)}
 }
 
-function sub(T,dt){if(view===2){drawDeepSub(T,dt);return}const bx=80+Math.sin(T/700)*4,by=28+Math.sin(T/500)*2;
+function sub(T,dt){if(view===3){drawSkynet(T,dt);return}if(view===2){drawDeepSub(T,dt);return}const bx=80+Math.sin(T/700)*4,by=28+Math.sin(T/500)*2;
 R(0,0,W,H,'#0d0f20');g.save();g.translate(0,GY-92);for(let y=-40;y<92;y+=8)for(let x=((y/8)&1)*8;x<W;x+=16)R(x,y,15,7,'#14172e');
 R(0,-32,W,4,'#2a2e4a');R(0,-31,W,1,'#3d4366');R(0,86,W,24,'#2a2e4a');R(0,86,W,1,'#4a5075');for(let x=0;x<W;x+=16){R(x,92,8,1,'#1d2038');R(x+8,98,8,1,'#1d2038')}
 const lit=((T/900)|0)%9!=4;[30,80,120].forEach(x=>{R(x,-28,1,4,'#4a5075');R(x-6,-24,13,2,lit?'#ffe27a':'#7a6a40')});
@@ -1227,6 +1230,7 @@ if(!view&&lvl()>=50&&(s.bd||0)===1&&!bossFight){
  if(me.f===bf&&Math.hypot(x-91,y-by)<16){startBoss(1);return}
 }
 if(elvHit(x,y)){toast('🛗 Use os botões ▲ ▼ ao lado do elevador');sfx(400,.1);return}
+if(view===3){if(x>=34&&x<=126&&y>=18&&y<=118){if(bossFight)return;if((s.bd||0)>=3)toast('✅ SKYNET-X já foi derrotada!');else startBoss(2)}return}
 if(view===2){if(x>=58&&x<=100&&y>=55&&y<=110){if((s.bd||0)>=2)toast('✅ Dr. Lucas já foi derrotado!');else startBoss(1);return}return}
 if(view&&subClick(x,y))return;
 const fb=fy(Math.max(me.f,0));me.tx=Math.min(107,Math.max(18,x));me.ty=Math.min(fb-1,Math.max(fb-6,y));me.mk=Date.now()+900;sfx(420,.04,.02)});
@@ -1526,7 +1530,7 @@ function drawBoss(){const el=$('bossArea');if(!el)return;
 if(!bossFight){el.hidden=true;el.innerHTML='';el._sig=null;return}
 el.hidden=false;el.style.display='block';
 if(!bossFight.built){bossFight.built=1;const d=BOSS_DEFS[bossFight.i];el.innerHTML='<div class="boss-wrap"><div class="boss-h">'+bossIco(d)+'<b class="pf">'+d.nm+'</b></div><div class="boss-hp"><i></i></div><div class="boss-phase pf"></div><div class="boss-arena"></div><button class="bt" data-bx="1" style="margin-top:10px;width:100%;max-width:none;background:var(--tab);color:var(--ink)">FUGIR</button></div>';el._sig=null;nextBossPhase()}}
-function startBoss(i){const c=canFightBoss(i);if(!c.ok){toast(c.why);return}bossClear();bossFight={i,hp:BOSS_DEFS[i].hp,max:BOSS_DEFS[i].hp,ph:0,tm:[],lock:0,built:0};if(i===1){view=2;me.f=-2;me.x=me.tx=58;me.y=me.ty=105;me.mk=0} sfx(200,.3,.05,'sawtooth');drawBoss()}
+function startBoss(i){const c=canFightBoss(i);if(!c.ok){toast(c.why);return}bossClear();bossFight={i,hp:BOSS_DEFS[i].hp,max:BOSS_DEFS[i].hp,ph:0,tm:[],lock:0,built:0};if(i===1){view=2;me.f=-2;me.x=me.tx=58;me.y=me.ty=105;me.mk=0}if(i===2){view=3;me.f=-3;me.x=me.tx=108;me.y=me.ty=127;me.mk=0;flash=.9} sfx(200,.3,.05,'sawtooth');drawBoss()}
 function nextBossPhase(){const f=bossFight;if(!f)return;const d=BOSS_DEFS[f.i];if(f.ph>=d.ph.length||f.hp<=0){winBoss();return}
 const N={seq:'SEQUÊNCIA',timing:'TIMING',whack:'CAÇA-BUGS',mem:'MEMÓRIA',ref:'REFLEXO',odd:'INTRUSO'};$('bossArea').querySelector('.boss-phase').textContent='FASE '+(f.ph+1)+'/'+d.ph.length+' · '+N[d.ph[f.ph]];renderMiniGame()}
 function phaseEnd(ok){const f=bossFight;if(!f||f.lock)return;f.lock=1;bossClear();if(!ok){failBoss();return}const d=BOSS_DEFS[f.i],last=f.ph>=d.ph.length-1;damageBoss(last?f.hp:d.dmg[f.ph]);f.ph++;bT(f,setTimeout(nextBossPhase,700))}
@@ -1658,7 +1662,7 @@ bT(f,setInterval(()=>{if(f.lock)return;left-=.25;upd();if(left<=0)phaseEnd(0)},2
 let skAsked=0;
 setInterval(()=>{if(skAsked||bossFight||document.hidden||reset||document.querySelector('.ov:not([hidden])'))return;if(!canFightBoss(2).ok)return;skAsked=1;const first=!s.sk;s.sk=1;save();
 sfx(220,.3,.05,'sawtooth');setTimeout(()=>sfx(330,.3,.05,'sawtooth'),200);
-ask('🤖 SKYNET-X APARECEU!',(first?'Você alcançou o <b>nível 75</b>! ':'')+'A inteligência artificial SKYNET-X invadiu seus servidores. Derrote-a em 6 minigames seguidos para ganhar <b>+20% de produção para sempre</b>.<br><br>Se não for agora, ela volta a desafiar você na próxima vez que abrir o jogo.','ENFRENTAR',()=>startBoss(2))},4000);
+ask('🤖 SKYNET-X APARECEU!',(first?'Você alcançou o <b>nível 75</b>! ':'')+'A inteligência artificial SKYNET-X invadiu seus servidores e se escondeu no <b>Subterrâneo 3</b>. Derrote-a em 6 minigames seguidos para ganhar <b>+20% de produção para sempre</b>.<br><br>Se não for agora, ela volta a desafiar você na próxima vez que abrir o jogo.','ENFRENTAR',()=>startBoss(2))},4000);
 /* ===== VISITAR A EMPRESA DO AMIGO ===== */
 let vpT=0,vpErr=0;
 async function vpPush(){if(!A||reset||document.hidden||vpErr||Date.now()-vpT<45e3)return;vpT=Date.now();pe();
@@ -1716,11 +1720,82 @@ R(bx-26,by+18+bob,6,6,col);R(bx-27,by+24+bob,1,3,'#ff2d2d');R(bx-25,by+24+bob,1,
 R(bx+20,by+18-bob,6,6,col);R(bx+21,by+24-bob,1,3,'#ff2d2d');R(bx+23,by+24-bob,1,3,'#ff2d2d');R(bx+25,by+24-bob,1,3,'#ff2d2d');
 for(let q=0;q<6;q++)R(bx-18+((gl*7+q*37)%36),by+((q*13+gl*3)%38),3,1,q%2?'#3ee0a0':'#ff4d6d')}
 const _eld=$('eld').onclick;
-$('eld').onclick=()=>{if(me.f!==-2){_eld();return}if(elv.busy||bossFight)return;const c=canFightBoss(2);
-if(c.done)toast('✅ SKYNET-X já foi derrotada!');
-else if(lvl()<75){toast('🔒 O próximo chefão (SKYNET-X) abre no Nível 75! Seu nível: '+lvl());sfx(200,.2,.05,'sawtooth')}
-else if(!c.ok){toast(c.why);sfx(200,.2,.05,'sawtooth')}
-else startBoss(2)};
+/* ===== SUBTERRÂNEO 3 · SKYNET-X (CHEFÃO 3) ===== */
+const SKX={w:64,h:92,pal:["#0b0d1a", "#454d6a", "#2a3048", "#0a0c18", "#fff0a0", "#ffd23f", "#171b2c", "#b4bdd0", "#7a8399", "#ff6a74", "#d12a3c", "#4d566e", "#232a3c", "#8e1628", "#4a0c18", "#07080f", "#9fe8ff", "#4cc9f0", "#0e5f7a", "#6a7494"],rows:["....................ABCA................ABCA....................", "...................AACDA................ABDAA...................", "...................AEFCA................ACEFA...................", "..................AABCDA................ACCCAA..................", "..................ABGGDAA..............AACGGGA..................", ".................AACGGDGA..............ABGGGDAA.................", ".................ABDDDDDAAAAAAAAAAAAAAAACDDDDGA.................", ".............AAAAAAAAAAAHIIIIJKKKKKHHHHIAAAAAAAAAAA.............", "............AABCCA.AAAHILLMJKNNNNNNKKILLIIAAA.ABBCAA............", "...........AABGDAAAAHILLLMJNNNNNNNNOONILLLILAAAABGCAA...........", "...........ABGGDAAAHMMMMMMKOOOOOOOOOOOIMMMMMLAAACGGCA...........", "..........AACGDABBBBBBBBBBBCCCCCCCCCCCCCCCCCCCCCACGDAA..........", "..........ABGGDACDDDDDHDDDDDDDDDDDDDDDDDDDDDDDDDACGDGA..........", "..........ACGDAAAHHHHHHHHHHIIIIIIIIIIIIIIIIIIIIAAACDDA..........", "..........ACDAA.AHIBBBBBBBBBBBBBBBBBBBBBBBBBBLMA.AAGDA..........", "..........AAAA..AHLPPPBBBBBBBCCCCCCCCCCCCCPPPIMA..AAAA..........", "................AHBPPPPPPCDDGGGGGGGGDDDPPPPPPBIA................", "................AHBPPPPPPPPPCDDGGDDDPPPPPPPPPBLA................", "................AICPPPPPPPPPPPPCDPPPPPPPPPPPPCLA................", "................AICPPPPPPPPPPPPPPPPPPPPPPPPPPCLA................", "................AICPPPPPPPPPPPPPPPPPPPPPPPPPPCLA................", "................AIIPPPPPPPPPPPPPPPPPPPPPPPPPPIMA................", "................AAIGGGGGGGGGGGGGGGGGGGGGGGGGGLAA................", ".................AAHHHHHHHHHIIIIIIIIIIIIIIIIIAA.................", "..................AQHIIIIIMMMMMMMMMMMMLLLLLMQA..................", "..................RAAHIILMBBBBCCCCCCCCILLLMAAR..................", ".......AAAA.......S.AAILLMBHCHCHICHCHCILLMAA.S.......AAAA.......", "......AAHHAA.........AILLMCICICIMCICIGILLMA.........AAHIAA......", ".....AAHIIHAAA.......AAILMCICICIMCIGIGILMAA.......AAAHLLIAA.....", ".....AHIIIIHHA........AILMCCDCDCCDGDGDLMMA........AHILLLLIA.....", ".....AHIIIIILAA.......AILLIIIIIIIIIILLMMMA.......AAILLLLLMA.....", ".....AHIIIIIIHAA......AIMMPPPPPPPPPPPPLMMA......AAHLLLLLLMA.....", "....AAHIIIIIIIHAA.....AAAABBBBCCCCCCCCAAAA.....AAHLLLLLLLMAA....", "....AHLIIIIIIIIIAAAAAAAAAAPPPPPPPPPPPPAAAAAAAAAAHLLLLLLLLMIA....", "....AAAHIIIIIILLIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIILLLLLLLLMAAA....", "...AAHHLLLLLMMLLMMMMMMMMMMMMLLLLLLLLMMMMMMMMMMMMLLMMMMMMMIIAA...", "..AAHILJJKKKKKIMJJJJKKHKKKKKILLLLLLMJJJJJHKKKKKKIMJJJKKKKILIAA..", "..AHILJNNNNNNOIJKKNNNNNNNNHOILLLLLLMJHKNNNNNNNNNKIJNNNNNNKILIA..", "..AHILKNNHNNOOIHNNNNNNNNNNNOILLLLLLMJNNNNNNNNNNNHIKNNNHNOOILMA..", "..AHILKOOOOOOOIKNNNNNNNNNNOHLLMMMMLLIKNNNNNNNNNOOIKOOOOOOOIMMA..", "..AHIIIIQHIIIILIKNNNNNNNOOHLMMBCCCIMLIKNNMNNNOOOHLIIIIIQHLMMMA..", "..AHILLLILLLLLLLIKOOOOOOOHMMBCDDTDCCIMIKOOMOOOOHLLLLLLLIMMMMMA..", "..AAILLLLLLLLLLLLIIIIIIIIMBBDDPPPPCDCCIIIIIIIIILLLLLLLLMMMMMAA..", "...AILLLLLLLLLLLLLLLLLLLLMTGPPPPPPPPCTILLLLLLLLLLLLLLLMMMMMMA...", "...AAILLLLLLLLLLLLLLLLLLMBGPPPPPPPPPPCCILLLLLLLLLLLLMMMMMMMAA...", "....AAIMHLLLLLLLHLLLLLLMBCDPPPPPPPPPPCGCILLLLLLHLLLMMMMHMMAA....", ".....AAAIMLLLLLLLLLLLLLMBGPPPPPPPPPPPPCDILLLLLLLLLMMMMMMAAA.....", "....AAAAAAIMMMMMMMLLLLLMBDPPPPPPPPPPPPCDILLLLLMMMMMMMMAAAAAA....", "....ABBBCCCCCCAAAAILLLLMTDPPPPPPPPPPPPGTILLLLMAAAABBBCCCCCCA....", "....ACDDDDDDDDA..AAILLLMCDPPPPPPPPPPPPGDILLLMAA..ACDDDDDDDDA....", "....AHHHIIHIIIA...ABILLMCDPPPPPPPPPPPPGDILLMBA...AHHHHIIIIIA....", "....AHLLMMMMMMA...ABILLMCGCPPPPPPPPPPCDDILLMBA...AHLLMMMMMMA....", "....AHJJJKKKKIA...ABILLLICDPPPPPPPPPPGDHLLMMBA...AHJJJKKKKIA....", "....AHKOOOOOOIA...ACILLLLITCPPPPPPPPCTHLLMMMCA...AHKOOOOOOIA....", "....AHIIIIIIIMA...ACAILLLMCDCCPPPPCGDDILMMMACA...AHIIIIIIIMA....", "....AHLLLMLLLMA...ACAAILLLIICDCCTCDDHIMMMMAACA...AHLLLMLLLMA....", "....AILLMEILMMA...ACAAILLLLLIICDDDHILMMMMMAACA...AILLMEILMMA....", "....AILLLILLMMA...AAAAIMMMMMMMIIIIMMMMMMMMAAAA...AILLLILLMMA....", "....AILLLLLMMMA......AABBBCCCCCAABBBCCCCCAA......AILLLLLMMMA....", "....AILLLLLMMMA.......ABHHIIIICAABHHIIIICA.......AILLLLLMMMA....", "....AILLLLLMMMA.......ABBCCCCCDAABMCCCCCDA.......AILLLLLMMMA....", "...AAIMMMMMMMMAA......ABHHIIIIGAABHMIIIIGA......AAIMMMMMMMMAA...", "...ABBBBCCCCCCCA......ACCCCCCGDAACCCMCCGDA......ABBBBCCCCCCCA...", "...ABGHHHIIIICDA......ACHHIIIIGAACHHIIIIGA......ABGHHHIIIICDA...", "...ABDHLLLLLMCDA......ACCCCCGGDAACCCCCGGDA......ABDHLLLLLMCDA...", "...ACDILLLLMMGDA.....AACHHHHHIGAACHIIIIIGAA.....ACDILLLLMMGDA...", "...ACDIMMMMMMGDA..H.AAHHLLLLLLIIIILLLLLLIIAA.H..ACDIMMMMMMGDA...", "..AACDCCCCGGGDDA....AHMMMMMMMMMMMMMMMMMMMMLA....ACDCCCCGGGDDAA..", "..AJJJJKKKKKKKKA....AIBBBBBBBCCCCCCCCCCCCCLA....AJJJJKKKKKKKKA..", "..AKNNNNNNNNNOOA....AAHHHHHHHIIIIIIIIIIIIIAA....AKNNNNNNNNNOOA..", "..AKOOOOOHOOHOOA.....AAJKHILLLLLLLLLLLMJKAA.....AKOHOOHOOOOOOA..", "..AHHHHIIIIIIIIA......AAKNILLLLLLLLLLMJOAA......AHHHHIIIIIIIIA..", "..AHLBBBCCCCCIMA.......AAHLLLLLLLLLLLLIAA.......AHLBBBCCCCCIMA..", "..AHLCDDDDDDDIMAAA......AAILLLLLLLLLLMAA......AAAHLCDDDDDDDIMA..", "..AHIIIIIIIIIMBCCA.......AAILLLLLLLLMAA.......ABCCHIIIIIIIILMA..", "..AHLLLLLLLLLMBGDA........AAILLLLLLMAA........ABGDILLLLLLLLLMA..", "..AILLLLHLLLLMCGDA.........AILLLLLLMA.........ACGDILLLLHLLLMMA..", "..AILLLLLLLLMMCDDA.........AAIMMMMMAA.........ACDDILLLLLLLMMMA..", "..AIMMLLMMLMMMLAAA.........ABBBCCCCCA.........AAAHLLLLLLLMMMMA..", "..AIEFIMEFIMEFLA...........ACDDDDDDDA...........AILLLLLLLMMMMA..", "..AIIIMMIIMMLLMA...........AAPPPPPPAA...........AIMMMMMMMMMMMA..", "..ABCCABCCABCCAA............APPPPPPA............AABCCABCCABCCA..", "..ABGDABGDABGDA.............AAAAAAAA.............ABGDABGDABGDA..", "..ACGDACGDACGDA..................................ACGDACGDACGDA..", "..ACGDACGDACGDA..................................ACGDACGDACGDA..", "..ACDDACDDACDDA..................................ACDDACDDACDDA..", "..AHIAAHIAAHIAA..................................AAHIAAHIAAHIA..", "..AIMAAIMAAIMA....................................AIMAAIMAAIMA..", "..AIMAAIMAAIMA....................................AIMAAIMAAIMA..", "..AJAAAJAAAJAA....................................AAAAAAAAAAAA..", "..AAA.AAA.AAA...................................................", "................................................................"]};
+const SKCH='ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789',skC={};
+function skBuild(){if(skC.n)return;
+ const mk=()=>{const c=document.createElement('canvas');c.width=SKX.w;c.height=SKX.h;return c};
+ const n=mk(),x=n.getContext('2d');
+ SKX.rows.forEach((r,j)=>{for(let i=0;i<r.length;i++){const ch=r[i];if(ch!=='.'){x.fillStyle=SKX.pal[SKCH.indexOf(ch)];x.fillRect(i,j,1,1)}}});
+ const mod=fn=>{const c=mk(),q=c.getContext('2d');q.drawImage(n,0,0);try{const im=q.getImageData(0,0,SKX.w,SKX.h),a=im.data;for(let i=0;i<a.length;i+=4){if(!a[i+3])continue;const o=fn(a[i],a[i+1],a[i+2]);a[i]=o[0];a[i+1]=o[1];a[i+2]=o[2]}q.putImageData(im,0,0)}catch(e){}return c};
+ skC.n=n;
+ skC.hit=mod((r,g2,b)=>[Math.min(255,r*.35+170),Math.min(255,g2*.35+110),Math.min(255,b*.35+110)]);
+ skC.dead=mod((r,g2,b)=>{const l=(r*.3+g2*.59+b*.11)*.62;return[l*.95,l*.98,l*1.08]})}
+const PFN={S:'111100111001111',K:'101101110101101',Y:'101101010010010',N:'101111111101101',E:'111100111100111',T:'111010010010010','-':'000000111000000',X:'101101010101101',O:'111101101101111',Q:'111101101111001',U:'101101101101111',P:'111101111100100',A:'111101111101101',R:'110101110101101',L:'100100100100111',D:'110101101101110','3':'111001111001111'};
+function ptxt(t,x,y,c){for(const ch of t){const gl=PFN[ch];if(gl)for(let i=0;i<15;i++)if(gl[i]==='1')R(x+i%3,y+((i/3)|0),1,1,c);x+=4}}
+function disc(cx,cy,r,c){for(let y=Math.floor(cy-r);y<=Math.ceil(cy+r);y++){const dy=y+.5-cy,q=r*r-dy*dy;if(q<=0)continue;const hw=Math.sqrt(q);const a=Math.round(cx-hw),b=Math.round(cx+hw);if(b>a)R(a,y,b-a,1,c)}}
+function ell(cx,cy,rx,ry,c){for(let y=Math.floor(cy-ry);y<=Math.ceil(cy+ry);y++){const dy=(y+.5-cy)/ry,q=1-dy*dy;if(q<=0)continue;const hw=rx*Math.sqrt(q);R(Math.round(cx-hw),y,Math.round(cx+hw)-Math.round(cx-hw),1,c)}}
+function dring(cx,cy,r,c,n,rot,fill){for(let i=0;i<n;i++){if(fill&&i%fill[0]>=fill[1])continue;const a=rot+i/n*6.2832;R(cx+Math.cos(a)*r,cy+Math.sin(a)*r*.98,1,1,c)}}
+function drawSkynet(T,dt){skBuild();
+ const f=bossFight&&bossFight.i===2?bossFight:null,dead=(s.bd||0)>=3,fr=dead?0:f?f.hp/f.max:1,hit=!dead&&bhit>T,crit=!dead&&fr<.4,pu=(Math.sin(T/(crit?85:230))+1)/2,mv=dead?0:Math.sin(T/420);
+ // parede e piso
+ R(0,0,W,H,'#05060d');for(let y=0;y<H;y+=8)for(let x=((y/8)&1)*8;x<W;x+=16)R(x,y,15,7,'#0a0d1c');
+ R(0,12,W,5,'#181e36');R(0,13,W,1,'#34426e');R(0,16,W,1,'#0c0f1e');
+ for(let x=10;x<154;x+=28){R(x,17,2,6,'#2a3558');const on=crit?((T/160+x/28)|0)%2:((T/700+x)|0)%5!==0;R(x-2,22,6,2,dead?'#1c2238':on?(crit?'#ff4d6d':'#7a2a3a'):'#2a1a24')}
+ // halo atrás do boss
+ const hx=80,hy=64;
+ if(!dead){g.globalAlpha=.07+.05*pu;disc(hx,hy,46,'#ff2d4a');g.globalAlpha=.08;disc(hx,hy,34,'#ff6a3d');g.globalAlpha=1}
+ const rc=dead?'#2a3150':'#7a1f36';dring(hx,hy,45,rc,150,0);dring(hx,hy,41,dead?'#222845':'#ff4d6d',60,T/2600,[3,2]);dring(hx,hy,37,dead?'#1c2238':'#4cc9f0',44,-T/1900,[4,1]);
+ // racks de servidores
+ [[3,0],[133,1]].forEach(([rx,sd])=>{R(rx,20,24,99,'#0d1122');R(rx,20,24,1,'#2c3760');R(rx,20,1,99,'#1a2142');R(rx+23,20,1,99,'#050712');
+  for(let u=0;u<9;u++){const uy=24+u*10;R(rx+2,uy,20,8,'#141a32');R(rx+2,uy,20,1,'#252f56');R(rx+2,uy+7,20,1,'#080a16');R(rx+4,uy+3,9,2,'#080a16');
+   for(let k=0;k<4;k++){const st=dead?3:(((T/(330+u*61+k*37))+u*3+k+sd)|0)%4;const col=st===0?'#4cc9f0':st===1?(crit?'#ff4d6d':'#3ee0a0'):st===2?'#ff4d6d':'#1c2340';R(rx+15+k*2,uy+2,1,1,col);R(rx+15+k*2,uy+5,1,1,st===3?'#1c2340':col)}}});
+ // chão com circuitos
+ R(0,119,W,31,'#0b101f');R(0,119,W,2,'#2a3558');R(0,121,W,1,'#050712');
+ for(let y=128;y<150;y+=8){for(let x=0;x<W;x+=32)R(x+((y/8)&1)*16,y,18,1,'#1b2748');for(let x=((y/8)&1)*16;x<W;x+=32)R(x+17,y-1,2,3,'#26345e')}
+ if(!dead)for(let i=0;i<6;i++){const px=((T/26+i*29)%(W+8))-4,ry=128+(i%3)*8;R(px,ry,4,1,i%2?'#4cc9f0':'#ff4d6d');R(px+4,ry,1,1,'#fff')}
+ // plataforma sob o boss
+ R(44,116,72,3,'#1a2342');R(46,114,68,3,'#232e55');R(46,114,68,1,'#3a4a80');R(50,112,60,2,'#141b36');
+ for(let i=0;i<9;i++)R(52+i*7,115,4,1,dead?'#2a3150':(((T/200+i)|0)%3?'#7a1f36':'#ff4d6d'));
+ // cabos do teto
+ const bx=48+(hit?Math.round(Math.sin(T/18)*1.5):0),by=dead?29:20+Math.round(mv*2);
+ [[52,bx+8],[108,bx+55]].forEach(([tx,ex])=>{for(let y=17;y<by+34;y+=1){const u=(y-17)/(by+17),x=tx+(ex-tx)*u*u*(3-2*u)+Math.sin(y/7+T/800)*1.2;R(x,y,3,1,'#0e1224');R(x,y,1,1,'#2a3558');if(!dead&&(((y*3-(T/16))|0)%34)===0)R(x+1,y,1,2,crit?'#ffd23f':'#ff4d6d')}});
+ // chama do propulsor
+ if(!dead){const fl=7+((T/55)|0)%4+Math.round(pu*2);g.globalAlpha=.22+.1*pu;ell(80,115,30,5,'#ff4d6d');g.globalAlpha=.18;ell(80,115,18,3,'#ffd23f');g.globalAlpha=1;
+  R(bx+28,by+82,8,fl,'#ff2d2d');R(bx+29,by+82,6,fl-2,'#ff7a3c');R(bx+30,by+82,4,fl-4,'#ffd23f');R(bx+31,by+82,2,Math.max(1,fl-7),'#fff6c0')}
+ // sprite
+ g.drawImage(hit?skC.hit:dead?skC.dead:skC.n,bx,by);
+ // olho
+ const eyeOn=!dead||((T/130)|0)%23===0;
+ if(eyeOn){const ec=hit?'#ffffff':dead?'#7a1f36':'#ff2d2d';R(bx+22,by+19,20,2,ec);R(bx+22,by+18,7,1,ec);R(bx+35,by+18,7,1,ec);R(bx+22,by+21,20,1,dead?'#3a1020':'#8a1020');
+  if(!dead){const pp=Math.round(24+(Math.sin(T/(crit?160:520))+1)/2*13);R(bx+pp,by+18,4,3,'#ffd8d8');R(bx+pp+1,by+19,2,1,'#fff');g.globalAlpha=.18+.12*pu;R(bx+20,by+16,24,7,'#ff2d2d');g.globalAlpha=1}}
+ // núcleo do peito
+ if(!dead){const cx=bx+32,cy=by+48.5;disc(cx,cy,5.6,hit?'#fff':'#7a0f20');disc(cx,cy,4.4,'#d1202f');disc(cx,cy,3.2+pu*.8,'#ff4d5a');disc(cx,cy,1.8+pu,'#ffb0a8');disc(cx,cy,.9,'#fff');
+  g.globalAlpha=.55;for(let i=0;i<4;i++){const a=T/260+i*1.5708;R(cx+Math.cos(a)*4.6-.5,cy+Math.sin(a)*4.6-.5,1,1,'#fff')}g.globalAlpha=1}
+ else if(((T/200)|0)%9===0)disc(bx+32,by+48.5,1.4,'#7a1f36');
+ // luzes das antenas e bochechas
+ const bl=((T/380)|0)%2;R(bx+20,by+2,2,1,dead?'#2a2f44':bl?'#ff2d2d':'#4a0c18');R(bx+42,by+2,2,1,dead?'#2a2f44':bl?'#4a0c18':'#ff2d2d');
+ if(!dead&&((T/250)|0)%2){R(bx+18,by+25,1,2,'#9fe8ff');R(bx+45,by+25,1,2,'#9fe8ff')}
+ // faíscas / fumaça quando ferida ou derrotada
+ if(crit||dead){const sp=(T/95)|0;for(let q=0;q<4;q++){if((sp+q)%3)continue;const sx=bx+6+((sp*37+q*53)%52),sy=by+26+((sp*29+q*17)%54);R(sx,sy,1,2,'#ffd23f');R(sx+1,sy+1,1,1,'#fff')}}
+ if(dead||fr<.25)for(let q=0;q<5;q++){const u=((T/46+q*21)%100)/100;g.globalAlpha=(1-u)*.5;R(bx+27+q*3+Math.sin(u*6+q)*3,by+(dead?18:12)-u*30,2,2,'#6a7388');g.globalAlpha=1}
+ // barra de nome / vida
+ R(7,5,146,8,'#000');
+ if(f){R(8,6,144,6,'#2a0c16');R(8,6,Math.max(0,Math.round(144*fr)),6,fr<.4?'#ff9a3c':'#ff4d6d');R(8,6,Math.max(0,Math.round(144*fr)),1,'rgba(255,255,255,.35)');const t='SKYNET-X';ptxt(t,80-Math.round((t.length*4-1)/2),7,'#fff')}
+ else{const t=dead?'SKYNET-X - DERROTADA':'SKYNET-X - TOQUE PARA LUTAR';R(8,6,144,6,dead?'#3ee0a0':'#ff9a3c');ptxt(t,80-Math.round((t.length*4-1)/2),7,'#14162a')}
+ P.forEach(p=>{if(p.k)return;g.globalAlpha=Math.max(0,p.l/p.m);R(p.x,p.y,p.s,p.h||p.s,p.c)});g.globalAlpha=1;
+ pers(T);
+ if(!dead){const vg=.18+.06*pu;g.globalAlpha=crit?vg+.06:vg;R(0,0,W,2,'#ff2d4a');R(0,H-2,W,2,'#ff2d4a');R(0,0,2,H,'#ff2d4a');R(W-2,0,2,H,'#ff2d4a');g.globalAlpha=1}
+ if(flash>0){g.globalAlpha=Math.min(1,flash);R(0,0,W,H,'#fff');g.globalAlpha=1;flash=Math.max(0,flash-dt*3)}}
+{const _dB=damageBoss;damageBoss=function(){const r=_dB.apply(this,arguments);if(bossFight&&bossFight.i===2){bhit=Date.now()+450;burst(80,62,['#ff2d2d','#fff','#ffd23f'],26,80)}return r}}
+{const _wB=winBoss;winBoss=function(){const sk=bossFight&&bossFight.i===2;const r=_wB.apply(this,arguments);if(sk){[0,200,420,700].forEach((d,i)=>setTimeout(()=>{burst(60+i*14,48+(i%2)*22,['#ff2d2d','#ffd23f','#fff','#ff9a3c'],36,100);sfx(180+i*60,.25,.05,'sawtooth')},d))}return r}}
+{const _bi=bossIco;bossIco=function(d){if(d&&d.id==='skynet'&&!bossIcoC.skynet){skBuild();const c=document.createElement('canvas');c.width=c.height=44;c.getContext('2d').drawImage(skC.n,10,0,44,40,0,2,44,40);bossIcoC.skynet=c.toDataURL()}return _bi.apply(this,arguments)}}
+$('eld').onclick=()=>{if(elv.busy||bossFight)return;
+ if(me.f===-2){if(lvl()<75){toast('🔒 O Subterrâneo 3 abre no Nível 75! Seu nível: '+lvl());sfx(200,.2,.05,'sawtooth');return}
+  if((s.bd||0)<2){toast('🔒 Derrote o Dr. Lucas para liberar o Subterrâneo 3');sfx(200,.2,.05,'sawtooth');return}
+  ride(-3);return}
+ if(me.f===-3)return;
+ _eld()};
 /* ===== NOVA ERA: COLONIZAÇÃO ESPACIAL E ASCENSÃO CÓSMICA ===== */
 var COL=[
 {id:'moon',ic:'🌙',n:'Base Lunar',d:'Seu primeiro passo fora da Terra.',cost:2e11,req:null},
