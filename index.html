@@ -366,7 +366,7 @@ button.cl:active{background:rgba(255,255,255,.1)}
       <div class="qty" id="qty"><button data-q="1" class="on">x1</button><button data-q="10">x10</button><button data-q="50">x50</button><button data-q="100">x100</button><button data-q="0">MÁX</button></div>
       <div id="apps"></div>
       <div id="emps" hidden><div id="el"></div></div>
-      <div id="eqs" hidden></div><div id="achs" hidden></div><div id="rk" hidden></div><div id="ipo" hidden></div><div id="shop" hidden></div><div id="world" hidden></div><div id="depts" hidden></div><div id="research" hidden></div><div id="company" hidden></div><div id="admin" hidden></div><div id="friends" hidden></div>
+      <div id="eqs" hidden></div><div id="achs" hidden></div><div id="rk" hidden></div><div id="ipo" hidden></div><div id="shop" hidden></div><div id="world" hidden></div><div id="depts" hidden></div><div id="research" hidden></div><div id="company" hidden></div><div id="admin" hidden></div><div id="friends" hidden></div><div id="era" hidden></div>
     </section>
   </div>
   <div class="foot">Tudo aqui é fictício. O jogo salva sozinho neste aparelho.</div>
@@ -444,7 +444,7 @@ if(!s.v){s.v=2;s.dk=1}
 let bakT=0,rankSyncTimer=null;const save=()=>{if(reset)return;if(![s.m,s.c,s.tot].every(Number.isFinite))return;s.ts=Date.now();try{const pv=localStorage.getItem(K);if(pv&&pv[0]=='{'&&Date.now()-bakT>6e4){localStorage.setItem(K+'_bak',pv);bakT=Date.now()}localStorage.setItem(K,JSON.stringify(s))}catch(e){};if(rankSyncTimer)clearTimeout(rankSyncTimer);rankSyncTimer=setTimeout(()=>{if(A){cloud();push()}},5000)};
 /* ===== CÁLCULOS ===== */
 const has=id=>(s.own||[]).includes(id),mil=n=>{let m=1;[10,25,50,100].forEach(t=>{if(n>=t)m*=1.35});return m},nxm=n=>[10,25,50,100].find(t=>n<t)||0;
-const cost=(b,n)=>Math.ceil(b*Math.pow(1.23,n)),bonus=()=>(1+s.t.length*.015)*(1+s.sh*.05)*(1+(s.bd?.25:0))*(has('u3')?1.25:1)*(has('x2')?1.1:1)*(1+Math.max(0,s.world.countries.length-1)*.04)*petB();
+const cost=(b,n)=>Math.ceil(b*Math.pow(1.23,n)),bonus=()=>(1+s.t.length*.015)*(1+s.sh*.05)*(1+(s.bd?.25:0))*(has('u3')?1.25:1)*(has('x2')?1.1:1)*(1+Math.max(0,s.world.countries.length-1)*.04)*petB()*eraB();
 const fm=p=>{const n=Date.now();let r=1;for(const f of fx)if(f.u>n)r*=f[p];return r};
 const DEPTS=[{id:'dev',ic:'💻',name:'Desenvolvimento',desc:'A equipe programa com mais eficiência.',unlock:0,base:2500,rate:.025,kind:'c',cap:30},{id:'mkt',ic:'📣',name:'Marketing',desc:'Seus aplicativos atraem mais usuários.',unlock:1,base:12000,rate:.025,kind:'m',cap:30},{id:'res',ic:'🔬',name:'Pesquisa',desc:'Pesquisa melhora toda a produção.',unlock:2,base:80000,rate:.015,kind:'all',cap:30},{id:'fin',ic:'💰',name:'Financeiro',desc:'Melhora a eficiência da empresa.',unlock:3,base:350000,rate:.012,kind:'all',cap:25},{id:'sec',ic:'🛡️',name:'Segurança',desc:'Fortalece a infraestrutura da empresa.',unlock:4,base:1800000,rate:.012,kind:'all',cap:25},{id:'ai',ic:'🤖',name:'Inteligência Artificial',desc:'Automatiza processos e amplia a produção.',unlock:5,base:12000000,rate:.02,kind:'all',cap:25}];
 const deptMult=k=>DEPTS.reduce((v,d)=>{const n=s.dp[d.id]||0;return v*(d.kind===k||d.kind==='all'?1+n*d.rate:1)},1);
@@ -628,7 +628,7 @@ else if(tab=='research')researchDraw();
 else if(tab=='company')companyDraw();
 else if(tab=='admin')adminDraw();
 else if(tab=='friends')friendsDraw();
-else rankDraw()}
+else if(tab=='era'){}else rankDraw()}
 /* ===== CABEÇALHO / HUD ===== */
 function head(){const T=Date.now(),k=stg();if(k>lastSt){toast('🎉 Você evoluiu: '+ST[k][0]+'!');sfx(880,.25);setTimeout(()=>sfx(1175,.3),150);burst(100,50,['#ffd23f','#fff','#3ee0a0','#4cc9f0'],40,90);shake();flash=.8}lastSt=k;
 $('mo').textContent=fmt(s.m);$('co').textContent=fmt(s.c);$('mr').textContent='+'+fmt(mps())+'/s';$('cr').textContent='+'+fmt(cps())+'/s';$('lv').textContent='Nv.'+lvl()+(s.sh?' 📈'+s.sh:'');setH($('dmv'),ico('💎')+' '+fmt(s.dm));
@@ -1416,17 +1416,17 @@ async function adSel(id){const f=AD.list&&AD.list.find(p=>p.user_id==id);if(f)AD
 try{const d=await rpc('admin_player_detail',{target:id});if(AD.sel&&AD.sel.user_id==id){AD.det=d;adDet()}}catch(e){toast('Erro: '+e.message)}}
 function adDet(){const el=$('adDet');if(!el)return;const p=AD.sel;
 if(!p){el.innerHTML='<div class="adm-box pxc"><h3>JOGADOR</h3><div class="nx" style="margin:0">Toque em um jogador da lista.</div></div>';return}
-const d=AD.det,lv=d?Math.floor(Math.log2(1+(+d.tot||0)/50))+1:0;
+const d=AD.det,lv=d?Math.max(Math.floor(+d.mxl||0),Math.floor(Math.log2(1+(+d.tot||0)/50))+1):0;
 const st=d?'<div class="adm-st"><div>💰 DINHEIRO<b>'+fmt(+d.m||0)+'</b></div><div>💻 CÓDIGO<b>'+fmt(+d.c||0)+'</b></div><div>💎 DIAMANTES<b>'+fmt(+d.dm||0)+'</b></div><div>⬆️ NÍVEL<b>'+lv+'</b></div><div>🏆 TROFÉUS<b>'+(+d.trophies||0)+' / '+AC.length+'</b></div><div>📈 IPOs<b>'+(+d.ipo||0)+'</b></div></div>':'<div class="nx">Carregando…</div>';
 const num=(k,lab,ph)=>'<div class="adm-act"><label>'+lab+'</label><input id="adv-'+k+'" inputmode="decimal" placeholder="'+ph+'" autocomplete="off"><button class="nb" data-ak="'+k+'" data-sg="1" aria-label="Adicionar">+</button><button class="nb neg" data-ak="'+k+'" data-sg="-1" aria-label="Retirar">−</button></div>';
 el.innerHTML='<div class="adm-box pxc"><h3>'+esc(p.name)+'</h3><small style="color:var(--muted);font-size:1.1rem">'+esc(p.email)+'</small>'+st
 +'<div class="foot" style="margin:0 0 10px;text-align:left">Valores da última sincronização do jogador. Os ajustes entram quando ele estiver com o jogo aberto.</div>'
 +num('money','💰 DINHEIRO (aceita 10K, 5M, 2B)','Ex: 5M')+num('diamonds','💎 DIAMANTES','Ex: 50')+num('code','💻 CÓDIGO','Ex: 1M')
-+'<div class="adm-act"><label>⬆️ NÍVEL (1 a 50)</label><input id="adv-level" inputmode="numeric" placeholder="Ex: 25"><button class="nb" data-ak="level" data-sg="1" style="grid-column:2/4">DEFINIR</button></div>'
++'<div class="adm-act"><label>⬆️ NÍVEL (1 a 1000)</label><input id="adv-level" inputmode="numeric" placeholder="Ex: 250"><button class="nb" data-ak="level" data-sg="1" style="grid-column:2/4">DEFINIR</button></div>'
 +'<div class="adm-act"><label>🏆 TROFÉU</label><select id="adv-trophy"><option value="-1">Todos os troféus</option>'+AC.map((a,i)=>'<option value="'+i+'">'+esc(a[1])+'</option>').join('')+'</select><button class="nb" data-ak="trophy" data-sg="1" style="grid-column:2/4">LIBERAR</button></div>'
 +(p.user_id==A.uid?'':'<div class="adm-danger"><button class="nb" id="adDel">🗑️ EXCLUIR CONTA</button></div>')+'</div>'}
 async function adSend(k,sg){const p=AD.sel;if(!p)return;const el=$('adv-'+k);if(!el)return;const body={target:p.user_id,kind:k,amount:0,payload:{}};let txt;
-if(k=='level'){const n=Math.floor(+el.value);if(!(n>=1&&n<=50)){toast('Informe um nível de 1 a 50');return}body.payload={level:n};txt='definir nível '+n}
+if(k=='level'){const n=Math.floor(+el.value);if(!(n>=1&&n<=1000)){toast('Informe um nível de 1 a 1000');return}body.payload={level:n};txt='definir nível '+n}
 else if(k=='trophy'){const i=+el.value;body.payload={i};txt=i<0?'liberar TODOS os troféus':'liberar o troféu '+AC[i][1]}
 else{const v=parseAmt(el.value);if(!(v>0)||v>1e15){toast('Informe um valor válido (ex: 5M)');return}body.amount=v*sg;txt=(sg>0?'adicionar ':'retirar ')+fmt(v)+' de '+({money:'dinheiro',diamonds:'diamantes',code:'código'}[k])}
 const go=async()=>{try{await rpc('admin_send_command',body);toast('🛡️ Enviado: '+txt+'. Entra quando o jogador estiver online.');if(k!='trophy')el.value='';adLogLoad()}catch(e){toast('Negado ou erro: '+e.message)}};
@@ -1450,7 +1450,7 @@ function applyCmds(L){const out=[];L.forEach(c=>{const v=+c.amount||0,p=c.payloa
 if(c.kind=='money'){s.m=Math.max(0,s.m+v);out.push('💰 '+sg)}
 else if(c.kind=='diamonds'){s.dm=Math.max(0,s.dm+v);out.push('💎 '+sg)}
 else if(c.kind=='code'){s.c=Math.max(0,s.c+v);out.push('💻 '+sg)}
-else if(c.kind=='level'){const n=Math.max(1,Math.min(50,Math.floor(+p.level)||1));s.tot=50*(Math.pow(2,n-1)-1);s.mxl=Math.max(s.mxl||0,n);out.push('⬆️ Nível '+n)}
+else if(c.kind=='level'){const n=Math.max(1,Math.min(1000,Math.floor(+p.level)||1)),t50=50*(Math.pow(2,Math.min(n,50)-1)-1);s.tot=n>50?Math.max(s.tot,t50):t50;s.mxl=n;out.push('⬆️ Nível '+n)}
 else if(c.kind=='trophy'){const i=+p.i;(i<0?AC.map((_,k)=>k):[i]).forEach(k=>{if(AC[k]&&!s.t.includes(k))s.t.push(k)});out.push('🏆 Troféu')}});
 if(!out.length)return;save();cloud();push();head();if(!/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName))draw();toast('🛡️ Ajuste da administração: '+out.join(' · '));sfx(880,.15)}
 async function claimCmds(){if(!A||claiming||noCmd||document.hidden)return;claiming=1;try{const L=await rpc('claim_my_commands');if(Array.isArray(L)&&L.length)applyCmds(L)}catch(e){if(/find the function|PGRST202/.test(e.message))noCmd=1}claiming=0}
@@ -1721,6 +1721,43 @@ if(c.done)toast('✅ SKYNET-X já foi derrotada!');
 else if(lvl()<75){toast('🔒 O próximo chefão (SKYNET-X) abre no Nível 75! Seu nível: '+lvl());sfx(200,.2,.05,'sawtooth')}
 else if(!c.ok){toast(c.why);sfx(200,.2,.05,'sawtooth')}
 else startBoss(2)};
+/* ===== NOVA ERA: COLONIZAÇÃO ESPACIAL E ASCENSÃO CÓSMICA ===== */
+var COL=[
+{id:'moon',ic:'🌙',n:'Base Lunar',d:'Seu primeiro passo fora da Terra.',cost:2e11,req:null},
+{id:'iss',ic:'🛰️',n:'Estação Orbital',d:'Data center flutuante em órbita.',cost:6e11,req:'moon'},
+{id:'mars',ic:'🔴',n:'Colônia em Marte',d:'Servidores no planeta vermelho.',cost:2e12,req:'moon'},
+{id:'ast',ic:'☄️',n:'Cinturão de Asteroides',d:'Mineração de recursos para chips.',cost:8e12,req:'mars'},
+{id:'eur',ic:'🧊',n:'Europa',d:'Laboratório sob o gelo da lua de Júpiter.',cost:3e13,req:'ast'},
+{id:'tit',ic:'🪐',n:'Titã',d:'Refinaria de energia em Saturno.',cost:1.2e14,req:'eur'},
+{id:'exo',ic:'🌍',n:'Exoplaneta Kepler',d:'Uma nova Terra para sua empresa.',cost:5e14,req:'tit'},
+{id:'gal',ic:'🌌',n:'Rede Galáctica',d:'Conecta a humanidade entre as estrelas.',cost:3e15,req:'exo'}];
+function nxInit(){
+ s.ess=Math.max(0,Math.floor(+s.ess)||0);s.asc=Math.max(0,Math.floor(+s.asc)||0);
+ if(!Array.isArray(s.col))s.col=[];
+ s.col=s.col.filter(x=>COL.some(c=>c.id===x))}
+function eraB(){if(!COL||!Array.isArray(s.col))return 1;return(1+(s.ess||0)*.03)*(1+s.col.length*.06)}
+const pgBar=(v,c)=>'<div class="pg sm" style="margin-top:6px"><i style="width:'+Math.max(0,Math.min(100,v))+'%;'+(c?'background:'+c:'')+'"></i></div>';
+const ascGain=()=>s.ipo>=50&&s.tot>=1e12?Math.max(1,Math.floor(Math.pow(s.tot/1e12,.4))):0;
+function eraDraw(){nxInit();const el=$('era');if(!el)return;
+ if(s.ipo<50){setH(el,'<div class="it pxc"><div class="ic">🔒</div><div class="in"><b>NOVA ERA</b><small>Realize os 50 IPOs para desbloquear a colonização espacial e a Ascensão cósmica.</small><span class="st">IPOs: '+s.ipo+' / 50</span>'+pgBar(s.ipo/50*100,'')+'</div></div>');return}
+ const g=ascGain();
+ let h='<div class="foot" style="margin:0 0 10px;color:var(--blue)">🚀 NOVA ERA<br>Colônias dão +6% de produção cada. Elas e a Essência ficam para sempre.</div><div class="world-stats"><div>ESSÊNCIA CÓSMICA<b>'+fmt(s.ess)+' ✨ (+'+fmt(s.ess*3)+'%)</b></div><div>ASCENSÕES<b>'+s.asc+'</b></div><div>COLÔNIAS<b>'+s.col.length+' / '+COL.length+'</b></div><div>BÔNUS DA ERA<b>x'+eraB().toFixed(2)+'</b></div></div>';
+ h+='<h3 style="font:.55rem monospace;color:var(--blue);margin:16px 0 10px">COLONIZAÇÃO ESPACIAL</h3>';
+ h+=COL.map(c=>{const own=s.col.includes(c.id),pre=!c.req||s.col.includes(c.req),pn=c.req?COL.find(x=>x.id===c.req).n:'',dis=own||!pre||s.m<c.cost;
+  return '<div class="it pxc '+(own?'done':!pre?'lock':'')+'"><div class="ic">'+ico(!own&&!pre?'🔒':c.ic)+'</div><div class="in"><b>'+c.n+'</b><small>'+(!pre?'Requer: '+pn:c.d)+'</small><span class="st">'+(own?'COLONIZADO · +6% produção':'+6% de produção')+'</span></div><button class="bt" data-col="'+c.id+'" '+(dis?'disabled':'')+'>'+(own?'FEITO':!pre?'BLOQUEADO':'COLONIZAR<small>💰 '+fmt(c.cost)+'</small>')+'</button></div>'}).join('');
+ h+='<h3 style="font:.55rem monospace;color:var(--gold);margin:18px 0 10px">ASCENSÃO CÓSMICA</h3><div class="it pxc"><div class="in"><b>✨ Ascender</b><small>Reinicia dinheiro, código, apps, equipe e equipamentos (como um IPO). Mantém ações, IPOs, países, setores, pesquisas e colônias. Dá Essência Cósmica: +3% de produção cada, para sempre, e 💎. Requer '+fmt(1e12)+' 💰 ganhos na rodada.</small><span class="st">Ganhos da rodada: '+fmt(s.tot)+' 💰 → você receberia ✨ '+g+'</span></div><button class="bt" id="ascB" '+(g<1?'disabled':'')+'>ASCENDER<small>+'+g+' ✨</small></button></div>';
+ setH(el,h)}
+function ascRun(){const g=ascGain();if(g<1)return;const dg=Math.max(500,Math.round(ipoDia()*.5));
+ s.life+=s.tot;s.ess+=g;s.asc++;s.dm+=dg;s.m=0;s.c=0;s.tot=0;s.a=AP.map(()=>0);s.e=EM.map(()=>0);s.q=EQ.map(()=>0);s.ms=[];fillM();msSig='';fx=[];applyBt();bugs=[];star=null;ev=null;drawEv();lastSt=0;crewSig='';
+ save();cloud();push();modal('ASCENSÃO CONCLUÍDA! ✨','Você ganhou <b>'+g+' ✨</b> e <b>💎 '+fmt(dg)+'</b>. Bônus da era: x'+eraB().toFixed(2)+'.');sfx(1175,.35);burst(100,40,['#c77dff','#fff','#4cc9f0'],40,90);draw();head()}
+$('era').addEventListener('click',e=>{const b=e.target.closest('button');if(!b||b.disabled)return;nxInit();
+ if(b.id==='ascB'){const g=ascGain();if(g>=1)ask('ASCENDER? ✨','Você ganha <b>'+g+' ✨</b> e sua empresa será reiniciada (ações, países, setores, pesquisas e colônias ficam).','ASCENDER',ascRun);return}
+ if(b.dataset.col){const c=COL.find(x=>x.id===b.dataset.col);if(!c||s.col.includes(c.id)||(c.req&&!s.col.includes(c.req))||s.m<c.cost)return;s.m-=c.cost;s.col.push(c.id);save();head();eraDraw();sfx(880,.2);burst(100,42,['#c77dff','#4cc9f0','#ffd23f'],24,65);toast(c.ic+' '+c.n+' colonizado! +6% de produção.')}});
+setInterval(()=>{if(s.ipo>=50&&!s.nera){s.nera=1;save();modal('NOVA ERA DESBLOQUEADA! 🚀','Você completou 50 IPOs! Abra <b>Mais → Nova Era</b> para colonizar o espaço e fazer a Ascensão cósmica.')}},4000);
+TB0.push(['era','🚀','Nova Era']);NAV_GROUPS.navExpansion.push('era');buildTabs();
+{const _d4=draw;draw=function(){const r=_d4.apply(this,arguments);if(tab==='era')eraDraw();return r}}
+setInterval(()=>{if(document.hidden||tab!=='era'||/^(INPUT|SELECT|TEXTAREA)$/.test(document.activeElement.tagName))return;eraDraw()},2000);
+nxInit();
 })();
 </script>
 </body>
