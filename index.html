@@ -475,7 +475,7 @@ const cps=()=>cpsB()*fm('c');
 const mps=()=>AP.reduce((x,a,i)=>x+a[4]*s.a[i]*mil(s.a[i]),0)*roleMoney()*mult('a')*bonus()*deptMult('m')*researchMult('m')*fm('m')*(has('u2')?1.1:1);
 const cv=()=>(1+cpsB()*.05)*mult('c')*bonus()*researchMult('click')*fm('c')*(has('x3')?1.15:1);
 const stg=()=>{let k=0;ST.forEach((x,i)=>{if(s.tot>=x[3])k=i});return k};
-const lvl=()=>Math.floor(Math.log2(1+s.tot/50))+1;
+const lvlRaw=()=>Math.floor(Math.log2(1+s.tot/50))+1,lvl=()=>Math.max(s.mxl||0,lvlRaw());
 const sc=()=>Math.floor((s.life||0)+s.tot);
 const gain=v=>{s.m+=v;s.tot+=v;mp('earn',v)};
 const addFx=o=>{const n=Date.now();fx=fx.filter(f=>f.k!==o.k&&f.u>n);fx.push(o)};
@@ -640,9 +640,9 @@ $('cv').textContent='+'+fmt(cv())+' código por clique';
 const L=fx.filter(f=>f.u>T);fx=L;const n2=v=>+v.toFixed(2);
 setH($('fxs'),L.map(f=>'<span class="chip '+(f.m<1||f.c<1?'bad':'')+'">'+f.ic+' '+f.nm+' '+(f.m==f.c?'x'+n2(f.m):'💰x'+n2(f.m)+' 💻x'+n2(f.c))+' '+Math.ceil((f.u-T)/1000)+'s</span>').join(''));
 const hr=Math.ceil((s.hkt-T)/1000),hb=$('hk');hb.disabled=hr>0;setH(hb,ico('☕')+'<span>'+(hr>0?hr+'s':'HACK')+'</span>');
-const NF=nFl();if(!elv.busy&&me.f>NF-1)me.f=Math.max(0,NF-1);const bz=!!elv.busy,uu=$('elu'),dd=$('eld'),lk=me.f==0&&!unl();
-const go=bz&&elv.ph=='go',fl=go?(elv.lv<-.3?-1:Math.round(elv.lv)):me.f;
-setH($('elt'),(go?'<i>'+(elv.dir>0?'▲':'▼')+'</i>':'')+(fl<0?'S1':fl==0?'T':fl+1));$('elt').classList.toggle('mv',go);
+const NF=nFl();if(!elv.busy&&me.f>NF-1)me.f=Math.max(0,NF-1);const bz=!!elv.busy,uu=$('elu'),dd=$('eld'),lk=(me.f==0&&!unl())||(me.f==-1&&(s.bd||0)<1)||(me.f==-2&&lvl()<75);
+const go=bz&&elv.ph=='go',fl=go?(elv.lv<-.9?-2:elv.lv<-.3?-1:Math.round(elv.lv)):me.f;
+setH($('elt'),(go?'<i>'+(elv.dir>0?'▲':'▼')+'</i>':'')+(fl<0?'S'+(-fl):fl==0?'T':fl+1));$('elt').classList.toggle('mv',go);
 uu.disabled=bz||me.f>=NF-1;dd.disabled=bz||me.f<-2;
 uu.hidden=bz;dd.hidden=bz;
 uu.classList.toggle('on',bz&&elv.dir>0);dd.classList.toggle('on',bz&&elv.dir<0);dd.classList.toggle('lk',lk&&!bz)}
@@ -869,7 +869,7 @@ m.hud(3,'CHIPS 0',1);draw();m.msg('PREPARE-SE');m.start(()=>{run=1;m.msg('');m.l
 function mgDone(i){if(s.mg[i])return;s.mg[i]=1;if(sum(s.mg)%5===0)s.dm+=1;bhit=Date.now()+600;shake();burst(80,GY-52,['#fff','#ff4d6d','#ffd23f'],24,80);sfx(220,.3,.05,'sawtooth');const d=sum(s.mg);gain(Math.max(150,mps()*180));if(d>=5)setTimeout(bossDown,900);else toast('💥 Mr. Malware perdeu força! '+d+'/5'+(d%5===0?' · +1 💎':''));save()}
 function bossDown(){dialog([['M','NÃOOO! Meu plano... destruído por uma simples empresa de garagem?!'],['L','Conseguimos! Os dados do mundo estão salvos, graças a você!'],['L','Como recompensa, instalei um servidor quântico na sua empresa: +25% de produção para sempre!']],()=>{s.bd=1;s.dm+=5;gain(Math.max(1000,mps()*900));burst(80,50,['#ffd23f','#fff','#3ee0a0','#4cc9f0'],50,100);flash=.9;sfx(988,.4);save();cloud();push()})}
 function subClick(x,y){y-=GY-92;if(y>64&&x<32){talkLucas();return 1}
-for(let i=0;i<5;i++)if(x>=RX(i)-2&&x<=RX(i)+13&&y>=56&&y<=93){me.tx=RX(i)+5;me.ty=89;if(!s.lu)talkLucas();else if(s.mg[i])toast('✅ Servidor '+(i+1)+' já restaurado');else playMG(i);return 1}return 0}
+for(let i=0;i<5;i++)if(x>=RX(i)-2&&x<=RX(i)+13&&y>=56&&y<=93){me.tx=RX(i)+5;me.ty=fy(0)-3;if(!s.lu)talkLucas();else if(s.mg[i])toast('✅ Servidor '+(i+1)+' já restaurado');else playMG(i);return 1}return 0}
 function ride(t){if(elv.busy)return;if(vis.on){toast('🛗 Elevador em uso por um dev');sfx(200,.15,.04,'sawtooth');return}const N=nFl();if(t>N-1||t<-2||t==me.f)return;
 if(t==-2&&(s.bd||0)<1){toast('🔒 Derrote o Mr. Malware para liberar o Subterrâneo 2');return}
 if(t==-1&&!unl()){toast('🔒 O Subterrâneo abre no Nível 25! Seu nível: '+lvl());sfx(200,.2,.05,'sawtooth');return}
@@ -890,7 +890,7 @@ function elevUpd(dt){const d=elv.dt-elv.dr;elv.dr+=Math.sign(d)*Math.min(Math.ab
 if(!elv.busy){if(vis.on)return;if(elv.dt>0&&(elv.cw-=dt)<=0)elv.dt=0;elv.lv=Math.max(0,Math.min(me.f,nFl()-1));return}
 const near=Math.hypot(me.tx-me.x,me.ty-me.y)<=.8,p=elv.ph;
 if(p=='in'){const w=me.x>DX-30?1:0;if(w&&!elv.dt)sfx(1046,.18,.035,'sine');elv.dt=w;if(near&&elv.dr>.95){elv.ph='close';elv.dt=0;me.dr=-1;sfx(520,.08,.03)}}
-else if(p=='close'){if(elv.dr<=.01){elv.dr=0;elv.ph='go';if(me.f<0){view=0;flash=.5;elv.lv=me.f===-2?-1.2:-.6}else elv.lv=me.f;elv.from=elv.lv;sfx(330,.15)}}
+else if(p=='close'){if(elv.dr<=.01){elv.dr=0;elv.ph='go';if(me.f<0){if(elv.to>=0){view=0;flash=.5}elv.lv=me.f===-2?-1.2:-.6}else elv.lv=me.f;elv.from=elv.lv;sfx(330,.15)}}
 else if(p=='go'){const tg=elv.to<0?elv.to*.6:elv.to,df=tg-elv.lv,a=Math.abs(df),b=Math.abs(elv.lv-elv.from),sp=Math.min(2.8,.7+Math.min(a,b)*3.2)*dt;if(a<=sp){elv.lv=tg;arrive()}else{elv.lv+=Math.sign(df)*sp;me.tx=me.x=DX;me.ty=me.y=fy(elv.lv)-3}}
 else if(p=='open'){if(elv.dr>=.99){elv.dr=1;elv.ph='out';me.tx=108;me.ty=me.y}}
 else if(p=='out'){if(near){elv.busy=0;elv.ph='';elv.cw=.7}}}
@@ -1486,7 +1486,7 @@ $('rst').onclick=()=>ask('APAGAR TUDO?','Apagar todo o progresso? Isso também a
 async function rstRun(){{reset=1;if(A){try{const q=await hd();await fetch(SB_URL+'/rest/v1/progresso?user_id=eq.'+A.uid,{method:'DELETE',headers:q});await fetch(SB_URL+'/rest/v1/placar?user_id=eq.'+A.uid,{method:'DELETE',headers:q})}catch(x){}}try{localStorage.removeItem(K)}catch(x){}location.reload()}};
 /* ===== INÍCIO ===== */
 let last=Date.now();
-function tick(){const n=Date.now(),dt=Math.min((n-last)/1000,3600);last=n;s.pt=(s.pt||0)+Math.min(dt,1);const v=mps()*dt;gain(v);s.c+=cps()*dt;const LV=lvl();if(LV>(s.mxl||0)){const dd=LV-(s.mxl||0),gemLv=Math.floor(LV/5)-Math.floor((s.mxl||0)/5);s.mxl=LV;if(gemLv>0)s.dm+=gemLv;toast('⬆️ Nível '+LV+'! '+(gemLv>0?'+'+gemLv+' 💎':'sem diamantes desta vez'));if(LV>=25&&!s.un){s.un=1;modal('SINAL DO SUBTERRÂNEO 📡','Um chamado urgente chegou! O Dr. Lucas precisa de você. O elevador agora desce até o <b>Subterrâneo</b>: use o botão ▼ no térreo.')}}head()}
+function tick(){const n=Date.now(),dt=Math.min((n-last)/1000,3600);last=n;s.pt=(s.pt||0)+Math.min(dt,1);const v=mps()*dt;gain(v);s.c+=cps()*dt;const LV=lvlRaw();if(LV>(s.mxl||0)){const dd=LV-(s.mxl||0),gemLv=Math.floor(LV/5)-Math.floor((s.mxl||0)/5);s.mxl=LV;if(gemLv>0)s.dm+=gemLv;toast('⬆️ Nível '+LV+'! '+(gemLv>0?'+'+gemLv+' 💎':'sem diamantes desta vez'));if(LV>=25&&!s.un){s.un=1;modal('SINAL DO SUBTERRÂNEO 📡','Um chamado urgente chegou! O Dr. Lucas precisa de você. O elevador agora desce até o <b>Subterrâneo</b>: use o botão ▼ no térreo.')}}head()}
 const dkey=d=>d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
 const off=Math.min((Date.now()-s.ts)/1000,14400)*.2;
 fillM();applyBt();
@@ -1714,6 +1714,12 @@ R(bx-3,by+19,6,6,'#2a1a4a');R(bx-2,by+20,4,4,'#9b4dff');R(bx-1,by+21,2,2,'#ff2d2
 R(bx-26,by+18+bob,6,6,col);R(bx-27,by+24+bob,1,3,'#ff2d2d');R(bx-25,by+24+bob,1,3,'#ff2d2d');R(bx-23,by+24+bob,1,3,'#ff2d2d');
 R(bx+20,by+18-bob,6,6,col);R(bx+21,by+24-bob,1,3,'#ff2d2d');R(bx+23,by+24-bob,1,3,'#ff2d2d');R(bx+25,by+24-bob,1,3,'#ff2d2d');
 for(let q=0;q<6;q++)R(bx-18+((gl*7+q*37)%36),by+((q*13+gl*3)%38),3,1,q%2?'#3ee0a0':'#ff4d6d')}
+const _eld=$('eld').onclick;
+$('eld').onclick=()=>{if(me.f!==-2){_eld();return}if(elv.busy||bossFight)return;const c=canFightBoss(2);
+if(c.done)toast('✅ SKYNET-X já foi derrotada!');
+else if(lvl()<75){toast('🔒 O próximo chefão (SKYNET-X) abre no Nível 75! Seu nível: '+lvl());sfx(200,.2,.05,'sawtooth')}
+else if(!c.ok){toast(c.why);sfx(200,.2,.05,'sawtooth')}
+else startBoss(2)};
 })();
 </script>
 </body>
