@@ -1,1 +1,33 @@
-{"name": "Garagem Tech", "short_name": "Garagem Tech", "description": "Construa seu império de tecnologia, da garagem à gigante tech.", "start_url": "./", "scope": "./", "display": "standalone", "orientation": "portrait", "background_color": "#0b1a1f", "theme_color": "#ff8a2b", "lang": "pt-BR", "icons": [{"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"}, {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}]}
+{
+  "name": "Garagem Tech",
+  "short_name": "Garagem Tech",
+  "description": "Da garagem com um notebook velho ao império tech. Jogo incremental em pixel art.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#14162a",
+  "theme_color": "#14162a",
+  "lang": "pt-BR",
+  "categories": ["games", "simulation"],
+  "icons": [
+    {
+      "src": "favicon.png",
+      "sizes": "64x64",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
